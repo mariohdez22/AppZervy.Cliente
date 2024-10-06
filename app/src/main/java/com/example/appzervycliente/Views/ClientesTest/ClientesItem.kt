@@ -14,25 +14,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appzervycliente.DTOs.ClienteDTO
+import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 
 @Composable
-fun ClientesItem(cliente: ClienteDTO, navController: NavController, onClick: (() -> Unit)? = null) {
+fun ClientesItem(cliente: ClienteDTO, navController: NavController, viewModel: ClientesViewModel, onClienteEliminado: () -> Unit) {
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(enabled = onClick != null) { onClick?.invoke() }
             .padding(16.dp)
     ) {
         Text(text = cliente.nombres, style = MaterialTheme.typography.headlineMedium)
+        Text(text = "ID: ${cliente.idCliente}", style = MaterialTheme.typography.bodyMedium)
         Text(text = "Correo: ${cliente.correo}", style = MaterialTheme.typography.bodyMedium)
         Text(text = "Celular: ${cliente.celular}", style = MaterialTheme.typography.bodyMedium)
     }
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
         IconButton(onClick = {
             // Mostrar un diálogo de confirmación
-            // viewModel.eliminarCliente(cliente.idCliente)
-            // onClienteEliminado()
+             cliente.idCliente?.let { viewModel.eliminarCliente(id = it) }
+             onClienteEliminado()
             }
         ) {
             Icon(Icons.Default.Delete, contentDescription = "Eliminar Cliente")

@@ -17,7 +17,7 @@ interface ClientesApiService {
     suspend fun crearCliente(@Body cliente: ClienteDTO): Response<ApiResponse<ClienteDTO>>
 
     @PUT("clientes/actualizarCliente")
-    suspend fun actualizarCliente(@Body cliente: ClienteDTO): Response<ApiResponse<Unit>>
+    suspend fun actualizarCliente(@Body cliente: ClienteDTO): Response<ApiResponse<ClienteDTO>>
 
     //----------------------------------------------------------------------------------------------
 

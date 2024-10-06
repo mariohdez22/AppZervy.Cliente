@@ -93,7 +93,13 @@ fun MostrarClientes(viewModel: ClientesViewModel, navController: NavController) 
                             modifier = Modifier.padding(top = 0.dp),
                         ) {
                             items(clientes) { cliente ->
-                                ClientesItem(cliente, navController)
+                                ClientesItem(
+                                    cliente = cliente,
+                                    navController = navController,
+                                    viewModel = viewModel,
+                                    onClienteEliminado = {
+                                        navController.navigate("clientesList")
+                                    })
                                 HorizontalDivider()
                             }
                         }

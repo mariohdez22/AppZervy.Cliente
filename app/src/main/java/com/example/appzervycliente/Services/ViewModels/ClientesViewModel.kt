@@ -116,7 +116,7 @@ class ClientesViewModel : ViewModel() {
                 val response = repository.eliminarCliente(id)
                 if (response.isSuccessful && response.body()?.success == true) {
                     // Actualizar la lista de clientes después de eliminar uno
-                    obtenerClientes()
+//                    obtenerClientes()
                 } else {
                     _errorMessage.value = response.body()?.message ?: "Error al eliminar el cliente"
                 }
