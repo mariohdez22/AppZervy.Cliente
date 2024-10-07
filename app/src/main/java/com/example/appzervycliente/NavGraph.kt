@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Views.Cliente.CarritoPage
+import com.example.appzervycliente.Views.Cliente.InspeccionPage
 import com.example.appzervycliente.Views.ClientesTest.CrearClientes
 import com.example.appzervycliente.Views.ClientesTest.EditarClientes
 import com.example.appzervycliente.Views.ClientesTest.MostrarClientes
@@ -20,10 +21,13 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.CarritoPage.route
+        startDestination = Routes.InspeccionPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             CarritoPage(navController)
+        }
+        composable(Routes.InspeccionPage.route) {
+            InspeccionPage(navController)
         }
 
 //-------------------------------------------------------------[PRUEBAS]

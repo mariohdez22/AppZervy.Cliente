@@ -1,6 +1,11 @@
 package com.example.appzervycliente.Routes
 
+//----------------------------------------------------- [CARRITO DE COMPRAS]
 const val ROOT_CARRITO_COMPRAS_PAGE = "carrito_compra"
+
+//----------------------------------------------------- [INSPECCION]
+const val ROOT_INSPECCION_PAGE = "inspeccion"
+
 
 //------------------------------------------------------[PRUEBAS]
 //----------------------------------------------------- [LISTA DE CLIENTES]
@@ -17,6 +22,8 @@ sealed class Routes(
     val route : String
 ){
     object CarritoPage: Routes(ROOT_CARRITO_COMPRAS_PAGE)
+    object InspeccionPage: Routes(ROOT_INSPECCION_PAGE)
+
     object MainPage: Routes(ROOT_MAIN_PAGE)
     object CrearClientePage: Routes(ROOT_CREAR_CLIENTE_PAGE)
     object EditarClientPage: Routes("${ROOT_EDITAR_CLIENTE_PAGE}/{${ARG_CLIENTE_ID}}")

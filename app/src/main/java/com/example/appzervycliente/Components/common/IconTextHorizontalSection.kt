@@ -11,14 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.example.appzervycliente.R
 
 @Composable
-fun IconTextSection(
+fun IconTextHorizontalSection(
     painter: Painter,
     contentDescription: String? = null,
     label: String = "Esto es un texto",
@@ -46,7 +45,7 @@ fun IconTextSection(
 }
 
 @Composable
-fun IconTextSection(
+fun IconTextHorizontalSection(
     imageVector: ImageVector,
     contentDescription: String? = null,
     label: String = "Esto es un texto",
@@ -68,6 +67,51 @@ fun IconTextSection(
         Text(
             text = label,
             fontWeight = fontWeight
+        )
+    }
+
+}
+
+
+@Composable
+fun IconTextHorizontalSection(
+    painter: Painter,
+    contentDescription: String? = null,
+    label: String = "Label",
+    labelWeight: FontWeight? = null,
+    labelSize: TextUnit = TextUnit.Unspecified,
+    text: String = "Esto es un texto",
+    textWeight: FontWeight? = null,
+    textSize: TextUnit = TextUnit.Unspecified,
+    iconGap: Dp = 4.dp,
+    horizontalArrangement : Arrangement.Horizontal = Arrangement.Start
+){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = horizontalArrangement
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(iconGap)
+        ) {
+            Icon(
+                modifier = Modifier
+                    .size(height = 20.dp, width = 20.dp),
+                painter = painter,
+                contentDescription = contentDescription
+            )
+            Text(
+                text = label,
+                fontWeight = labelWeight,
+                fontSize = labelSize
+            )
+        }
+        Text(
+            text = text,
+            fontWeight = textWeight,
+            fontSize = textSize
         )
     }
 

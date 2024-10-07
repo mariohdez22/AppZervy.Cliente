@@ -6,6 +6,14 @@
         commodo. Donec in turpis vitae nisl congue accumsan eget ac nulla.
     </string>
 
+    <string name="puntos">
+        .....................................................................................
+        .....................................................................................
+        .....................................................................................
+    </string>
+
+    ----------------------------------------------------------------------------[CARRITO]
+
     <string name="lblPagarServicio">Pagar Servicio.</string>
     <string name="txtPagarServicio">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         Ut auctor ligula nec mollis commodo.</string>
@@ -20,4 +28,28 @@
     <string name="lblMetodo">Metodo de pago</string>
 
     <string name="btnPagar">Pagar Servicio</string>
+
+    ----------------------------------------------------------------------------[INSPECCION]
+
+    <string name="lblInspeccionActiva">Inspeccion Activa</string>
+
+    <string name="lblCodigo">Codigo</string>
+
+    <string name="lblDatosGenerales">Datos Generales de la inspeccion</string>
+    <string name="lblEstado">Estado Inspección</string>
+    <string name="lblDuracion">Duracion de la Inspección</string>
+    <string name="lblFechaInicio">Fecha de inicio</string>
+    <string name="lblFechaFinal">Fecha de finalización</string>
+    
+    <string name="lblPrecio">Precio Inspección</string>
+
+    <string name="lblDetalles">Detalles de la inspección</string>
+    <string name="lblCategoria">Categoria del servicio</string>
+    <string name="lblDuracionServicio">Duracion del servicio</string>
+
+    ----------------------------------------------------------------------------[RESENA]
+    
+    <string name="lblPregunta">¿Como estuvo tu servicio?</string>
+    <string name="lblCalifica">Califica tu servicio</string>
+    
 </resources>

@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="btnCarritoTopBar">#CCCCCC</color>
+    <color name="lblCodigo">#7982FF</color>
+
 </resources>
