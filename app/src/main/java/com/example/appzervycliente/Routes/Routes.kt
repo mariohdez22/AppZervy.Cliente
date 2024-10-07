@@ -6,6 +6,10 @@ const val ROOT_CARRITO_COMPRAS_PAGE = "carrito_compra"
 //----------------------------------------------------- [INSPECCION]
 const val ROOT_INSPECCION_PAGE = "inspeccion"
 
+//----------------------------------------------------- [INICIO]
+
+const val ROOT_LOGIN_SCREEN_PAGE = "login_screen"
+
 
 //------------------------------------------------------[PRUEBAS]
 //----------------------------------------------------- [LISTA DE CLIENTES]
@@ -23,6 +27,7 @@ sealed class Routes(
 ){
     object CarritoPage: Routes(ROOT_CARRITO_COMPRAS_PAGE)
     object InspeccionPage: Routes(ROOT_INSPECCION_PAGE)
+    object LoginScreen: Routes(ROOT_LOGIN_SCREEN_PAGE)
 
     object MainPage: Routes(ROOT_MAIN_PAGE)
     object CrearClientePage: Routes(ROOT_CREAR_CLIENTE_PAGE)

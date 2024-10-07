@@ -5,10 +5,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Views.Cliente.CarritoPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
+import com.example.appzervycliente.Views.Cliente.LoginScreen
 import com.example.appzervycliente.Views.ClientesTest.CrearClientes
 import com.example.appzervycliente.Views.ClientesTest.EditarClientes
 import com.example.appzervycliente.Views.ClientesTest.MostrarClientes
@@ -28,6 +30,13 @@ fun SetupNavGraph(
         }
         composable(Routes.InspeccionPage.route) {
             InspeccionPage(navController)
+        }
+        composable(Routes.LoginScreen.route) {
+            LoginScreen(
+                onLoginClick = {},
+                onSignUpClick = {},
+                navController = rememberNavController()
+            )
         }
 
 //-------------------------------------------------------------[PRUEBAS]
