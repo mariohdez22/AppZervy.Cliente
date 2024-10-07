@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">AppZervy.Cliente</string>
+
+    <string name="txtEjemplo">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut auctor ligula nec mollis
+        commodo. Donec in turpis vitae nisl congue accumsan eget ac nulla.
+    </string>
+
+    <string name="lblPagarServicio">Pagar Servicio.</string>
+    <string name="txtPagarServicio">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Ut auctor ligula nec mollis commodo.</string>
+    
+    <string name="lblDireccion">Direccion de residencia.</string>
+    <string name="lblNota">Agregar nota para el socio.</string>
+    <string name="lblNotaPlaceholder">Agregar nota…</string>
+
+    <string name="lblPago">Pago Servicio.</string>
+    <string name="lblSocio">Socio que impartira el servicio.</string>
+
+    <string name="lblMetodo">Metodo de pago</string>
+
+    <string name="btnPagar">Pagar Servicio</string>
 </resources>
