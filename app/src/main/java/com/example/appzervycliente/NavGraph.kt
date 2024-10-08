@@ -12,6 +12,8 @@ import com.example.appzervycliente.Views.Cliente.CarritoPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
 import com.example.appzervycliente.Views.Cliente.LoginScreen
 import com.example.appzervycliente.Views.Cliente.ResenaSocioPage
+import com.example.appzervycliente.Views.Cliente.MainScreen
+import com.example.appzervycliente.Views.Cliente.MainScreen
 import com.example.appzervycliente.Views.Cliente.SignUpScreen
 import com.example.appzervycliente.Views.Cliente.SplashScreen
 
@@ -23,7 +25,7 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.ResenaPage.route
+        startDestination = Routes.MainPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
@@ -32,9 +34,15 @@ fun SetupNavGraph(
         composable(Routes.InspeccionPage.route) {
             InspeccionPage(navController)
         }
+
+        composable(Routes.MainPage.route) {
+           MainScreen(navController)
+        }
         composable(Routes.LoginPage.route) {
             LoginScreen(
-                onLoginClick = {},
+                onLoginClick = {
+                    navController.navigate(Routes.MainPage.route)
+                },
                 onSignUpClick = {},
                 navController = rememberNavController()
             )
