@@ -11,6 +11,9 @@ import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Views.Cliente.CarritoPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
 import com.example.appzervycliente.Views.Cliente.LoginScreen
+import com.example.appzervycliente.Views.Cliente.RegistroPreview
+import com.example.appzervycliente.Views.Cliente.SignUpScreen
+import com.example.appzervycliente.Views.Cliente.SplashScreen
 import com.example.appzervycliente.Views.ClientesTest.CrearClientes
 import com.example.appzervycliente.Views.ClientesTest.EditarClientes
 import com.example.appzervycliente.Views.ClientesTest.MostrarClientes
@@ -23,7 +26,7 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.InspeccionPage.route
+        startDestination = Routes.ArranquePage.route
     ) {
         composable(Routes.CarritoPage.route) {
             CarritoPage(navController)
@@ -37,6 +40,16 @@ fun SetupNavGraph(
                 onSignUpClick = {},
                 navController = rememberNavController()
             )
+        }
+        composable(Routes.RegistroPage.route) {
+            SignUpScreen(
+                onLoginClick = {},
+                onSignUpClick = {},
+                navController = rememberNavController()
+            )
+        }
+        composable(Routes.ArranquePage.route) {
+            SplashScreen(navController)
         }
 
 //-------------------------------------------------------------[PRUEBAS]
