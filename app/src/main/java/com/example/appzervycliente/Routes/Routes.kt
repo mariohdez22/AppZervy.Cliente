@@ -31,6 +31,9 @@ const val ROOT_CREAR_CLIENTE_PAGE = "crear_cliente"
 const val ROOT_EDITAR_CLIENTE_PAGE = "editar_cliente"
 const val ARG_CLIENTE_ID = "cliente_id"
 
+//----------------------------------------------------- [PERFIL AGREGAR DIRECCIÓN]
+const val ROOT_PERFIL_AGREGAR_DIRECCION_PAGE = "perfil_agregar_direccion"
+
 sealed class Routes(
     val route : String
 ){
@@ -39,6 +42,8 @@ sealed class Routes(
     object LoginScreen: Routes(ROOT_LOGIN_SCREEN_PAGE)
     object RegistroPage: Routes(ROOT_REGISTRO_PAGE)
     object ArranquePage: Routes(ROOT_ARRANQUE_PAGE)
+
+    object PerfilAgregarDireccionPage: Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 
     object MainPage: Routes(ROOT_MAIN_PAGE)
     object CrearClientePage: Routes(ROOT_CREAR_CLIENTE_PAGE)
