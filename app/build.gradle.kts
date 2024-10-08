@@ -61,6 +61,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // Coil para cargar imagenes en Compose y Multiplatform
+    implementation("io.coil-kt:coil-compose:2.1.0")
+
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
 
