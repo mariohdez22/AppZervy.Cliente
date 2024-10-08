@@ -25,7 +25,7 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.MainPage.route
+        startDestination = Routes.ArranquePage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
@@ -43,14 +43,20 @@ fun SetupNavGraph(
                 onLoginClick = {
                     navController.navigate(Routes.MainPage.route)
                 },
-                onSignUpClick = {},
+                onSignUpClick = {
+                    navController.navigate(Routes.RegistroPage.route)
+                },
                 navController = rememberNavController()
             )
         }
         composable(Routes.RegistroPage.route) {
             SignUpScreen(
-                onLoginClick = {},
-                onSignUpClick = {},
+                onLoginClick = {
+                    navController.navigate(Routes.MainPage.route)
+                },
+                onSignUpClick = {
+                    navController.navigate(Routes.LoginPage.route)
+                },
                 navController = rememberNavController()
             )
         }
