@@ -17,7 +17,6 @@ import com.example.appzervycliente.Views.Cliente.SplashScreen
 import com.example.appzervycliente.Views.ClientesTest.CrearClientes
 import com.example.appzervycliente.Views.ClientesTest.EditarClientes
 import com.example.appzervycliente.Views.ClientesTest.MostrarClientes
-import com.example.appzervycliente.Views.Cliente.PerfilAgregarDireccionPage
 
 @Composable
 fun SetupNavGraph(
@@ -27,13 +26,8 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.PerfilAgregarDireccionPage.route
+        startDestination = Routes.ArranquePage.route
     ) {
-
-        composable(Routes.PerfilAgregarDireccionPage.route) {
-            PerfilAgregarDireccionPage()
-        }
-
         composable(Routes.CarritoPage.route) {
             CarritoPage(navController)
         }

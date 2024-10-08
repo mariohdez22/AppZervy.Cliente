@@ -4,9 +4,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -17,7 +19,8 @@ import com.example.appzervycliente.R
 fun CommentSection(
     value: String,
     onValueChange: (String) -> Unit,
-    minHeight: Dp = 100.dp
+    minHeight: Dp = 100.dp,
+    shape: Shape = RoundedCornerShape(8.dp)
 ){
     OutlinedTextField(
         modifier = Modifier
@@ -33,6 +36,6 @@ fun CommentSection(
         },
         maxLines = 5,
         singleLine = false,
-        shape = RoundedCornerShape(8.dp)
+        shape = shape
     )
 }
