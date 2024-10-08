@@ -23,6 +23,10 @@ const val ROOT_ARRANQUE_PAGE = "arranque"
 
 const val ROOT_PRINCIPAL_PAGE = "principal"
 
+//----------------------------------------------------- [INICIO]
+
+const val ROOT_INICIO_PAGE = "inicio"
+
 //----------------------------------------------------- [REGISTRO]
 
 //------------------------------------------------------[PRUEBAS]
@@ -44,6 +48,7 @@ sealed class Routes(
     object LoginPage: Routes(ROOT_LOGIN_PAGE)
     object ResenaPage: Routes(ROOT_RESENA_PAGE)
     object RegistroPage: Routes(ROOT_REGISTRO_PAGE)
+    object InicioPage: Routes(ROOT_INICIO_PAGE)
     object ArranquePage: Routes(ROOT_ARRANQUE_PAGE)
     object PrincipalPage: Routes(ROOT_PRINCIPAL_PAGE)
 

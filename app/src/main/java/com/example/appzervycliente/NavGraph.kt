@@ -11,6 +11,7 @@ import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Views.Cliente.CarritoPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
 import com.example.appzervycliente.Views.Cliente.LoginScreen
+import com.example.appzervycliente.Views.Cliente.Login
 import com.example.appzervycliente.Views.Cliente.ResenaSocioPage
 import com.example.appzervycliente.Views.Cliente.MainScreen
 import com.example.appzervycliente.Views.Cliente.MainScreen
@@ -39,9 +40,20 @@ fun SetupNavGraph(
            MainScreen(navController)
         }
         composable(Routes.LoginPage.route) {
-            LoginScreen(
+            Login(
                 onLoginClick = {
                     navController.navigate(Routes.MainPage.route)
+                },
+                onSignUpClick = {
+                    navController.navigate(Routes.RegistroPage.route)
+                },
+                navController = rememberNavController()
+            )
+        }
+        composable(Routes.InicioPage.route) {
+            LoginScreen(
+                onLoginClick = {
+                    navController.navigate(Routes.LoginPage.route)
                 },
                 onSignUpClick = {
                     navController.navigate(Routes.RegistroPage.route)

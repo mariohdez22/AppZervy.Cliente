@@ -38,7 +38,7 @@ class SplashScreenActivity : ComponentActivity() {
 fun SplashScreen(navController: NavHostController) {
     SplashScreenContent {
         // Navegar a la pantalla de inicio de sesión cuando se complete el splash screen
-        navController.navigate("login_screen") {
+        navController.navigate("inicio") {
             popUpTo("splash_screen") { inclusive = true }
         }
     }

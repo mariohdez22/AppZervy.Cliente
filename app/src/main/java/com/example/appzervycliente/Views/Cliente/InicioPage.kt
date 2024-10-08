@@ -32,30 +32,25 @@ fun LoginScreen(
     onLoginClick: () -> Unit,
     onSignUpClick: () -> Unit
 ) {
-    // Variables de estado para los campos de texto
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        content = { innerPadding ->
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
                     .background(Color.White)
             ) {
-                // Fondo decorativo con imágenes
+                // Imagen decorativa superior izquierda (group1)
                 Image(
                     painter = painterResource(id = R.drawable.group5),
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .padding(0.dp)
-                        .fillMaxWidth(0.25f),
+                        .fillMaxWidth(0.25f),  // Ajustar al tamaño deseado
                     contentScale = ContentScale.Crop
                 )
 
+                // Imagen decorativa superior derecha (group2)
                 Image(
                     painter = painterResource(id = R.drawable.group6),
                     contentDescription = null,
@@ -66,117 +61,71 @@ fun LoginScreen(
                     contentScale = ContentScale.Crop
                 )
 
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    // Imagen decorativa inferior (group3)
-                    Image(
-                        painter = painterResource(id = R.drawable.group3),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .fillMaxWidth()
-                            .height(150.dp)
-                            .offset(y = 30.dp),
-                        contentScale = ContentScale.FillWidth
-                    )
-                }
-
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
-                        .align(Alignment.Center)
-                        .offset(y = (-50).dp)
+                        .padding(horizontal = 16.dp, vertical = 32.dp)
                 ) {
-                    // Logo
+                    Spacer(modifier = Modifier.height(150.dp))
+
+                    // Logo (group4.png)
                     Image(
-                        painter = painterResource(id = R.drawable.union),
+                        painter = painterResource(id = R.drawable.group4),
                         contentDescription = null,
                         modifier = Modifier
-                            .size(200.dp)
-                            .padding(top = 10.dp)
+                            .size(258.dp, 153.dp)
+                            .padding(top = 24.dp) // Ajuste del margen superior
                     )
 
-                    // Texto de bienvenida
-                    Text(
-                        text = "Inicia Sesión en Zervy",
-                        fontSize = 24.sp,
-                        color = Color.Black,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
+                    Spacer(modifier = Modifier.height(40.dp))
 
-                    // Campo de Email
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = { Text("Email") },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.personaicon),
-                                contentDescription = null
-                            )
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth(0.85f)
-                            .padding(top = 16.dp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = Color.Black,
-                            unfocusedBorderColor = Color.Black
-                        ),
-                        shape = RoundedCornerShape(16.dp),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-                    )
-
-                    // Campo de Contraseña
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        label = { Text("Contraseña") },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.emailicon),
-                                contentDescription = null
-                            )
-                        },
-                        visualTransformation = PasswordVisualTransformation(),
-                        modifier = Modifier
-                            .fillMaxWidth(0.85f)
-                            .padding(top = 16.dp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = Color.Black,
-                            unfocusedBorderColor = Color.Black
-                        ),
-                        shape = RoundedCornerShape(16.dp)
-                    )
-
-
-
-                    // Botón de "Aceptar"
+                    // Botón Iniciar Sesión
                     Button(
                         onClick = onLoginClick,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2)), // Color ajustado
+                        shape = RoundedCornerShape(50),
                         modifier = Modifier
-                            .padding(top = 16.dp)
-                            .fillMaxWidth(0.5f),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2))
+                            .fillMaxWidth(0.7f)
+                            .height(48.dp)
                     ) {
-                        Text(text = "Aceptar", color = Color.White)
+                        Text("Iniciar Sesión", color = Color.White, fontSize = 16.sp)
                     }
 
-                    // Botón de "Registrarse"
-                    TextButton(
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    // Botón Registrarse
+                    OutlinedButton(
                         onClick = onSignUpClick,
-                        modifier = Modifier.padding(top = 8.dp)
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF7E57C2)),
+                        shape = RoundedCornerShape(50),
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .height(48.dp)
                     ) {
-                        Text(text = "Registrarse")
+                        Text("Registrarse", color = Color(0xFF7E57C2), fontSize = 16.sp)
+                    }
+
+                    Spacer(modifier = Modifier.height(40.dp))
+
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        // Imagen decorativa inferior (group3)
+                        Image(
+                            painter = painterResource(id = R.drawable.group3),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)  // Alineado al centro inferior dentro de un Box
+                                .fillMaxWidth()                  // Ocupa todo el ancho disponible
+                                .height(200.dp)                 // Ajuste del tamaño para que sobresalga correctamente
+                                .offset(y = 80.dp),             // Mueve la imagen hacia arriba en lugar de usar padding negativo
+                            contentScale = ContentScale.FillWidth // Ajuste para llenar el ancho
+                        )
                     }
                 }
             }
         }
-    )
-}
 
 @Preview(showBackground = true)
 @Composable

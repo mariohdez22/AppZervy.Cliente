@@ -164,7 +164,7 @@ fun Login(
 @Composable
 fun LoginPreview() {
     AppZervyClienteTheme {
-        LoginScreen(
+        Login(
             navController = rememberNavController(),
             onLoginClick = {},
             onSignUpClick = {}
