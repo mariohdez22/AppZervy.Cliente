@@ -11,12 +11,9 @@ import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Views.Cliente.CarritoPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
 import com.example.appzervycliente.Views.Cliente.LoginScreen
-import com.example.appzervycliente.Views.Cliente.RegistroPreview
+import com.example.appzervycliente.Views.Cliente.ResenaSocioPage
 import com.example.appzervycliente.Views.Cliente.SignUpScreen
 import com.example.appzervycliente.Views.Cliente.SplashScreen
-import com.example.appzervycliente.Views.ClientesTest.CrearClientes
-import com.example.appzervycliente.Views.ClientesTest.EditarClientes
-import com.example.appzervycliente.Views.ClientesTest.MostrarClientes
 
 @Composable
 fun SetupNavGraph(
@@ -26,15 +23,16 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.ArranquePage.route
+        startDestination = Routes.ResenaPage.route
     ) {
         composable(Routes.CarritoPage.route) {
+            viewModel.cliente
             CarritoPage(navController)
         }
         composable(Routes.InspeccionPage.route) {
             InspeccionPage(navController)
         }
-        composable(Routes.LoginScreen.route) {
+        composable(Routes.LoginPage.route) {
             LoginScreen(
                 onLoginClick = {},
                 onSignUpClick = {},
@@ -50,6 +48,10 @@ fun SetupNavGraph(
         }
         composable(Routes.ArranquePage.route) {
             SplashScreen(navController)
+        }
+
+        composable(Routes.ResenaPage.route) {
+            ResenaSocioPage(navController)
         }
 
 //-------------------------------------------------------------[PRUEBAS]
