@@ -34,7 +34,7 @@ fun SetupNavGraph(
         composable(Routes.InspeccionPage.route) {
             InspeccionPage(navController)
         }
-        composable(Routes.LoginScreen.route) {
+        composable(Routes.LoginPage.route) {
             LoginScreen(
                 onLoginClick = {},
                 onSignUpClick = {},
