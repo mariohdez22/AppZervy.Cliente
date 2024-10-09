@@ -1,3 +1,62 @@
 <resources>
     <string name="app_name">AppZervy.Cliente</string>
+
+    <string name="txtEjemplo">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut auctor ligula nec mollis
+        commodo. Donec in turpis vitae nisl congue accumsan eget ac nulla.
+    </string>
+
+    <string name="puntos">
+        .....................................................................................
+        .....................................................................................
+        .....................................................................................
+    </string>
+
+    ----------------------------------------------------------------------------[CARRITO]
+
+    <string name="lblPagarServicio">Pagar Servicio.</string>
+    <string name="txtPagarServicio">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Ut auctor ligula nec mollis commodo.</string>
+    
+    <string name="lblDireccion">Direccion de residencia.</string>
+    <string name="lblNota">Agregar nota para el socio.</string>
+    <string name="lblNotaPlaceholder">Agregar nota…</string>
+
+    <string name="lblPago">Pago Servicio.</string>
+    <string name="lblSocio">Socio que impartira el servicio.</string>
+
+    <string name="lblMetodo">Metodo de pago</string>
+
+    <string name="btnPagar">Pagar Servicio</string>
+
+    ----------------------------------------------------------------------------[INSPECCION]
+
+    <string name="lblInspeccionActiva">Inspeccion Activa</string>
+
+    <string name="lblCodigo">Codigo</string>
+
+    <string name="lblDatosGenerales">Datos Generales de la inspeccion</string>
+    <string name="lblEstado">Estado Inspección</string>
+    <string name="lblDuracion">Duracion de la Inspección</string>
+    <string name="lblFechaInicio">Fecha de inicio</string>
+    <string name="lblFechaFinal">Fecha de finalización</string>
+    
+    <string name="lblPrecio">Precio Inspección</string>
+
+    <string name="lblDetalles">Detalles de la inspección</string>
+    <string name="lblCategoria">Categoria del servicio</string>
+    <string name="lblDuracionServicio">Duracion del servicio</string>
+
+    ----------------------------------------------------------------------------[RESENA]
+    
+    <string name="lblPregunta">¿Como estuvo tu servicio?</string>
+    <string name="lblCalifica">Califica tu servicio</string>
+    <string name="lblPreguntaCalifica">¿Como calificarias el servicio ofrecido?</string>
+    <string name="lblAgregarTitulo">Agregar titulo de reseña</string>
+    <string name="btnSiguienteResena">Siguiente</string>
+    <string name="btnTerminarResena">Terminar</string>
+
+    <string name="urlEficiencia">https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGVlMGFseXo2MzI4cGZrMGxhNHBpOGk2YjZ2aTBraG56d3Z2ZWhzaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cNWkC2JTKdqWcwcVsc/giphy.gif</string>
+    <string name="urlTrabajoHecho">https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExemdoaGsyazF4ajZnNmNzMWx0bTJud2FtNXpyZjMxNzR4eDl6eHZ1OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/M3brAky8azgnM39iCb/giphy.gif</string>
+
 </resources>

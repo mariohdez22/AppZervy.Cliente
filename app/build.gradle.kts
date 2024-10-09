@@ -61,6 +61,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // Coil para cargar imagenes en Compose y Multiplatform
+    implementation("io.coil-kt:coil-compose:2.1.0")
+
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
 
@@ -81,6 +84,10 @@ dependencies {
     // Para utilizar ViewModel en Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     implementation(libs.androidx.navigation.compose)
+
+    //coil
+    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("io.coil-kt:coil-gif:2.7.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
