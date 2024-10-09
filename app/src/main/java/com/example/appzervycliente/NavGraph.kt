@@ -40,37 +40,13 @@ fun SetupNavGraph(
            MainScreen(navController)
         }
         composable(Routes.LoginPage.route) {
-            Login(
-                onLoginClick = {
-                    navController.navigate(Routes.MainPage.route)
-                },
-                onSignUpClick = {
-                    navController.navigate(Routes.RegistroPage.route)
-                },
-                navController = rememberNavController()
-            )
+            Login(navController)
         }
         composable(Routes.InicioPage.route) {
-            LoginScreen(
-                onLoginClick = {
-                    navController.navigate(Routes.LoginPage.route)
-                },
-                onSignUpClick = {
-                    navController.navigate(Routes.RegistroPage.route)
-                },
-                navController = rememberNavController()
-            )
+            LoginScreen(navController)
         }
         composable(Routes.RegistroPage.route) {
-            SignUpScreen(
-                onLoginClick = {
-                    navController.navigate(Routes.MainPage.route)
-                },
-                onSignUpClick = {
-                    navController.navigate(Routes.LoginPage.route)
-                },
-                navController = rememberNavController()
-            )
+            SignUpScreen(navController)
         }
         composable(Routes.ArranquePage.route) {
             SplashScreen(navController)

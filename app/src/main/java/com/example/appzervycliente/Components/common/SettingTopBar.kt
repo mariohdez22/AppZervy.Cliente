@@ -30,7 +30,8 @@ import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingTopBar(
-    scrollBehavior : TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    scrollBehavior : TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
+    onNavigationIconClick: () -> Unit
 ){
     TopAppBar(
         modifier = Modifier
@@ -50,7 +51,7 @@ fun SettingTopBar(
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = colorResource(R.color.btnCarritoTopBar)
                 ),
-                onClick = {}
+                onClick = onNavigationIconClick
             ) {
                 Icon(
                     modifier = Modifier.fillMaxSize(0.75f),
@@ -87,6 +88,6 @@ fun SettingTopBarPreview(){
     AppZervyClienteTheme(
         dynamicColor = false
     ) {
-        SettingTopBar()
+        SettingTopBar(onNavigationIconClick = {});
     }
 }

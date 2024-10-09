@@ -1,6 +1,6 @@
 package com.example.appzervycliente.Routes
 
-//----------------------------------------------------- [INICIO]
+//----------------------------------------------------- [LOGIN]
 const val ROOT_LOGIN_PAGE = "login_screen"
 
 //----------------------------------------------------- [CARRITO DE COMPRAS]
@@ -21,7 +21,7 @@ const val ROOT_ARRANQUE_PAGE = "arranque"
 
 //----------------------------------------------------- [PRINCIPAL]
 
-const val ROOT_PRINCIPAL_PAGE = "principal"
+const val ROOT_MAIN_PAGE = "principal"
 
 //----------------------------------------------------- [INICIO]
 
@@ -31,7 +31,7 @@ const val ROOT_INICIO_PAGE = "inicio"
 
 //------------------------------------------------------[PRUEBAS]
 //----------------------------------------------------- [LISTA DE CLIENTES]
-const val ROOT_MAIN_PAGE = "clientes_list"
+const val ROOT_CLIENTE_LISTA_PAGE = "clientes_list"
 
 //----------------------------------------------------- [CREAR CLIENTES]
 const val ROOT_CREAR_CLIENTE_PAGE = "crear_cliente"
@@ -53,11 +53,11 @@ sealed class Routes(
     object RegistroPage: Routes(ROOT_REGISTRO_PAGE)
     object InicioPage: Routes(ROOT_INICIO_PAGE)
     object ArranquePage: Routes(ROOT_ARRANQUE_PAGE)
-    object PrincipalPage: Routes(ROOT_PRINCIPAL_PAGE)
+    object MainPage: Routes(ROOT_MAIN_PAGE)
 
     object PerfilAgregarDireccionPage: Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 
-    object MainPage: Routes(ROOT_MAIN_PAGE)
+
     object CrearClientePage: Routes(ROOT_CREAR_CLIENTE_PAGE)
     object EditarClientPage: Routes("${ROOT_EDITAR_CLIENTE_PAGE}/{${ARG_CLIENTE_ID}}")
 }

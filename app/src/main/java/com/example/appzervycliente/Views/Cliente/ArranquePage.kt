@@ -66,7 +66,7 @@ fun SplashScreenContent(onSplashFinished: () -> Unit) {
 
     // Introduce un retraso de 3 segundos antes de navegar al LoginScreen
     LaunchedEffect(Unit) {
-        delay(3000) // 3 segundos de espera (ajusta este valor si lo necesitas)
+        delay(3000)
         onSplashFinished() // Llama a la función para finalizar el splash y navegar
     }
 

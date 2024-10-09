@@ -36,6 +36,7 @@ import com.example.appzervycliente.Components.common.SettingTopBar
 import com.example.appzervycliente.Components.common.TextCommentSection
 import com.example.appzervycliente.Components.common.TextSection
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,7 +48,11 @@ fun CarritoPage(
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { SettingTopBar(scrollBehavior) }
+        topBar = { SettingTopBar(
+            scrollBehavior, onNavigationIconClick = {
+                navController.navigate(Routes.MainPage.route)
+            })
+        }
     ) {
         innerPadding ->
         Column(

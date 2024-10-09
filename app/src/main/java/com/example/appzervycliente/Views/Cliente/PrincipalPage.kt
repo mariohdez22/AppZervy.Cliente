@@ -25,20 +25,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-
-@Composable
-fun MainApp() {
-    val navController = rememberNavController()
-    AppZervyClienteTheme {
-        // Configuración del NavHost
-        NavHost(navController = navController, startDestination = "main_screen") {
-            composable("main_screen") {
-                MainScreen(navController = navController)
-            }
-            // Agrega más rutas si es necesario
-        }
-    }
-}
+import com.example.appzervycliente.Routes.ROOT_CARRITO_COMPRAS_PAGE
+import com.example.appzervycliente.Routes.ROOT_INSPECCION_PAGE
+import com.example.appzervycliente.Routes.ROOT_MAIN_PAGE
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -170,10 +159,10 @@ fun ServiceItem(service: Service, onClick: () -> Unit) {
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
-        BottomNavItem("Home", R.drawable.homeicon, "home"),
+        BottomNavItem("Home", R.drawable.homeicon, ROOT_MAIN_PAGE),
         BottomNavItem("Stores", R.drawable.historyicon, "stores"),
-        BottomNavItem("Cart", R.drawable.carticon, "cart"),
-        BottomNavItem("History", R.drawable.shopicon, "history")
+        BottomNavItem("Cart", R.drawable.carticon, ROOT_CARRITO_COMPRAS_PAGE),
+        BottomNavItem("History", R.drawable.shopicon, ROOT_INSPECCION_PAGE)
     )
 
     NavigationBar {
@@ -186,7 +175,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                 selected = false, // Puedes manejar el estado seleccionado
                 onClick = {
                     // Manejar la navegación
-                    // navController.navigate(item.route)
+                    navController.navigate(item.route)
                 }
             )
         }

@@ -44,6 +44,7 @@ import com.example.appzervycliente.Components.common.TextHorizontalDotSpacingSec
 import com.example.appzervycliente.Components.common.TextHorizontalSection
 import com.example.appzervycliente.Components.common.TextSection
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +68,11 @@ fun InspeccionPage(
         sheetTonalElevation = 1.5.dp,
     ) {
         Scaffold(
-            topBar = { SettingTopBar() }
+            topBar = { SettingTopBar(
+                onNavigationIconClick = {
+                    navController.navigate(Routes.MainPage.route)
+                })
+            }
         ) {
             paddingValues ->
             Column(
