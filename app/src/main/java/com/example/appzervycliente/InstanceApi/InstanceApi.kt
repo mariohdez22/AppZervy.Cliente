@@ -1,5 +1,6 @@
 package com.example.appzervycliente.InstanceApi
 
+import com.example.appzervycliente.Network.AuthInterceptor
 import com.example.appzervycliente.Network.ClientesApiService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -9,9 +10,10 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object InstanceApi {
 
-    private const val BASE_URL = "http://10.0.2.2:8080/" // Para el emulador
+    private const val BASE_URL = "http://10.0.2.2:8080/" // Ajusta la URL si es necesario
 
     private val client = OkHttpClient.Builder()
+        .addInterceptor(AuthInterceptor())
         .build()
 
     private val moshi = Moshi.Builder()
