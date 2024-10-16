@@ -12,6 +12,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -25,20 +28,34 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
+import com.example.appzervycliente.DTOs.CategoriaServicioDTO
 import com.example.appzervycliente.Routes.ROOT_CARRITO_COMPRAS_PAGE
 import com.example.appzervycliente.Routes.ROOT_INSPECCION_PAGE
 import com.example.appzervycliente.Routes.ROOT_MAIN_PAGE
+import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
+import com.example.appzervycliente.Views.ClientesTest.ClientesItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavHostController) {
-    val servicesList = listOf(
-        Service("Instalación de TV", R.drawable.tv),
-        Service("Ensamblaje de Muebles", R.drawable.mueble),
-        Service("Cuidado del Jardín", R.drawable.jardin),
-        Service("Cuidado del Jardín", R.drawable.carpinteria)
-        // Agrega más servicios si es necesario
-    )
+fun MainScreen(viewModel: CategoriaServicioViewModel,navController: NavHostController) {
+
+    val categorias by viewModel.categorias
+    val isLoading by viewModel.isLoading
+    val errorMessage by viewModel.errorMessage
+
+    LaunchedEffect(Unit) {
+        viewModel.obtenerCategoriaServicios()
+    }
+
+//    val servicesList = listOf(
+//        Service("Instalación de TV", R.drawable.tv),
+//        Service("Ensamblaje de Muebles", R.drawable.mueble),
+//        Service("Cuidado del Jardín", R.drawable.jardin),
+//        Service("Cuidado del Jardín", R.drawable.carpinteria)
+//        // Agrega más servicios si es necesario
+//    )
 
     Scaffold(
         bottomBar = {
@@ -51,26 +68,54 @@ fun MainScreen(navController: NavHostController) {
                 .padding(innerPadding)
         ) {
             HeaderSection()
+
             Text(
                 text = "Servicios Disponibles",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.W300,
+                color = Color.DarkGray,
                 modifier = Modifier
-                    .padding(start = 16.dp, top = 16.dp)
+                    .padding(start = 16.dp, top = 16.dp, bottom = 10.dp)
             )
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                items(servicesList) { service ->
-                    ServiceItem(service = service, onClick = {
-                        // Manejar el clic en el servicio
-                        // Por ejemplo, navegar a la pantalla de detalles del servicio
-                        // navController.navigate("service_detail/${service.title}")
-                    })
+
+            //--------------------------------------------------------------------------------------
+
+            when {
+                isLoading -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                errorMessage != null -> {
+                    Text(
+                        text = errorMessage ?: "Error desconocido",
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+                else -> {
+
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(categorias) { categoria ->
+                            ServiceItem(
+                                categoria = categoria,
+                                onClick = {
+                                // Manejar el clic en el servicio
+                                // Por ejemplo, navegar a la pantalla de detalles del servicio
+                                // navController.navigate("service_detail/${service.title}")
+                                })
+                        }
+                    }
+
                 }
             }
+
+            //--------------------------------------------------------------------------------------
+
         }
     }
 }
@@ -90,7 +135,7 @@ fun HeaderSection() {
             contentDescription = "Imagen de perfil",
             modifier = Modifier
                 .size(40.dp)
-                .clip(MaterialTheme.shapes.small)
+                .clip(RoundedCornerShape(20.dp))
                 .background(MaterialTheme.colorScheme.primary)
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -98,7 +143,7 @@ fun HeaderSection() {
         Text(
             text = "Mario H.",
             fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.W300,
             color = Color.Black
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -124,11 +169,11 @@ fun HeaderSection() {
 }
 
 @Composable
-fun ServiceItem(service: Service, onClick: () -> Unit) {
+fun ServiceItem(categoria: CategoriaServicioDTO, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(12.dp)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp)
@@ -138,16 +183,29 @@ fun ServiceItem(service: Service, onClick: () -> Unit) {
                 .height(200.dp)
         ) {
             Image(
-                painter = painterResource(id = service.imageRes),
+                painter = rememberAsyncImagePainter(model = categoria.foto),
                 contentDescription = "Imagen del servicio",
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
             )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(Color.Black.copy(alpha = 0.7f), Color.Transparent),
+                            startX = 0f,
+                            endX = 800f // Ajusta el tamaño del gradiente según el efecto deseado
+                        )
+                    )
+            )
+
             Text(
-                text = service.title,
+                text = categoria.tituloCategoria,
                 color = Color.White,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.W300,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(start = 16.dp, bottom = 16.dp)
@@ -200,8 +258,8 @@ fun MainScreenPreview() {
         dynamicColor = true
     ) {
         MainScreen(
-            navController = rememberNavController(),
-
+            viewModel = CategoriaServicioViewModel(),
+            navController = rememberNavController()
         )
     }
 }

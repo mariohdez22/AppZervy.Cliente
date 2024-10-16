@@ -36,6 +36,7 @@ import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MostrarClientes(viewModel: ClientesViewModel, navController: NavController) {
+
     val clientes by viewModel.clientes
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
@@ -115,8 +116,6 @@ fun MostrarClientes(viewModel: ClientesViewModel, navController: NavController) 
                 }
             }
         }
-
-
     }
 }
 

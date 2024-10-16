@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Views.Cliente.CarritoPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
@@ -23,6 +24,7 @@ fun SetupNavGraph(
     navController: NavHostController
 ){
     val viewModel: ClientesViewModel = viewModel()
+    val categoryViewModel: CategoriaServicioViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -37,7 +39,10 @@ fun SetupNavGraph(
         }
 
         composable(Routes.MainPage.route) {
-           MainScreen(navController)
+           MainScreen(
+               viewModel = categoryViewModel,
+               navController = navController
+           )
         }
         composable(Routes.LoginPage.route) {
             Login(navController)
