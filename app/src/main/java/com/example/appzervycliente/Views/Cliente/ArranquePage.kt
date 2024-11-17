@@ -22,17 +22,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.*
 
-class SplashScreenActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            val navController = rememberNavController()
-            AppZervyClienteTheme {
-                SplashScreen(navController = navController)
-            }
-        }
-    }
-}
+//class SplashScreenActivity : ComponentActivity() {
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            val navController = rememberNavController()
+//            AppZervyClienteTheme {
+//                SplashScreen(navController = navController)
+//            }
+//        }
+//    }
+//}
 
 @Composable
 fun SplashScreen(navController: NavHostController) {
