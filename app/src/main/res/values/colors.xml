@@ -10,5 +10,7 @@
 
     <color name="btnCarritoTopBar">#CCCCCC</color>
     <color name="lblCodigo">#7982FF</color>
+    <color name="cardInsepccionActiva">#7847BD</color>
+    <color name="standar">#FFCCC2DC</color>
 
 </resources>

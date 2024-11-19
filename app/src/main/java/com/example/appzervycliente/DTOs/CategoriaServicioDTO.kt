@@ -10,6 +10,6 @@ data class CategoriaServicioDTO(
     @Json(name = "foto") val foto: String,
     @Json(name = "tituloCategoria") val tituloCategoria: String,
     @Json(name = "descripcion") val descripcion: String? = "",
-    @Json(name = "horarioServicio") val horarioServicio: String? = "",
-    @Json(name = "tipoCategoria") val tipoCategoria: String? = ""
+    @Json(name = "horarioServicio") val horarioServicio: String?,
+    @Json(name = "tipoCategoria") val tipoCategoria: String?,
 )
