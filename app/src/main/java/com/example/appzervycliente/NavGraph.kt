@@ -29,13 +29,13 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.SolicitudUnDiaPage.route
+        startDestination = Routes.SolicitudDiaPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
             CarritoPage(navController)
         }
-        composable(Routes.SolicitudUnDiaPage.route) {
+        composable(Routes.SolicitudDiaPage.route) {
             SolicitudServicioDia(navController)
         }
         composable(Routes.InspeccionPage.route) {

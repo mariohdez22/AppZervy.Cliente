@@ -58,7 +58,7 @@ sealed class Routes(
     object InicioPage: Routes(ROOT_INICIO_PAGE)
     object ArranquePage: Routes(ROOT_ARRANQUE_PAGE)
     object MainPage: Routes(ROOT_MAIN_PAGE)
-    object SolicitudUnDiaPage: Routes(ROOT_SOLICITUD_DIA_PAGE)
+    object SolicitudDiaPage: Routes(ROOT_SOLICITUD_DIA_PAGE)
 
     object PerfilAgregarDireccionPage: Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 
