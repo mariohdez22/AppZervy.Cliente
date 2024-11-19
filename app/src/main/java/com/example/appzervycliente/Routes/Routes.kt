@@ -23,9 +23,18 @@ const val ROOT_ARRANQUE_PAGE = "arranque"
 
 const val ROOT_MAIN_PAGE = "principal"
 
-//----------------------------------------------------- [LOGIN]
+//----------------------------------------------------- [SOLICITUD DIA]
 
 const val ROOT_SOLICITUD_DIA_PAGE = "solicitudDia"
+
+//----------------------------------------------------- [SOLICITUD DIAS]
+
+const val ROOT_SOLICITUD_DIAS_PAGE = "solicitudDias"
+
+//----------------------------------------------------- [ESPERA]
+
+const val ROOT_ESPERA_PAGE = "espera"
+
 
 //----------------------------------------------------- [INICIO]
 
@@ -59,6 +68,8 @@ sealed class Routes(
     object ArranquePage: Routes(ROOT_ARRANQUE_PAGE)
     object MainPage: Routes(ROOT_MAIN_PAGE)
     object SolicitudDiaPage: Routes(ROOT_SOLICITUD_DIA_PAGE)
+    object SolicitudDiasPage: Routes(ROOT_SOLICITUD_DIAS_PAGE)
+    object EsperaPage: Routes(ROOT_ESPERA_PAGE)
 
     object PerfilAgregarDireccionPage: Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 

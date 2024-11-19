@@ -18,6 +18,7 @@ import com.example.appzervycliente.Views.Cliente.MainScreen
 import com.example.appzervycliente.Views.Cliente.MainScreen
 import com.example.appzervycliente.Views.Cliente.SignUpScreen
 import com.example.appzervycliente.Views.Cliente.SolicitudServicioDia
+import com.example.appzervycliente.Views.Cliente.SolicitudServicioDias
 import com.example.appzervycliente.Views.Cliente.SplashScreen
 
 @Composable
@@ -29,19 +30,24 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.SolicitudDiaPage.route
+        startDestination = Routes.EsperaPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
             CarritoPage(navController)
         }
+        composable(Routes.EsperaPage.route) {
+
+        }
         composable(Routes.SolicitudDiaPage.route) {
             SolicitudServicioDia(navController)
+        }
+        composable(Routes.SolicitudDiasPage.route) {
+            SolicitudServicioDias(navController)
         }
         composable(Routes.InspeccionPage.route) {
             InspeccionPage(navController)
         }
-
         composable(Routes.MainPage.route) {
            MainScreen(
                viewModel = categoryViewModel,

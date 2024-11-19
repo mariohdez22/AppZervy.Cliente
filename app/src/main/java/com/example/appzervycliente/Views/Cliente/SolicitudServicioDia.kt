@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,6 +50,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,6 +61,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.R
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
+import kotlin.math.sin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
@@ -81,6 +85,7 @@ fun SolicitudServicioDia(
             Header()
             ArticuloDescripcion()
             Solicitud()
+            TipoPago()
         }
     }
 
@@ -139,6 +144,7 @@ private fun TopBar(
             scrolledContainerColor = Color.White
         ),
         scrollBehavior = scrollBehavior,
+        windowInsets = WindowInsets(left = 25.dp, right = 25.dp, top = 20.dp)
     )
 }
 
@@ -157,7 +163,7 @@ private fun Header(){
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp, bottom = 15.dp)
+                .padding(start = 25.dp, end = 25.dp, bottom = 20.dp)
                 .align(Alignment.BottomStart)
         ) {
             Text(
@@ -176,7 +182,7 @@ private fun ArticuloDescripcion(){
 
     Column(
         modifier = Modifier
-            .padding(15.dp),
+            .padding(top = 25.dp, bottom = 20.dp, start = 25.dp, end = 25.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         Text(
@@ -225,6 +231,7 @@ private fun ArticuloDescripcion(){
 private fun Solicitud(){
 
     var titulo by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("") }
     val images = listOf(
         painterResource(R.drawable.furniture_assembly_image),
         painterResource(R.drawable.garden_care_image),
@@ -234,9 +241,9 @@ private fun Solicitud(){
 
     Column(
         modifier = Modifier
-            .padding(15.dp)
+            .padding(top = 30.dp, bottom = 30.dp, start = 25.dp, end = 25.dp)
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(15.dp)
+        verticalArrangement = Arrangement.spacedBy(30.dp)
     ) {
         Column{
             Text(
@@ -253,7 +260,9 @@ private fun Solicitud(){
                 placeholder = {
                     Text("Agregar titulo...")
                 },
-                shape = RoundedCornerShape(15.dp)
+                shape = RoundedCornerShape(15.dp),
+                maxLines = 1,
+                singleLine = true
             )
         }
 
@@ -268,12 +277,11 @@ private fun Solicitud(){
                     .fillMaxWidth()
                     .height(200.dp),
                 label = { Text("") },
-                value = titulo,
-                onValueChange = { titulo = it },
+                value = descripcion,
+                onValueChange = { descripcion = it },
                 placeholder = {
                     Text("Agregar descripcion...")
                 },
-                maxLines = 5,
                 singleLine = false,
                 shape = RoundedCornerShape(15.dp)
             )
@@ -339,7 +347,6 @@ private fun Solicitud(){
         }
 
     }
-    HorizontalDivider(thickness = 1.dp)
 }
 
 @Composable
@@ -363,9 +370,8 @@ private fun TipoPago(){
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(
-                    text = "",
-                    fontSize = 16.5.sp,
-                    fontWeight = FontWeight.W500
+                    text = "Targeta",
+                    fontWeight = FontWeight.W400
                 )
                 Checkbox(
                     checked = isTargeta,
@@ -380,9 +386,8 @@ private fun TipoPago(){
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(
-                    text = "Tipo de pago",
-                    fontSize = 16.5.sp,
-                    fontWeight = FontWeight.W500
+                    text = "Efectivo",
+                    fontWeight = FontWeight.W400
                 )
                 Checkbox(
                     checked = isEfectivo,
@@ -394,6 +399,25 @@ private fun TipoPago(){
                 )
             }
         }
+        HorizontalDivider(thickness = 1.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 15.dp, bottom = 15.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(
+                modifier = Modifier.fillMaxWidth(0.75f),
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.btnEnviarSolicitud),
+                    contentColor = Color.White
+                )
+            ){
+                Text("Enviar Solicitud")
+            }
+        }
+
     }
 
 }
