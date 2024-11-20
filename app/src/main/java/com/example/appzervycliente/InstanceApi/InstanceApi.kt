@@ -1,6 +1,7 @@
 package com.example.appzervycliente.InstanceApi
 
 import com.example.appzervycliente.Network.AuthInterceptor
+import com.example.appzervycliente.Network.CategoriaServicioApiService
 import com.example.appzervycliente.Network.ClientesApiService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -20,12 +21,21 @@ object InstanceApi {
         .add(KotlinJsonAdapterFactory())
         .build()
 
-    val api: ClientesApiService by lazy {
+    val apiClient: ClientesApiService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(client)
             .build()
             .create(ClientesApiService::class.java)
+    }
+
+    val apiCategory: CategoriaServicioApiService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
+            .create(CategoriaServicioApiService::class.java)
     }
 }

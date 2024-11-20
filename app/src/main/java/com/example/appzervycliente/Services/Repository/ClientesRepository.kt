@@ -6,7 +6,7 @@ import com.example.appzervycliente.Network.ClientesApiService
 
 class ClientesRepository {
 
-    private val apiService: ClientesApiService = InstanceApi.api
+    private val apiService: ClientesApiService = InstanceApi.apiClient
 
     suspend fun obtenerClientes() = apiService.obtenerClientes()
 

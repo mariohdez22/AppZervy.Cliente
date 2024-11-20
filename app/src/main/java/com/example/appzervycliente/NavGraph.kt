@@ -7,8 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Views.Cliente.CarritoPage
+import com.example.appzervycliente.Views.Cliente.EsperaPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
 import com.example.appzervycliente.Views.Cliente.LoginScreen
 import com.example.appzervycliente.Views.Cliente.Login
@@ -16,6 +18,8 @@ import com.example.appzervycliente.Views.Cliente.ResenaSocioPage
 import com.example.appzervycliente.Views.Cliente.MainScreen
 import com.example.appzervycliente.Views.Cliente.MainScreen
 import com.example.appzervycliente.Views.Cliente.SignUpScreen
+import com.example.appzervycliente.Views.Cliente.SolicitudServicioDia
+import com.example.appzervycliente.Views.Cliente.SolicitudServicioDias
 import com.example.appzervycliente.Views.Cliente.SplashScreen
 import com.example.appzervycliente.Views.Cliente.WelcomeScreen
 import com.example.appzervycliente.Views.Cliente.EmailVerificationPreview
@@ -27,21 +31,34 @@ fun SetupNavGraph(
     navController: NavHostController
 ){
     val viewModel: ClientesViewModel = viewModel()
+    val categoryViewModel: CategoriaServicioViewModel = viewModel()
 
     NavHost(
         navController = navController,
-        startDestination = Routes.ArranquePage.route
+        startDestination = Routes.EsperaPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
             CarritoPage(navController)
+        }
+        composable(Routes.EsperaPage.route) {
+            EsperaPage(navController)
+        }
+        composable(Routes.SolicitudDiaPage.route) {
+            SolicitudServicioDia(navController)
+        }
+        composable(Routes.SolicitudDiasPage.route) {
+            SolicitudServicioDias(navController)
         }
         composable(Routes.InspeccionPage.route) {
             InspeccionPage(navController)
         }
 
         composable(Routes.MainPage.route) {
-           MainScreen(navController)
+           MainScreen(
+               viewModel = categoryViewModel,
+               navController = navController
+           )
         }
         composable(Routes.LoginPage.route) {
             Login(navController)
