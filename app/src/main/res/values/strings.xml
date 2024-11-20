@@ -59,6 +59,18 @@
     <string name="urlEficiencia">https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGVlMGFseXo2MzI4cGZrMGxhNHBpOGk2YjZ2aTBraG56d3Z2ZWhzaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cNWkC2JTKdqWcwcVsc/giphy.gif</string>
     <string name="urlTrabajoHecho">https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExemdoaGsyazF4ajZnNmNzMWx0bTJud2FtNXpyZjMxNzR4eDl6eHZ1OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/M3brAky8azgnM39iCb/giphy.gif</string>
 
-    <string name="example">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,   Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni.</string>
+    <string name="example">
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+        accusantium doloremque laudantium, Nemo enim ipsam voluptatem quia voluptas
+        sit aspernatur aut odit aut fugit, sed quia consequuntur magni.
+    </string>
+
+    <string name="example2">
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+        laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
+        architecto beatae vitae dicta sunt explicabo, sed quia consequuntur magni dolores,
+        sed quia consequuntur magni. Sed ut perspiciatis unde omnis iste natus error sit
+        voluptatem accusantium doloremque laudantium, totam rem.
+    </string>
 
 </resources>

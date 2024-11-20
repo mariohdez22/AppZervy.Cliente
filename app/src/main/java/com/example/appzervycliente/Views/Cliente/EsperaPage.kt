@@ -2,6 +2,7 @@ package com.example.appzervycliente.Views.Cliente
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -10,59 +11,62 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.appzervycliente.Components.common.IconTextHorizontalSection
 import com.example.appzervycliente.R
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +88,7 @@ fun EsperaPage(
             TopBar(bottomSheetState.currentValue == SheetValue.Expanded)
         },
         sheetContent = { BodySheet(scope, bottomSheetState) },
-        sheetPeekHeight = 72.dp
+        sheetPeekHeight = 58.dp
     ) {
         paddingValues ->
         Box(
@@ -202,26 +206,164 @@ private fun BodySheet(
     scope: CoroutineScope,
     sheetState: SheetState
 ){
+    val scrollState = rememberScrollState()
+
+    val images = listOf(
+        painterResource(R.drawable.furniture_assembly_image),
+        painterResource(R.drawable.garden_care_image),
+        painterResource(R.drawable.tv),
+        painterResource(R.drawable.mueble),
+        painterResource(R.drawable.furniture_assembly_image),
+        painterResource(R.drawable.garden_care_image),
+        painterResource(R.drawable.tv),
+        painterResource(R.drawable.mueble),
+    )
+
     Column(
         modifier = Modifier
-            .padding(25.dp)
+            .heightIn(max = 500.dp)
             .fillMaxWidth()
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.spacedBy(5.dp),
     ) {
-        Text("hola que tal")
+        Column(
+            modifier = Modifier
+                .padding(25.dp)
+        ) {
+            Text(
+                text = "Detalles de la solicitud",
+                fontSize = 25.sp,
+                fontWeight = FontWeight.W500,
+            )
+        }
+        HorizontalDivider(thickness = 1.dp)
+        Column(
+            modifier = Modifier
+                .padding(25.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            Text(
+                text = "Montaje de muebles para sala",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.W500,
+            )
+            Text(
+                text = stringResource(R.string.example2)
+            )
+            Text(
+                text = stringResource(R.string.example)
+            )
+            Detalles()
+        }
+
+        Column(
+            modifier = Modifier
+                .padding(start = 25.dp, end = 25.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ){
+            Text(
+                text = "Detalles de la solicitud",
+                fontSize = 17.sp,
+                fontWeight = FontWeight.W500,
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ){
+                LazyRow(
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .weight(1f),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    items(images) { image ->
+                        Image(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .width(110.dp)
+                                .clip(shape = RoundedCornerShape(10.dp)),
+                            painter = image,
+                            contentDescription = "image",
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+            }
+        }
     }
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview(showBackground = true)
-private fun SheetPreview(){
-    AppZervyClienteTheme(
-        dynamicColor = false
+private fun Detalles(){
+
+    Column(
+        modifier = Modifier
+            .padding(top = 20.dp)
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        BodySheet(rememberCoroutineScope(), rememberModalBottomSheetState())
+        IconTextHorizontalSection(
+            painter = painterResource(R.drawable.start_icon),
+            label = "Categoria",
+            text = "Montaje de Articulos",
+            labelSize = 14.5.sp,
+            textSize = 14.5.sp,
+            labelWeight = FontWeight.W500,
+            textWeight = FontWeight.W300,
+            iconGap = 7.dp,
+            horizontalArrangement = Arrangement.SpaceBetween
+        )
+        IconTextHorizontalSection(
+            painter = painterResource(R.drawable.start_icon),
+            label = "Fecha",
+            text = "24 de Abril 2024 | 6:34 PM",
+            labelSize = 14.5.sp,
+            textSize = 14.5.sp,
+            labelWeight = FontWeight.W500,
+            textWeight = FontWeight.W300,
+            iconGap = 7.dp,
+            horizontalArrangement = Arrangement.SpaceBetween
+        )
+        IconTextHorizontalSection(
+            painter = painterResource(R.drawable.start_icon),
+            label = "Tipo de pago",
+            text = "En Curso",
+            labelSize = 14.5.sp,
+            textSize = 14.5.sp,
+            labelWeight = FontWeight.W500,
+            textWeight = FontWeight.W300,
+            iconGap = 7.dp,
+            horizontalArrangement = Arrangement.SpaceBetween
+        )
+        IconTextHorizontalSection(
+            painter = painterResource(R.drawable.start_icon),
+            label = "Duracion",
+            text = "Un dia",
+            labelSize = 14.5.sp,
+            textSize = 14.5.sp,
+            labelWeight = FontWeight.W500,
+            textWeight = FontWeight.W300,
+            iconGap = 7.dp,
+            horizontalArrangement = Arrangement.SpaceBetween
+        )
     }
+
 }
+
+
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//@Preview(showBackground = true)
+//private fun SheetPreview(){
+//    AppZervyClienteTheme(
+//        dynamicColor = false
+//    ) {
+//        BodySheet(rememberCoroutineScope(), rememberModalBottomSheetState())
+//    }
+//}
 
 
 @Composable
@@ -248,9 +390,20 @@ private fun Cargando(){
                 fontSize = 20.sp,
             )
             Text(
-                text = "Estimado de espera",
+                text = buildAnnotatedString {
+                    append("Estimado de espera: ")
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.W500)){
+                        append("30 min")
+                    }
+                },
                 fontWeight = FontWeight.W300,
                 fontSize = 14.sp,
+            )
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .height(13.dp)
+                    .fillMaxWidth(),
+                color = Color.Magenta,
             )
         }
     }
