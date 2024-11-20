@@ -2,12 +2,12 @@ package com.example.appzervycliente.Views.Cliente
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,7 +36,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -46,12 +45,17 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -67,6 +71,7 @@ import com.example.appzervycliente.Components.common.IconTextHorizontalSection
 import com.example.appzervycliente.R
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +79,7 @@ fun EsperaPage(
     navController: NavHostController
 ){
     val bottomSheetState = rememberStandardBottomSheetState(
-        initialValue = SheetValue.PartiallyExpanded
+        initialValue = SheetValue.PartiallyExpanded,
     )
 
     val scaffoldState = rememberBottomSheetScaffoldState(
@@ -82,12 +87,23 @@ fun EsperaPage(
     )
     val scope = rememberCoroutineScope()
 
+    var showImagePreview by remember { mutableStateOf(false) }
+    var imagePreview by remember { mutableStateOf<Painter?>(null) }
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TopBar(bottomSheetState.currentValue == SheetValue.Expanded)
+            TopBar(
+                bottomSheetState.currentValue == SheetValue.Expanded ||
+                showImagePreview
+            )
         },
-        sheetContent = { BodySheet(scope, bottomSheetState) },
+        sheetContent = {
+            BodySheet(scope, bottomSheetState){
+                showImagePreview = !showImagePreview
+                imagePreview = it
+            }
+        },
         sheetPeekHeight = 58.dp
     ) {
         paddingValues ->
@@ -109,7 +125,10 @@ fun EsperaPage(
             }
 
             AnimatedVisibility(
-                visible = bottomSheetState.currentValue == SheetValue.Expanded,
+                visible =
+                        bottomSheetState.currentValue == SheetValue.Expanded ||
+                        showImagePreview
+                ,
                 enter = fadeIn(animationSpec = tween(durationMillis = 300)),
                 exit = fadeOut(animationSpec = tween(durationMillis = 300))
             ) {
@@ -120,8 +139,38 @@ fun EsperaPage(
                 )
             }
 
+
         }
 
+    }
+
+    AnimatedVisibility(
+        visible = showImagePreview,
+        enter = fadeIn(animationSpec = tween(durationMillis = 300)),
+        exit = fadeOut(animationSpec = tween(durationMillis = 300))
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                    showImagePreview = !showImagePreview
+                    scope.launch {
+                        bottomSheetState.expand()
+                    }
+                }
+        ){
+            imagePreview?.let {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.4f)
+                        .align(Alignment.Center),
+                    painter = it,
+                    contentDescription = "imagePreview",
+                    contentScale = ContentScale.FillBounds
+                )
+            }
+        }
     }
 
 }
@@ -204,9 +253,11 @@ private fun TopBar(
 @Composable
 private fun BodySheet(
     scope: CoroutineScope,
-    sheetState: SheetState
+    sheetState: SheetState,
+    onClickImage: (Painter) -> Unit
 ){
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
 
     val images = listOf(
         painterResource(R.drawable.furniture_assembly_image),
@@ -283,7 +334,13 @@ private fun BodySheet(
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .width(110.dp)
-                                .clip(shape = RoundedCornerShape(10.dp)),
+                                .clip(shape = RoundedCornerShape(10.dp))
+                                .clickable {
+                                    scope.launch {
+                                        sheetState.partialExpand()
+                                    }
+                                    onClickImage(image)
+                                },
                             painter = image,
                             contentDescription = "image",
                             contentScale = ContentScale.Crop
@@ -412,7 +469,9 @@ private fun Cargando(){
 }
 
 @Composable
-private fun Publicidad(){
+private fun Publicidad(
+
+){
 
     val images = listOf(
         painterResource(R.drawable.furniture_assembly_image),
@@ -422,7 +481,6 @@ private fun Publicidad(){
         painterResource(R.drawable.furniture_assembly_image),
         painterResource(R.drawable.tv),
     )
-
 
     Column(
         modifier = Modifier
