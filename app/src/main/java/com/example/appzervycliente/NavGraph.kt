@@ -10,6 +10,7 @@ import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Views.Cliente.CarritoPage
+import com.example.appzervycliente.Views.Cliente.EsperaPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
 import com.example.appzervycliente.Views.Cliente.LoginScreen
 import com.example.appzervycliente.Views.Cliente.Login
@@ -37,7 +38,7 @@ fun SetupNavGraph(
             CarritoPage(navController)
         }
         composable(Routes.EsperaPage.route) {
-
+            EsperaPage(navController)
         }
         composable(Routes.SolicitudDiaPage.route) {
             SolicitudServicioDia(navController)
