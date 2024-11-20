@@ -46,23 +46,20 @@ fun Login(
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    var showResetPasswordDialog by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    // Detectar si el teclado está visible
     val imeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
 
-    // Animar el padding superior y el tamaño del logo al detectar cambios en el teclado
     val animatedPaddingTop by animateDpAsState(
-        targetValue = if (imeVisible) 16.dp else 64.dp, // Padding superior cambia según teclado
-        animationSpec = tween(durationMillis = 300) // Duración de la animación
+        targetValue = if (imeVisible) 16.dp else 64.dp,
+        animationSpec = tween(durationMillis = 300)
     )
 
     val animatedLogoSize by animateDpAsState(
-        targetValue = if (imeVisible) 150.dp else 200.dp, // Tamaño del logo cambia suavemente
-        animationSpec = tween(durationMillis = 300) // Duración de la animación
+        targetValue = if (imeVisible) 150.dp else 200.dp,
+        animationSpec = tween(durationMillis = 300)
     )
 
     Box(
@@ -72,18 +69,16 @@ fun Login(
             .imePadding()
             .padding(bottom = 8.dp)
     ) {
-        // Mostrar fondo decorativo con tamaño reducido si el teclado está visible
         LoginBackgroundImages(imeVisible)
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
-                .padding(bottom = if (imeVisible) 8.dp else 0.dp), // Reducir padding dinámicamente
+                .padding(bottom = if (imeVisible) 8.dp else 0.dp),
             verticalArrangement = if (imeVisible) Arrangement.Top else Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Título y logo con animación
             LoginTitleSection(animatedPaddingTop, animatedLogoSize)
 
             // Formulario
@@ -117,7 +112,11 @@ fun Login(
                 )
 
                 TextButton(
-                    onClick = { showResetPasswordDialog = true },
+                    onClick = {
+                        scope.launch {
+                            sendPasswordResetEmail(email, context)
+                        }
+                    },
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
                     Text(
@@ -128,7 +127,7 @@ fun Login(
                 }
             }
 
-            // Botón
+            // Botón de inicio de sesión
             Button(
                 onClick = {
                     isLoading = true
@@ -176,11 +175,27 @@ fun Login(
         errorMessage?.let { message ->
             LaunchedEffect(message) {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                errorMessage = null // Limpiar el error después de mostrarlo
+                errorMessage = null
             }
         }
     }
 }
+
+// Función para enviar correo de recuperación de contraseña
+suspend fun sendPasswordResetEmail(email: String, context: android.content.Context) {
+    if (email.isEmpty()) {
+        Toast.makeText(context, "Por favor, ingresa un correo electrónico.", Toast.LENGTH_SHORT).show()
+        return
+    }
+
+    try {
+        Firebase.auth.sendPasswordResetEmail(email).await()
+        Toast.makeText(context, "Correo de recuperación enviado a $email.", Toast.LENGTH_LONG).show()
+    } catch (e: Exception) {
+        Toast.makeText(context, "Error: ${e.localizedMessage ?: "No se pudo enviar el correo."}", Toast.LENGTH_LONG).show()
+    }
+}
+
 
 @Composable
 fun LoginTitleSection(paddingTop: Dp, logoSize: Dp) {
@@ -188,19 +203,16 @@ fun LoginTitleSection(paddingTop: Dp, logoSize: Dp) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(top = paddingTop)
     ) {
-        // Logo centrado con tamaño animado
         Image(
             painter = painterResource(id = R.drawable.union),
             contentDescription = null,
             modifier = Modifier.size(logoSize)
         )
-
-        // Texto de bienvenida
         Text(
             text = "Inicia Sesión en Zervy",
             fontSize = 18.sp,
             color = Color.Black,
-            modifier = Modifier.padding(top = 8.dp) // Separar texto del logo
+            modifier = Modifier.padding(top = 8.dp)
         )
     }
 }
@@ -212,18 +224,21 @@ suspend fun signInUser(email: String, password: String): SignInResult {
         val user = authResult.user
 
         if (user != null) {
-            // Obtener el ID Token
-            val idTokenResult = user.getIdToken(true).await()
-            val idToken = idTokenResult.token
+            if (user.isEmailVerified) { // Validar si el correo está verificado
+                // Obtener el ID Token
+                val idTokenResult = user.getIdToken(true).await()
+                val idToken = idTokenResult.token
 
-            if (idToken != null) {
-                // Aquí puedes almacenar el ID Token si es necesario
-                // Por ejemplo, en un SessionManager
-                SessionManager.idToken = idToken
+                if (idToken != null) {
+                    // Aquí puedes almacenar el ID Token si es necesario
+                    SessionManager.idToken = idToken
 
-                SignInResult(success = true)
+                    SignInResult(success = true)
+                } else {
+                    SignInResult(success = false, message = "No se pudo obtener el ID Token")
+                }
             } else {
-                SignInResult(success = false, message = "No se pudo obtener el ID Token")
+                SignInResult(success = false, message = "El correo no ha sido verificado. Por favor, verifica tu correo antes de iniciar sesión.")
             }
         } else {
             SignInResult(success = false, message = "No se pudo iniciar sesión")
@@ -332,6 +347,10 @@ fun LoginBackgroundImages(imeVisible: Boolean) {
         targetValue = if (imeVisible) 80.dp else 360.dp,
         animationSpec = tween(durationMillis = 300)
     )
+    val animatedUndertImageSize by animateDpAsState(
+        targetValue = if (imeVisible) 80.dp else 360.dp,
+        animationSpec = tween(durationMillis = 300)
+    )
 
     Box(
         modifier = Modifier
@@ -360,6 +379,16 @@ fun LoginBackgroundImages(imeVisible: Boolean) {
                 .aspectRatio(1f),
             contentScale = ContentScale.Fit
         )
+        Image(
+            painter = painterResource(id = R.drawable.group3),
+            contentDescription = null,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .offset(x = (-26).dp, y = (700).dp) // Asegurar que sobresalga ligeramente para cubrir el borde
+                .size(animatedUndertImageSize) // Animar tamaño
+                .aspectRatio(1f),
+            contentScale = ContentScale.Fit
+        )
     }
 }
 
@@ -369,8 +398,6 @@ fun LoginBackgroundImages(imeVisible: Boolean) {
 @Composable
 fun LoginPreview() {
     AppZervyClienteTheme {
-        Login(
-            navController = rememberNavController(),
-        )
+        Login(navController = rememberNavController())
     }
 }

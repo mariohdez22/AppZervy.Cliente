@@ -1,5 +1,6 @@
 package com.example.appzervycliente.Views.Cliente
 
+import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -53,6 +54,7 @@ fun SignUpScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val clientesRepository = ClientesRepository()
 
     // Detectar si el teclado está visible
@@ -137,11 +139,18 @@ fun SignUpScreen(
                 }
             }
         }
+
+        // Mostrar el Toast si hay error
+        errorMessage?.let { message ->
+            LaunchedEffect(message) {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                errorMessage = null // Limpiar el error después de mostrarlo
+            }
+        }
     }
 }
 
-
-    suspend fun signUpUser(
+suspend fun signUpUser(
     name: String,
     phone: String,
     dui: String,
@@ -175,19 +184,15 @@ fun SignUpScreen(
             }
 
             if (response.isSuccessful && response.body()?.success == true) {
-                println("Cliente creado exitosamente en el backend.")
                 return SignUpResult(success = true)
             } else {
                 val message = response.body()?.message ?: "Error al registrar cliente en el backend"
-                println("Error del backend: $message")
                 return SignUpResult(success = false, message = message)
             }
         } else {
-            println("Error: No se pudo obtener el usuario de Firebase Auth.")
             return SignUpResult(success = false, message = "No se pudo crear el usuario en Firebase")
         }
     } catch (e: Exception) {
-        println("Error general durante el registro: ${e.message}")
         return SignUpResult(success = false, message = "Error durante el registro: ${e.message}")
     }
 }
@@ -231,6 +236,15 @@ fun SignUpBackgroundImages(imeVisible: Boolean) {
         targetValue = if (imeVisible) 8.dp else 16.dp,
         animationSpec = tween(durationMillis = 100)
     )
+    // Animaciones para la imagen superior izquierda
+    val animatedUnderLeftSize by animateDpAsState(
+        targetValue = if (imeVisible) 80.dp else 320.dp,
+        animationSpec = tween(durationMillis = 300)
+    )
+    val animatedUnderLeftPadding by animateDpAsState(
+        targetValue = if (imeVisible) 8.dp else 16.dp,
+
+    )
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -255,6 +269,16 @@ fun SignUpBackgroundImages(imeVisible: Boolean) {
                 .align(Alignment.TopEnd)
                 .offset(x = (-26).dp, y = (16).dp) // Asegurar que sobresalga ligeramente para cubrir el borde
                 .size(animatedTopRightSize) // Animar tamaño
+                .aspectRatio(1f),
+            contentScale = ContentScale.Fit
+        )
+        Image(
+            painter = painterResource(id = R.drawable.group3),
+            contentDescription = null,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .offset(x = (-26).dp, y = (700).dp) // Asegurar que sobresalga ligeramente para cubrir el borde
+                .size(animatedUnderLeftSize) // Animar tamaño
                 .aspectRatio(1f),
             contentScale = ContentScale.Fit
         )
@@ -295,7 +319,7 @@ fun SignUnFormBody(
         onValueChange = onPhoneChange,
         label = { Text("Celular") },
         icon = painterResource(R.drawable.phoneicon),
-        sizeRoundedCorners = 12.dp,
+        sizeRoundedCorners = 42.dp,
         keyboardType = KeyboardType.Phone,
         modifier = Modifier
             .padding(vertical = 8.dp)
@@ -308,7 +332,7 @@ fun SignUnFormBody(
         onValueChange = onDuiChange,
         label = { Text("Documento de identidad") },
         icon = painterResource(R.drawable.calendaricon),
-        sizeRoundedCorners = 12.dp,
+        sizeRoundedCorners = 42.dp,
         keyboardType = KeyboardType.Text,
         modifier = Modifier
             .padding(vertical = 8.dp)
@@ -321,7 +345,7 @@ fun SignUnFormBody(
         onValueChange = onEmailChange,
         label = { Text("Correo") },
         icon = painterResource(R.drawable.emailicon),
-        sizeRoundedCorners = 12.dp,
+        sizeRoundedCorners = 42.dp,
         keyboardType = KeyboardType.Email,
         modifier = Modifier
             .padding(vertical = 8.dp)
@@ -334,7 +358,7 @@ fun SignUnFormBody(
         onValueChange = onPasswordChange,
         label = { Text("Contraseña") },
         icon = painterResource(R.drawable.passwordicon),
-        sizeRoundedCorners = 12.dp,
+        sizeRoundedCorners = 42.dp,
         keyboardType = KeyboardType.Password,
         visualTransformation = PasswordVisualTransformation(),
         modifier = Modifier
