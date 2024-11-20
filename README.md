@@ -1,4 +1,4 @@
-# APP ZERVY (SERVER)
+# APP ZERVY (Cliente)
 Codigo oficial de la app movil de Zervy.
 
 ## Tabla de contenidos

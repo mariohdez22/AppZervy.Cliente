@@ -12,6 +12,7 @@ composeBom = "2024.04.01"
 navigationCompose = "2.8.1"
 firebaseCommonKtx = "21.0.0"
 firebaseAuthKtx = "23.0.0"
+compose = "1.5.0"
 
 
 
@@ -26,6 +27,7 @@ androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", versi
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "compose" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }

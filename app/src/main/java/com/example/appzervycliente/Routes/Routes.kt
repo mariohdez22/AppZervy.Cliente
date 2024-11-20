@@ -40,6 +40,14 @@ const val ROOT_ESPERA_PAGE = "espera"
 
 const val ROOT_INICIO_PAGE = "inicio"
 
+//----------------------------------------------------- [INICIO]
+
+const val ROOT_WELCOME = "welcome"
+
+//----------------------------------------------------- [INICIO]
+
+const val ROOT_EMAIL_PAGE = "email"
+
 //----------------------------------------------------- [REGISTRO]
 
 //------------------------------------------------------[PRUEBAS]
@@ -67,6 +75,8 @@ sealed class Routes(
     object InicioPage: Routes(ROOT_INICIO_PAGE)
     object ArranquePage: Routes(ROOT_ARRANQUE_PAGE)
     object MainPage: Routes(ROOT_MAIN_PAGE)
+    object Welcome: Routes(ROOT_WELCOME)
+    object Email: Routes(ROOT_EMAIL_PAGE)
     object SolicitudDiaPage: Routes(ROOT_SOLICITUD_DIA_PAGE)
     object SolicitudDiasPage: Routes(ROOT_SOLICITUD_DIAS_PAGE)
     object EsperaPage: Routes(ROOT_ESPERA_PAGE)

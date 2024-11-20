@@ -65,7 +65,8 @@ fun FormTextField(
     iconContentDescription: String? = null,
     sizeRoundedCorners: Dp = 16.dp,
     keyboardType: KeyboardType = KeyboardType.Unspecified,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+            modifier: Modifier = Modifier // Añadimos este parámetro
 ){
 
     OutlinedTextField(
