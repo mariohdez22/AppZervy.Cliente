@@ -95,6 +95,7 @@ dependencies {
     implementation(libs.firebase.common.ktx)
     implementation(libs.firebase.auth.ktx)
 
+    implementation(libs.compose.animation)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -3,8 +3,10 @@ package com.example.appzervycliente.Views.Cliente
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.ui.unit.dp
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
@@ -14,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -39,76 +42,89 @@ import kotlin.coroutines.resumeWithException
 fun SignUpScreen(
     navController: NavHostController,
 ) {
-    // Variables de estado para los campos del formulario
     var name by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var dui by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
-    // Estados para manejar la carga y los errores
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val clientesRepository = ClientesRepository() // Instancia del repositorio
+    val clientesRepository = ClientesRepository()
+
+    // Detectar si el teclado está visible
+    val imeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .imePadding()
     ) {
-        SignUpBackgroundImages()
+        // Mostrar las imágenes decorativas solo si el teclado no está visible
+        if (!imeVisible) {
+            SignUpBackgroundImages()
+        }
 
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-                .align(Alignment.Center)
+                .fillMaxSize()
+                .padding(horizontal = 36.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Texto de bienvenida
-            Text(
-                text = "Crea una cuenta en Zervy",
-                fontSize = 18.sp,
-                color = Color.Black,
-                modifier = Modifier.padding(top = 40.dp)
-            )
-
-            // Formulario
-            SignUnFormBody(
-                name = name,
-                onNameChange = { name = it },
-                phone = phone,
-                onPhoneChange = { phone = it },
-                dui = dui,
-                onDuiChange = { dui = it },
-                email = email,
-                onEmailChange = { email = it },
-                password = password,
-                onPasswordChange = { password = it }
-            )
-
-            // Texto "¿Ya posees una cuenta?"
-            TextButton(
-                onClick = { navController.navigate(Routes.LoginPage.route) },
-                modifier = Modifier.padding(top = 16.dp)
+            // Sección superior con texto de bienvenida
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(top = if (imeVisible) 16.dp else 84.dp)
             ) {
                 Text(
-                    text = "¿Ya posees una cuenta?",
-                    fontSize = 14.sp,
-                    color = Color.Black
+                    text = "Crea una cuenta en Zervy",
+                    fontSize = 20.sp,
+                    color = Color.Black,
                 )
+                Spacer(modifier = Modifier.height(16.dp))
             }
 
-            // Botón "Aceptar"
+            // Formulario
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = 86.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                SignUnFormBody(
+                    name = name,
+                    onNameChange = { name = it },
+                    phone = phone,
+                    onPhoneChange = { phone = it },
+                    dui = dui,
+                    onDuiChange = { dui = it },
+                    email = email,
+                    onEmailChange = { email = it },
+                    password = password,
+                    onPasswordChange = { password = it }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TextButton(
+                    onClick = { navController.navigate(Routes.LoginPage.route) }
+                ) {
+                    Text(
+                        text = "¿Ya posees una cuenta?",
+                        fontSize = 14.sp,
+                        color = Color.Black
+                    )
+                }
+            }
+
             Button(
                 onClick = {
                     isLoading = true
                     errorMessage = null
-
-                    // Iniciar el proceso de registro
                     scope.launch {
                         val result = signUpUser(
                             name = name,
@@ -120,19 +136,17 @@ fun SignUpScreen(
                         )
                         isLoading = false
                         if (result.success) {
-                            // Registro exitoso, navegar a la página principal
-                            navController.navigate(Routes.MainPage.route) {
-                                popUpTo(Routes.MainPage.route) { inclusive = true }
+                            navController.navigate(Routes.Email.route) {
+                                popUpTo(Routes.RegistroPage.route) { inclusive = true }
                             }
                         } else {
-                            // Mostrar mensaje de error
                             errorMessage = result.message
                         }
                     }
                 },
                 modifier = Modifier
-                    .padding(top = 16.dp)
-                    .fillMaxWidth(0.5f),
+                    .fillMaxWidth(0.5f)
+                    .padding(vertical = 16.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2)),
                 enabled = !isLoading
@@ -144,19 +158,14 @@ fun SignUpScreen(
                 }
             }
 
-            // Mostrar mensaje de error si existe
-            errorMessage?.let {
-                Text(
-                    text = it,
-                    color = Color.Red,
-                    modifier = Modifier.padding(top = 16.dp)
-                )
-            }
+
         }
     }
 }
 
-// Función que maneja el registro de usuario
+
+
+
 suspend fun signUpUser(
     name: String,
     phone: String,
@@ -166,45 +175,49 @@ suspend fun signUpUser(
     clientesRepository: ClientesRepository
 ): SignUpResult {
     return try {
-        // Crear el usuario en Firebase Authentication
         val authResult = Firebase.auth.createUserWithEmailAndPassword(email, password).await()
         val user = authResult.user
 
         if (user != null) {
-            // Obtener el ID Token
-            val idTokenResult = user.getIdToken(true).await()
-            val idToken = idTokenResult.token
+            // Enviar el correo de verificación
+            try {
+                user.sendEmailVerification().await()
+            } catch (e: Exception) {
+                return SignUpResult(success = false, message = "Error al enviar el correo de verificación: ${e.message}")
+            }
 
-            if (idToken != null) {
-                // Crear el cliente en la API
-                val clienteDTO = ClienteDTO(
-                    nombres = name,
-                    celular = phone,
-                    correo = email,
-                    foto = "",
-                    dui = dui
-                )
+            // Crear el cliente en el backend
+            val clienteDTO = ClienteDTO(
+                nombres = name,
+                celular = phone,
+                correo = email,
+                foto = "",
+                dui = dui
+            )
 
-                val response = withContext(Dispatchers.IO) {
-                    clientesRepository.crearCliente(clienteDTO)
-                }
+            val response = withContext(Dispatchers.IO) {
+                clientesRepository.crearCliente(clienteDTO)
+            }
 
-                if (response.isSuccessful && response.body()?.success == true) {
-                    SignUpResult(success = true)
-                } else {
-                    val message = response.body()?.message ?: "Error al crear el cliente"
-                    SignUpResult(success = false, message = message)
-                }
+            if (response.isSuccessful && response.body()?.success == true) {
+                println("Cliente creado exitosamente en el backend.")
+                return SignUpResult(success = true)
             } else {
-                SignUpResult(success = false, message = "No se pudo obtener el ID Token")
+                val message = response.body()?.message ?: "Error al registrar cliente en el backend"
+                println("Error del backend: $message")
+                return SignUpResult(success = false, message = message)
             }
         } else {
-            SignUpResult(success = false, message = "No se pudo crear el usuario")
+            println("Error: No se pudo obtener el usuario de Firebase Auth.")
+            return SignUpResult(success = false, message = "No se pudo crear el usuario en Firebase")
         }
     } catch (e: Exception) {
-        SignUpResult(success = false, message = e.message ?: "Error desconocido")
+        println("Error general durante el registro: ${e.message}")
+        return SignUpResult(success = false, message = "Error durante el registro: ${e.message}")
     }
 }
+
+
 
 // Clase para representar el resultado del registro
 data class SignUpResult(val success: Boolean, val message: String? = null)
@@ -268,8 +281,11 @@ fun SignUnFormBody(
         onValueChange = onNameChange,
         label = { Text("Nombre") },
         icon = painterResource(R.drawable.personaicon),
-        sizeRoundedCorners = 16.dp,
+        sizeRoundedCorners = 12.dp,
         keyboardType = KeyboardType.Text,
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .height(50.dp) // Ajustar altura
     )
 
     // Campo de Celular
@@ -278,8 +294,11 @@ fun SignUnFormBody(
         onValueChange = onPhoneChange,
         label = { Text("Celular") },
         icon = painterResource(R.drawable.phoneicon),
-        sizeRoundedCorners = 16.dp,
-        keyboardType = KeyboardType.Phone
+        sizeRoundedCorners = 12.dp,
+        keyboardType = KeyboardType.Phone,
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .height(50.dp) // Ajustar altura
     )
 
     // Campo de DUI
@@ -288,8 +307,11 @@ fun SignUnFormBody(
         onValueChange = onDuiChange,
         label = { Text("Documento de identidad") },
         icon = painterResource(R.drawable.calendaricon),
-        sizeRoundedCorners = 16.dp,
-        keyboardType = KeyboardType.Text
+        sizeRoundedCorners = 12.dp,
+        keyboardType = KeyboardType.Text,
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .height(50.dp) // Ajustar altura
     )
 
     // Campo de Correo
@@ -298,8 +320,11 @@ fun SignUnFormBody(
         onValueChange = onEmailChange,
         label = { Text("Correo") },
         icon = painterResource(R.drawable.emailicon),
-        sizeRoundedCorners = 16.dp,
-        keyboardType = KeyboardType.Email
+        sizeRoundedCorners = 12.dp,
+        keyboardType = KeyboardType.Email,
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .height(50.dp) // Ajustar altura
     )
 
     // Campo de Contraseña
@@ -308,11 +333,15 @@ fun SignUnFormBody(
         onValueChange = onPasswordChange,
         label = { Text("Contraseña") },
         icon = painterResource(R.drawable.passwordicon),
-        sizeRoundedCorners = 16.dp,
+        sizeRoundedCorners = 12.dp,
         keyboardType = KeyboardType.Password,
-        visualTransformation = PasswordVisualTransformation()
+        visualTransformation = PasswordVisualTransformation(),
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .height(50.dp) // Ajustar altura
     )
 }
+
 
 @Preview(showBackground = true)
 @Composable

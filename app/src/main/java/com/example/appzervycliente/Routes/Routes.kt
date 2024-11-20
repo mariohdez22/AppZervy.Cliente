@@ -27,6 +27,14 @@ const val ROOT_MAIN_PAGE = "principal"
 
 const val ROOT_INICIO_PAGE = "inicio"
 
+//----------------------------------------------------- [INICIO]
+
+const val ROOT_WELCOME = "welcome"
+
+//----------------------------------------------------- [INICIO]
+
+const val ROOT_EMAIL_PAGE = "email"
+
 //----------------------------------------------------- [REGISTRO]
 
 //------------------------------------------------------[PRUEBAS]
@@ -43,6 +51,8 @@ const val ARG_CLIENTE_ID = "cliente_id"
 //----------------------------------------------------- [PERFIL AGREGAR DIRECCIÓN]
 const val ROOT_PERFIL_AGREGAR_DIRECCION_PAGE = "perfil_agregar_direccion"
 
+
+
 sealed class Routes(
     val route : String
 ){
@@ -54,6 +64,8 @@ sealed class Routes(
     object InicioPage: Routes(ROOT_INICIO_PAGE)
     object ArranquePage: Routes(ROOT_ARRANQUE_PAGE)
     object MainPage: Routes(ROOT_MAIN_PAGE)
+    object Welcome: Routes(ROOT_WELCOME)
+    object Email: Routes(ROOT_EMAIL_PAGE)
 
     object PerfilAgregarDireccionPage: Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 

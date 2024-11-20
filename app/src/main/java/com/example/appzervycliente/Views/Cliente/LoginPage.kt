@@ -7,6 +7,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.ui.unit.dp
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,7 +19,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.ui.unit.Dp
+
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Components.common.FormTextField
@@ -35,68 +44,122 @@ fun Login(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
-    // Estados para manejar la carga y los errores
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-
-    // Estado para mostrar el diálogo de restablecimiento de contraseña
     var showResetPasswordDialog by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    // Detectar si el teclado está visible
+    val imeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+
+    // Animar el padding superior y el tamaño del logo al detectar cambios en el teclado
+    val animatedPaddingTop by animateDpAsState(
+        targetValue = if (imeVisible) 16.dp else 64.dp, // Padding superior cambia según teclado
+        animationSpec = tween(durationMillis = 300) // Duración de la animación
+    )
+
+    val animatedLogoSize by animateDpAsState(
+        targetValue = if (imeVisible) 150.dp else 200.dp, // Tamaño del logo cambia suavemente
+        animationSpec = tween(durationMillis = 300) // Duración de la animación
+    )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .imePadding()
+            .padding(bottom = 8.dp)
     ) {
-        LoginBackgroundImages()
+        // Mostrar fondo decorativo con tamaño reducido si el teclado está visible
+        LoginBackgroundImages(imeVisible)
 
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .align(Alignment.Center)
-                .offset(y = (-50).dp)
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = if (imeVisible) 8.dp else 0.dp), // Reducir padding dinámicamente
+            verticalArrangement = if (imeVisible) Arrangement.Top else Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LoginTitleSection()
+            // Título y logo con animación
+            LoginTitleSection(animatedPaddingTop, animatedLogoSize)
 
-            // Caja de texto para el email
-            FormTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                icon = painterResource(R.drawable.personaicon),
-                sizeRoundedCorners = 16.dp,
-                keyboardType = KeyboardType.Email,
-                maxWidth = 0.85f
-            )
-
-            // Caja de texto para la contraseña
-            FormTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Contraseña") },
-                icon = painterResource(R.drawable.passwordicon),
-                sizeRoundedCorners = 16.dp,
-                maxWidth = 0.85f,
-                visualTransformation = PasswordVisualTransformation()
-            )
-
-            // Texto de "¿Olvidaste tu contraseña?"
-            TextButton(
-                onClick = { showResetPasswordDialog = true },
-                modifier = Modifier.padding(top = 8.dp)
+            // Formulario
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White, shape = RoundedCornerShape(10.dp))
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "¿Olvidaste tu contraseña?",
-                    fontSize = 14.sp,
-                    color = Color.Black
+                FormTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("Email") },
+                    icon = painterResource(R.drawable.personaicon),
+                    sizeRoundedCorners = 36.dp,
+                    keyboardType = KeyboardType.Email,
+                    maxWidth = 0.95f
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                FormTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("Contraseña") },
+                    icon = painterResource(R.drawable.passwordicon),
+                    sizeRoundedCorners = 36.dp,
+                    maxWidth = 0.95f,
+                    visualTransformation = PasswordVisualTransformation()
+                )
+
+                TextButton(
+                    onClick = { showResetPasswordDialog = true },
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    Text(
+                        text = "¿Olvidaste tu contraseña?",
+                        fontSize = 14.sp,
+                        color = Color.Black
+                    )
+                }
             }
 
-            // Texto de "¿Aún no posees una cuenta?"
+            // Botón
+            Button(
+                onClick = {
+                    isLoading = true
+                    errorMessage = null
+
+                    scope.launch {
+                        val result = signInUser(email, password)
+                        isLoading = false
+                        if (result.success) {
+                            navController.navigate(Routes.Welcome.route) {
+                                popUpTo(Routes.LoginPage.route) { inclusive = true }
+                            }
+                        } else {
+                            errorMessage = result.message
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .padding(vertical = 0.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2)),
+                enabled = !isLoading
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp)
+                } else {
+                    Text(text = "Aceptar", color = Color.White)
+                }
+            }
+
             TextButton(
                 onClick = { navController.navigate(Routes.RegistroPage.route) },
                 modifier = Modifier.padding(top = 8.dp)
@@ -107,57 +170,38 @@ fun Login(
                     color = Color.Black
                 )
             }
-
-            // Mostrar mensaje de error si existe
-            errorMessage?.let {
-                Text(
-                    text = it,
-                    color = Color.Red,
-                    modifier = Modifier.padding(top = 16.dp)
-                )
-            }
-
-            // Botón de "Aceptar" con bordes redondeados
-            Button(
-                onClick = {
-                    isLoading = true
-                    errorMessage = null
-
-                    scope.launch {
-                        val result = signInUser(email, password)
-                        isLoading = false
-                        if (result.success) {
-                            // Inicio de sesión exitoso, navegar a la página principal
-                            navController.navigate(Routes.MainPage.route) {
-                                popUpTo(Routes.LoginPage.route) { inclusive = true }
-                            }
-                        } else {
-                            // Mostrar mensaje de error
-                            errorMessage = result.message
-                        }
-                    }
-                },
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .fillMaxWidth(0.5f), // Tamaño del botón ajustado
-                shape = RoundedCornerShape(16.dp), // Bordes redondeados en el botón
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7E57C2)), // Color del botón
-                enabled = !isLoading
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp)
-                } else {
-                    Text(text = "Aceptar", color = Color.White)
-                }
-            }
         }
 
-        // Mostrar el diálogo de restablecimiento de contraseña
-        if (showResetPasswordDialog) {
-            ResetPasswordDialog(
-                onDismiss = { showResetPasswordDialog = false }
-            )
+        // Mostrar el Toast si hay error
+        errorMessage?.let { message ->
+            LaunchedEffect(message) {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                errorMessage = null // Limpiar el error después de mostrarlo
+            }
         }
+    }
+}
+
+@Composable
+fun LoginTitleSection(paddingTop: Dp, logoSize: Dp) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(top = paddingTop)
+    ) {
+        // Logo centrado con tamaño animado
+        Image(
+            painter = painterResource(id = R.drawable.union),
+            contentDescription = null,
+            modifier = Modifier.size(logoSize)
+        )
+
+        // Texto de bienvenida
+        Text(
+            text = "Inicia Sesión en Zervy",
+            fontSize = 18.sp,
+            color = Color.Black,
+            modifier = Modifier.padding(top = 8.dp) // Separar texto del logo
+        )
     }
 }
 
@@ -278,53 +322,48 @@ fun ResetPasswordDialog(
 }
 
 @Composable
-fun LoginBackgroundImages() {
+fun LoginBackgroundImages(imeVisible: Boolean) {
+    // Animar tamaños de las imágenes de fondo
+    val animatedLeftImageSize by animateDpAsState(
+        targetValue = if (imeVisible) 80.dp else 360.dp,
+        animationSpec = tween(durationMillis = 300)
+    )
+    val animatedRightImageSize by animateDpAsState(
+        targetValue = if (imeVisible) 80.dp else 360.dp,
+        animationSpec = tween(durationMillis = 300)
+    )
+
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
     ) {
-        // Fondo decorativo con imágenes
+        // Fondo decorativo superior izquierdo
         Image(
             painter = painterResource(id = R.drawable.group5),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(0.dp)
-                .fillMaxWidth(0.25f),
-            contentScale = ContentScale.Crop
+                .offset(x = (-136).dp, y = (46).dp) // Asegurar que sobresalga ligeramente para cubrir el borde
+                .size(animatedLeftImageSize) // Animar tamaño
+                .aspectRatio(1f),
+            contentScale = ContentScale.Fit
         )
 
+        // Fondo decorativo superior derecho
         Image(
             painter = painterResource(id = R.drawable.group6),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(0.dp)
-                .fillMaxWidth(0.2f),
-            contentScale = ContentScale.Crop
+                .offset(x = 136.dp, y = (46).dp) // Asegurar que sobresalga ligeramente para cubrir el borde
+                .size(animatedRightImageSize) // Animar tamaño
+                .aspectRatio(1f),
+            contentScale = ContentScale.Fit
         )
     }
 }
 
-@Composable
-fun LoginTitleSection() {
-    // Logo centrado
-    Image(
-        painter = painterResource(id = R.drawable.union),
-        contentDescription = null,
-        modifier = Modifier
-            .size(200.dp)
-            .padding(top = 10.dp) // Reducimos el margen superior
-    )
 
-    // Texto de bienvenida
-    Text(
-        text = "Inicia Sesión en Zervy",
-        fontSize = 18.sp,
-        color = Color.Black,
-        modifier = Modifier.padding(top = 16.dp)
-    )
-}
 
 @Preview(showBackground = true)
 @Composable

@@ -17,6 +17,10 @@ import com.example.appzervycliente.Views.Cliente.MainScreen
 import com.example.appzervycliente.Views.Cliente.MainScreen
 import com.example.appzervycliente.Views.Cliente.SignUpScreen
 import com.example.appzervycliente.Views.Cliente.SplashScreen
+import com.example.appzervycliente.Views.Cliente.WelcomeScreen
+import com.example.appzervycliente.Views.Cliente.EmailVerificationPreview
+import com.example.appzervycliente.Views.Cliente.EmailVerificationScreen
+import com.example.appzervycliente.Views.Cliente.WelcomeScreenPreview
 
 @Composable
 fun SetupNavGraph(
@@ -54,6 +58,13 @@ fun SetupNavGraph(
 
         composable(Routes.ResenaPage.route) {
             ResenaSocioPage(navController)
+        }
+
+        composable(Routes.Welcome.route) {
+            WelcomeScreen(navController)
+        }
+        composable(Routes.Email.route) {
+            EmailVerificationScreen(navController)
         }
 
 //-------------------------------------------------------------[PRUEBAS]
