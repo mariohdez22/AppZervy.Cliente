@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
+import com.example.appzervycliente.Views.Cliente.AceptacionSolicitudPage
 import com.example.appzervycliente.Views.Cliente.CarritoPage
 import com.example.appzervycliente.Views.Cliente.EsperaPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
@@ -35,7 +36,7 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.Email.route
+        startDestination = Routes.AceptacionSolicitudPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
@@ -49,6 +50,9 @@ fun SetupNavGraph(
         }
         composable(Routes.SolicitudDiasPage.route) {
             SolicitudServicioDias(navController)
+        }
+        composable(Routes.AceptacionSolicitudPage.route) {
+            AceptacionSolicitudPage(navController)
         }
         composable(Routes.InspeccionPage.route) {
             InspeccionPage(navController)

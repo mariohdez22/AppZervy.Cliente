@@ -1,5 +1,7 @@
 package com.example.appzervycliente.Routes
 
+import okhttp3.Route
+
 //----------------------------------------------------- [LOGIN]
 const val ROOT_LOGIN_PAGE = "login_screen"
 
@@ -35,16 +37,19 @@ const val ROOT_SOLICITUD_DIAS_PAGE = "solicitudDias"
 
 const val ROOT_ESPERA_PAGE = "espera"
 
+//----------------------------------------------------- [ACEPTACION SOLICITUD]
+
+const val ROOT_ACEPTACION_SOLICITUD_PAGE = "aceptacionSolicitud"
 
 //----------------------------------------------------- [INICIO]
 
 const val ROOT_INICIO_PAGE = "inicio"
 
-//----------------------------------------------------- [INICIO]
+//----------------------------------------------------- [WELCOME]
 
 const val ROOT_WELCOME = "welcome"
 
-//----------------------------------------------------- [INICIO]
+//----------------------------------------------------- [EMAIL]
 
 const val ROOT_EMAIL_PAGE = "email"
 
@@ -80,6 +85,7 @@ sealed class Routes(
     object SolicitudDiaPage: Routes(ROOT_SOLICITUD_DIA_PAGE)
     object SolicitudDiasPage: Routes(ROOT_SOLICITUD_DIAS_PAGE)
     object EsperaPage: Routes(ROOT_ESPERA_PAGE)
+    object AceptacionSolicitudPage: Routes(ROOT_ACEPTACION_SOLICITUD_PAGE)
 
     object PerfilAgregarDireccionPage: Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 
