@@ -1,5 +1,11 @@
 package com.example.appzervycliente.Views.Cliente
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -32,9 +39,28 @@ import com.google.firebase.auth.auth
 @Composable
 fun EmailVerificationScreen(navController: NavHostController) {
     val currentUser = Firebase.auth.currentUser
-    var verificationStatus by remember { mutableStateOf(false) } // Mantén esto igual
+    var verificationStatus by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
+
+    // Animación de opacidad y escala para el ícono del correo
+    val infiniteTransition = rememberInfiniteTransition()
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 0.5f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    val scale by infiniteTransition.animateFloat(
+        initialValue = 0.9f,
+        targetValue = 1.1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
 
     Box(
         modifier = Modifier
@@ -50,13 +76,18 @@ fun EmailVerificationScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Ícono de email
+            // Ícono de email con animación de opacidad y escala
             Image(
                 painter = painterResource(id = R.drawable.mail),
                 contentDescription = null,
                 modifier = Modifier
                     .size(120.dp)
                     .padding(bottom = 16.dp)
+                    .graphicsLayer(
+                        alpha = alpha, // Aplicar animación de opacidad
+                        scaleX = scale, // Aplicar animación de escala en X
+                        scaleY = scale  // Aplicar animación de escala en Y
+                    )
             )
 
             // Título
@@ -81,14 +112,13 @@ fun EmailVerificationScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Botón para verificar
             Button(
                 onClick = {
-                    // Comprobar si el correo ha sido verificado
                     currentUser?.reload()?.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             verificationStatus = currentUser.isEmailVerified
                             if (verificationStatus) {
-                                // Redirigir al LoginPage después de la verificación exitosa
                                 navController.navigate(Routes.LoginPage.route) {
                                     popUpTo(Routes.Email.route) { inclusive = true }
                                 }
@@ -108,7 +138,6 @@ fun EmailVerificationScreen(navController: NavHostController) {
             ) {
                 Text(text = "Verificar", color = Color.White, fontSize = 16.sp)
             }
-
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -131,7 +160,6 @@ fun EmailVerificationScreen(navController: NavHostController) {
                 )
                 TextButton(
                     onClick = {
-                        // Reenviar el correo de verificación
                         currentUser?.sendEmailVerification()?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 errorMessage = "Correo reenviado con éxito."
@@ -152,6 +180,7 @@ fun EmailVerificationScreen(navController: NavHostController) {
         }
     }
 }
+
 
 
 

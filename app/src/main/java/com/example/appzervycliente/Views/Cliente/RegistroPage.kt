@@ -1,5 +1,7 @@
 package com.example.appzervycliente.Views.Cliente
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -60,67 +62,44 @@ fun SignUpScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .imePadding()
+            .imePadding() // Asegurar que el teclado no oculte el contenido
     ) {
-        // Mostrar las imágenes decorativas solo si el teclado no está visible
-        if (!imeVisible) {
-            SignUpBackgroundImages()
-        }
-
+        SignUpBackgroundImages(imeVisible)
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 36.dp),
+                .padding(horizontal = 46.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = if (imeVisible) Arrangement.Top else Arrangement.Center
         ) {
-            // Sección superior con texto de bienvenida
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = if (imeVisible) 16.dp else 84.dp)
-            ) {
-                Text(
-                    text = "Crea una cuenta en Zervy",
-                    fontSize = 20.sp,
-                    color = Color.Black,
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+            // Texto superior
+            Text(
+                text = "Crea una cuenta en Zervy",
+                fontSize = 20.sp,
+                color = Color.Black,
+                modifier = Modifier
+                    .padding(top = if (imeVisible) 40.dp else 72.dp) // Ajustar posición dinámica
+            )
+
+            // Espaciador para ajustar el formulario
+            Spacer(modifier = Modifier.height(18.dp))
 
             // Formulario
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 86.dp)
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                SignUnFormBody(
-                    name = name,
-                    onNameChange = { name = it },
-                    phone = phone,
-                    onPhoneChange = { phone = it },
-                    dui = dui,
-                    onDuiChange = { dui = it },
-                    email = email,
-                    onEmailChange = { email = it },
-                    password = password,
-                    onPasswordChange = { password = it }
-                )
+            SignUnFormBody(
+                name = name,
+                onNameChange = { name = it },
+                phone = phone,
+                onPhoneChange = { phone = it },
+                dui = dui,
+                onDuiChange = { dui = it },
+                email = email,
+                onEmailChange = { email = it },
+                password = password,
+                onPasswordChange = { password = it }
+            )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                TextButton(
-                    onClick = { navController.navigate(Routes.LoginPage.route) }
-                ) {
-                    Text(
-                        text = "¿Ya posees una cuenta?",
-                        fontSize = 14.sp,
-                        color = Color.Black
-                    )
-                }
-            }
-
+            // Botón
+            Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = {
                     isLoading = true
@@ -157,16 +136,12 @@ fun SignUpScreen(
                     Text(text = "Aceptar", color = Color.White)
                 }
             }
-
-
         }
     }
 }
 
 
-
-
-suspend fun signUpUser(
+    suspend fun signUpUser(
     name: String,
     phone: String,
     dui: String,
@@ -236,31 +211,57 @@ suspend fun <T> com.google.android.gms.tasks.Task<T>.await(): T {
 }
 
 @Composable
-fun SignUpBackgroundImages() {
+fun SignUpBackgroundImages(imeVisible: Boolean) {
+    // Animaciones para la imagen superior izquierda
+    val animatedTopLeftSize by animateDpAsState(
+        targetValue = if (imeVisible) 80.dp else 320.dp,
+        animationSpec = tween(durationMillis = 300)
+    )
+    val animatedTopLeftPadding by animateDpAsState(
+        targetValue = if (imeVisible) 8.dp else 16.dp,
+        animationSpec = tween(durationMillis = 300)
+    )
+
+    // Animaciones para la imagen superior derecha
+    val animatedTopRightSize by animateDpAsState(
+        targetValue = if (imeVisible) 50.dp else 100.dp,
+        animationSpec = tween(durationMillis = 300)
+    )
+    val animatedTopRightPadding by animateDpAsState(
+        targetValue = if (imeVisible) 8.dp else 16.dp,
+        animationSpec = tween(durationMillis = 100)
+    )
+
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxSize()
     ) {
-        // Fondo decorativo con imágenes
+        // Imagen decorativa superior izquierda
         Image(
             painter = painterResource(id = R.drawable.group5),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(0.dp)
-                .fillMaxWidth(0.20f),
-            contentScale = ContentScale.Crop
+                .offset(x = (-126).dp, y = (16).dp) // Asegurar que sobresalga ligeramente para cubrir el borde
+                .size(animatedTopLeftSize) // Animar tamaño
+                .aspectRatio(1f),
+            contentScale = ContentScale.Fit
         )
-        // Logo pequeño en la esquina superior derecha
+
+        // Imagen decorativa superior derecha
         Image(
             painter = painterResource(id = R.drawable.group4),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .size(99.dp)
-                .padding(end = 20.dp, top = 16.dp)
+                .offset(x = (-26).dp, y = (16).dp) // Asegurar que sobresalga ligeramente para cubrir el borde
+                .size(animatedTopRightSize) // Animar tamaño
+                .aspectRatio(1f),
+            contentScale = ContentScale.Fit
         )
     }
 }
+
+
 
 @Composable
 fun SignUnFormBody(
@@ -281,7 +282,7 @@ fun SignUnFormBody(
         onValueChange = onNameChange,
         label = { Text("Nombre") },
         icon = painterResource(R.drawable.personaicon),
-        sizeRoundedCorners = 12.dp,
+        sizeRoundedCorners = 42.dp,
         keyboardType = KeyboardType.Text,
         modifier = Modifier
             .padding(vertical = 8.dp)
