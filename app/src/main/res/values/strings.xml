@@ -73,4 +73,9 @@
         voluptatem accusantium doloremque laudantium, totam rem.
     </string>
 
+    <string name="example3">
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+        doloremque laudantium
+    </string>
+
 </resources>

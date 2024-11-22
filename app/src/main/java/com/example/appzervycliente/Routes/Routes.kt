@@ -37,9 +37,19 @@ const val ROOT_SOLICITUD_DIAS_PAGE = "solicitudDias"
 
 const val ROOT_ESPERA_PAGE = "espera"
 
+//----------------------------------------------------- [PROPUESTA SERVICIO]
+
+const val ROOT_PROPUESTA_SERVICIO_PAGE = "propuestaServicio"
+
+//----------------------------------------------------- [PROPUESTA DETALLE]
+
+const val ROOT_PROPUESTA_DETALLE_PAGE = "propuestaDetalle"
+
 //----------------------------------------------------- [ACEPTACION SOLICITUD]
 
 const val ROOT_ACEPTACION_SOLICITUD_PAGE = "aceptacionSolicitud"
+
+
 
 //----------------------------------------------------- [INICIO]
 
@@ -86,6 +96,8 @@ sealed class Routes(
     object SolicitudDiasPage: Routes(ROOT_SOLICITUD_DIAS_PAGE)
     object EsperaPage: Routes(ROOT_ESPERA_PAGE)
     object AceptacionSolicitudPage: Routes(ROOT_ACEPTACION_SOLICITUD_PAGE)
+    object PropuestaServicioPage: Routes(ROOT_PROPUESTA_SERVICIO_PAGE)
+    object PropuestaDetallePage: Routes(ROOT_PROPUESTA_DETALLE_PAGE)
 
     object PerfilAgregarDireccionPage: Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 

@@ -36,7 +36,7 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.ArranquePage.route
+        startDestination = Routes.AceptacionSolicitudPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente

@@ -8,10 +8,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="btnCarritoTopBar">#CCCCCC</color>
+    <color name="btnCarritoTopBar">#F1F1F1</color>
     <color name="btnEnviarSolicitud">#7982FF</color>
     <color name="lblCodigo">#7982FF</color>
     <color name="cardInsepccionActiva">#7847BD</color>
     <color name="standar">#FFCCC2DC</color>
+    <color name="btnCerrarPropuesta">#E2C0FF</color>
 
 </resources>
