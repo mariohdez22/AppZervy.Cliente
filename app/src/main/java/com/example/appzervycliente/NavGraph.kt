@@ -5,7 +5,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
@@ -17,15 +16,14 @@ import com.example.appzervycliente.Views.Cliente.LoginScreen
 import com.example.appzervycliente.Views.Cliente.Login
 import com.example.appzervycliente.Views.Cliente.ResenaSocioPage
 import com.example.appzervycliente.Views.Cliente.MainScreen
-import com.example.appzervycliente.Views.Cliente.MainScreen
 import com.example.appzervycliente.Views.Cliente.SignUpScreen
 import com.example.appzervycliente.Views.Cliente.SolicitudServicioDia
 import com.example.appzervycliente.Views.Cliente.SolicitudServicioDias
 import com.example.appzervycliente.Views.Cliente.SplashScreen
 import com.example.appzervycliente.Views.Cliente.WelcomeScreen
-import com.example.appzervycliente.Views.Cliente.EmailVerificationPreview
 import com.example.appzervycliente.Views.Cliente.EmailVerificationScreen
-import com.example.appzervycliente.Views.Cliente.WelcomeScreenPreview
+import com.example.appzervycliente.Views.Cliente.PropuestaDetallePage
+import com.example.appzervycliente.Views.Cliente.PropuestaServicioPage
 
 @Composable
 fun SetupNavGraph(
@@ -36,11 +34,17 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.AceptacionSolicitudPage.route
+        startDestination = Routes.PropuestaDetallePage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
             CarritoPage(navController)
+        }
+        composable(Routes.PropuestaServicioPage.route) {
+            PropuestaServicioPage(navController)
+        }
+        composable(Routes.PropuestaDetallePage.route) {
+            PropuestaDetallePage(navController)
         }
         composable(Routes.EsperaPage.route) {
             EsperaPage(navController)

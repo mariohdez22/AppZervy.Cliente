@@ -55,7 +55,7 @@ import com.example.appzervycliente.R
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @Composable
-fun PropuestaDetalle(
+fun PropuestaDetallePage(
     navController: NavHostController
 ){
 
@@ -87,7 +87,7 @@ private fun PropuestaPreview(){
     AppZervyClienteTheme(
         dynamicColor = false
     ) {
-        PropuestaDetalle(rememberNavController())
+        PropuestaDetallePage(rememberNavController())
     }
 
 }
