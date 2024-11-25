@@ -19,72 +19,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun IconTextHorizontalSection(
-    painter: Painter,
-    contentDescription: String? = null,
-    label: String = "Esto es un texto",
-    fontWeight: FontWeight? = null,
-    gap: Dp = 4.dp
-){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(gap)
-    ) {
-        Icon(
-            modifier = Modifier
-                .size(height = 20.dp, width = 20.dp),
-            painter = painter,
-            contentDescription = contentDescription
-        )
-        Text(
-            text = label,
-            fontWeight = fontWeight
-        )
-    }
-
-}
-
-@Composable
-fun IconTextHorizontalSection(
-    imageVector: ImageVector,
-    contentDescription: String? = null,
-    label: String = "Esto es un texto",
-    fontWeight: FontWeight?,
-    gap: Dp = 4.dp
-){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(gap)
-    ) {
-        Icon(
-            modifier = Modifier
-                .size(height = 20.dp, width = 20.dp),
-            imageVector = imageVector,
-            contentDescription = contentDescription
-        )
-        Text(
-            text = label,
-            fontWeight = fontWeight
-        )
-    }
-
-}
-
-
-@Composable
-fun IconTextHorizontalSection(
+fun IconLabelHorizontalSection(
     painter: Painter,
     contentDescription: String? = null,
     label: String = "Label",
     labelWeight: FontWeight? = null,
     labelSize: TextUnit = TextUnit.Unspecified,
-    text: String = "",
-    textWeight: FontWeight? = null,
-    textSize: TextUnit = TextUnit.Unspecified,
     iconGap: Dp = 4.dp,
     iconWidth: Dp = 20.dp,
     iconHeight: Dp = 20.dp,
@@ -112,24 +52,16 @@ fun IconTextHorizontalSection(
                 fontSize = labelSize
             )
         }
-        Text(
-            text = text,
-            fontWeight = textWeight,
-            fontSize = textSize
-        )
     }
 }
 
 @Composable
-fun IconTextHorizontalSection(
+fun IconLabelHorizontalSection(
     imageVector: ImageVector = Icons.Filled.Info,
     contentDescription: String? = null,
     label: String = "Label",
     labelWeight: FontWeight? = null,
     labelSize: TextUnit = TextUnit.Unspecified,
-    text: String = "",
-    textWeight: FontWeight? = null,
-    textSize: TextUnit = TextUnit.Unspecified,
     iconGap: Dp = 4.dp,
     iconWidth: Dp = 20.dp,
     iconHeight: Dp = 20.dp,
@@ -157,10 +89,5 @@ fun IconTextHorizontalSection(
                 fontSize = labelSize
             )
         }
-        Text(
-            text = text,
-            fontWeight = textWeight,
-            fontSize = textSize
-        )
     }
 }

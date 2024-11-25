@@ -16,11 +16,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -38,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,24 +54,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.appzervycliente.Components.common.IconLabelHorizontalSection
 import com.example.appzervycliente.Components.common.IconTextHorizontalSection
 import com.example.appzervycliente.R
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PropuestaDetallePage(
     navController: NavHostController
 ){
+    val scrollState = rememberScrollState()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { TopBar() }
     ) {
         paddingValues ->
         Column(
             modifier = Modifier
-                .padding(top = paddingValues.calculateTopPadding())
-                .fillMaxSize()
-                .background(color = Color.White),
+                .padding(top = paddingValues.calculateTopPadding(), bottom = 25.dp)
+                .background(color = Color.White)
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Header()
@@ -75,6 +85,10 @@ fun PropuestaDetallePage(
             SocioDetalle()
             HorizontalDivider(thickness = 1.dp)
             Detalles()
+            HorizontalDivider(thickness = 1.dp)
+            SubTotal()
+            HorizontalDivider(thickness = 1.dp)
+            AceptarPropuesta()
         }
     }
 
@@ -136,7 +150,7 @@ private fun TopBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.White
         ),
-        windowInsets = WindowInsets(left = 25.dp, right = 25.dp, top = 20.dp)
+        windowInsets = WindowInsets(left = 25.dp, right = 25.dp, top = 23.dp)
     )
 }
 
@@ -284,34 +298,152 @@ private fun Detalles(
     Column(
         modifier = Modifier
             .padding(start = 25.dp, end = 25.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(15.dp)
     ){
+        DetallesLista()
+        DetalleInfo()
+    }
+}
+
+@Composable
+private fun DetallesLista(){
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Text(
+            text = "Datos generales",
+            fontWeight = FontWeight.W500,
+            fontSize = 17.sp
+        )
+        IconTextHorizontalSection(
+            painter = painterResource(R.drawable.start_icon),
+            label = "Montaje Articulos",
+            fontWeight = FontWeight.W300,
+            contentDescription = "icon"
+        )
+        IconTextHorizontalSection(
+            painter = painterResource(R.drawable.start_icon),
+            label = "Pago con targeta",
+            fontWeight = FontWeight.W300,
+            contentDescription = "icon"
+        )
+        IconTextHorizontalSection(
+            painter = painterResource(R.drawable.start_icon),
+            label = "Servicio de un solo dia",
+            fontWeight = FontWeight.W300,
+            contentDescription = "icon"
+        )
+    }
+}
+
+@Composable
+private fun DetalleInfo(){
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Text(
+            text = "Descripcion del servicio",
+            fontWeight = FontWeight.W500,
+            fontSize = 15.sp
+        )
+        Text(
+            text = stringResource(R.string.example),
+            fontWeight = FontWeight.W300,
+            fontSize = 15.sp
+        )
+        Text(
+            text = stringResource(R.string.example3),
+            fontWeight = FontWeight.W300,
+            fontSize = 15.sp
+        )
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            IconLabelHorizontalSection(
+                painter = painterResource(R.drawable.circle),
+                label = "item 1",
+                labelSize = 15.sp,
+                labelWeight = FontWeight.W300,
+                iconWidth = 5.dp,
+                iconHeight = 5.dp,
+                iconGap = 10.dp
+            )
+            IconLabelHorizontalSection(
+                painter = painterResource(R.drawable.circle),
+                label = "item 2",
+                labelSize = 15.sp,
+                labelWeight = FontWeight.W300,
+                iconWidth = 5.dp,
+                iconHeight = 5.dp,
+                iconGap = 10.dp
+            )
+            IconLabelHorizontalSection(
+                painter = painterResource(R.drawable.circle),
+                label = "item 3",
+                labelSize = 15.sp,
+                labelWeight = FontWeight.W300,
+                iconWidth = 5.dp,
+                iconHeight = 5.dp,
+                iconGap = 10.dp
+            )
+            IconLabelHorizontalSection(
+                painter = painterResource(R.drawable.circle),
+                label = "item 4",
+                labelSize = 15.sp,
+                labelWeight = FontWeight.W300,
+                iconWidth = 5.dp,
+                iconHeight = 5.dp,
+                iconGap = 10.dp
+            )
+        }
+    }
+}
+
+@Composable
+private fun SubTotal(){
+    Row(
+        modifier = Modifier
+            .padding(start = 25.dp, end = 25.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Text(
+            text = "Subtotal",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W500
+        )
+        Text(
+            text = "$ 35 USD",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W300
+        )
+    }
+}
+
+@Composable
+private fun AceptarPropuesta(
+
+){
+    Row(
+        modifier = Modifier
+            .padding(start = 25.dp, end = 25.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ){
+        Button(
+            modifier = Modifier,
+            onClick = {},
         ) {
             Text(
-                text = "Datos generales",
-                fontWeight = FontWeight.W500,
-                fontSize = 15.sp
-            )
-            IconTextHorizontalSection(
-                painter = painterResource(R.drawable.start_icon),
-                label = "Montaje Articulos",
-                fontWeight = FontWeight.W300,
-                contentDescription = "icon"
-            )
-            IconTextHorizontalSection(
-                painter = painterResource(R.drawable.start_icon),
-                label = "Pago con targeta",
-                fontWeight = FontWeight.W300,
-                contentDescription = "icon"
-            )
-            IconTextHorizontalSection(
-                painter = painterResource(R.drawable.start_icon),
-                label = "Servicio de un solo dia",
-                fontWeight = FontWeight.W300,
-                contentDescription = "icon"
+                text = "Aceptar Propuesta",
+                fontWeight = FontWeight.W400,
+                fontSize = 18.sp
             )
         }
     }
