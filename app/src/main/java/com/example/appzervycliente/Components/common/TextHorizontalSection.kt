@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import com.example.appzervycliente.R
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
@@ -120,10 +121,24 @@ fun TextHorizontalDotSpacingSection(
 
 @Preview(showBackground = true)
 @Composable
-fun preview(){
+private fun previewdot(){
     AppZervyClienteTheme(
         dynamicColor = false
     ) {
         TextHorizontalDotSpacingSection()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun preview(){
+    AppZervyClienteTheme(
+        dynamicColor = false
+    ) {
+        TextHorizontalSection(
+            content = "hola",
+            title = "adios",
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        )
     }
 }

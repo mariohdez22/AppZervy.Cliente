@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +29,8 @@ fun IconLabelHorizontalSection(
     iconGap: Dp = 4.dp,
     iconWidth: Dp = 20.dp,
     iconHeight: Dp = 20.dp,
-    horizontalArrangement : Arrangement.Horizontal = Arrangement.Start
+    horizontalArrangement : Arrangement.Horizontal = Arrangement.Start,
+    tint: Color = Color.Black
 ){
     Row(
         modifier = Modifier
@@ -44,7 +46,8 @@ fun IconLabelHorizontalSection(
                 modifier = Modifier
                     .size(height = iconHeight, width = iconWidth),
                 painter = painter,
-                contentDescription = contentDescription
+                contentDescription = contentDescription,
+                tint = tint
             )
             Text(
                 text = label,

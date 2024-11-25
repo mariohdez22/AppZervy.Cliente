@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -24,7 +25,8 @@ fun IconTextHorizontalSection(
     contentDescription: String? = null,
     label: String = "Esto es un texto",
     fontWeight: FontWeight? = null,
-    gap: Dp = 4.dp
+    gap: Dp = 4.dp,
+    tint: Color = Color.Black
 ){
     Row(
         modifier = Modifier
@@ -36,7 +38,8 @@ fun IconTextHorizontalSection(
             modifier = Modifier
                 .size(height = 20.dp, width = 20.dp),
             painter = painter,
-            contentDescription = contentDescription
+            contentDescription = contentDescription,
+            tint = tint
         )
         Text(
             text = label,

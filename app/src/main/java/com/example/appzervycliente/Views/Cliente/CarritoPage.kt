@@ -1,5 +1,6 @@
 package com.example.appzervycliente.Views.Cliente
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.appzervycliente.Components.common.IconLabelHorizontalSection
 import com.example.appzervycliente.Components.common.IconTextHorizontalSection
 import com.example.appzervycliente.Components.common.SettingTopBar
 import com.example.appzervycliente.Components.common.TextCommentSection
@@ -61,19 +64,20 @@ fun CarritoPage(
                     top = innerPadding.calculateTopPadding(),
                     bottom = innerPadding.calculateBottomPadding(),
                 )
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .background(color = Color.White),
             verticalArrangement = Arrangement.spacedBy(25.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CarritoTitleSection()
+            TitleSection()
             HorizontalDivider(thickness = 2.5.dp)
-            CarritoDirectionSection()
+            DirectionSection()
             HorizontalDivider(thickness = 2.5.dp)
-            CarritoServicioSection()
+            ServicioSection()
             HorizontalDivider(thickness = 2.5.dp)
-            CarritoMetodoPagoSection()
+            MetodoPagoSection()
             HorizontalDivider(thickness = 2.5.dp)
-            CarritoDetallesPago()
+            DetallesPago()
             HorizontalDivider(thickness = 2.5.dp)
             Button(
                 modifier = Modifier.fillMaxWidth(0.45f),
@@ -90,7 +94,7 @@ fun CarritoPage(
 
 @Preview(showBackground = true)
 @Composable
-fun CarritoPagePreview(){
+private fun Preview(){
 
     AppZervyClienteTheme(
         dynamicColor = true
@@ -103,7 +107,7 @@ fun CarritoPagePreview(){
 //------------------------------------------------------------[TITLE]
 
 @Composable
-fun CarritoTitleSection(){
+private fun TitleSection(){
 
     Column(
         modifier = Modifier
@@ -123,7 +127,7 @@ fun CarritoTitleSection(){
 //------------------------------------------------------------[DIRECTION]
 
 @Composable
-fun CarritoDirectionSection(){
+private fun DirectionSection(){
 
     var text by remember { mutableStateOf("") }
 
@@ -151,7 +155,7 @@ fun CarritoDirectionSection(){
 //------------------------------------------------------------[SERVICIO]
 
 @Composable
-fun CarritoServicioSection(){
+private fun ServicioSection(){
 
     Column(
         modifier = Modifier
@@ -194,7 +198,7 @@ fun CarritoServicioSection(){
 //------------------------------------------------------------[METODO PAGO]
 
 @Composable
-fun CarritoMetodoPagoSection(){
+private fun MetodoPagoSection(){
 
     Column(
         modifier = Modifier
@@ -204,20 +208,25 @@ fun CarritoMetodoPagoSection(){
         Text(
             text = stringResource(R.string.lblMetodo),
         )
-        IconTextHorizontalSection(
-            painter = painterResource(R.drawable.visa_icon),
+        IconLabelHorizontalSection(
+            painter = painterResource(R.drawable.visaicon),
             contentDescription = "Pay Method",
             label = "Targeta Hernandez - Nº 7676***",
-            gap = 15.dp
+            iconGap = 15.dp,
+            iconWidth = 45.dp,
+            iconHeight = 35.dp,
+            tint = Color.Unspecified
         )
     }
 
 }
 
+
+
 //------------------------------------------------------------[DETALLES PAGO]
 
 @Composable
-fun CarritoDetallesPago(){
+private fun DetallesPago(){
 
     Column(
         modifier = Modifier

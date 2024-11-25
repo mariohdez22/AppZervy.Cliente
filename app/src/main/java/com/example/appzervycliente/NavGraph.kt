@@ -9,6 +9,7 @@ import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Views.Cliente.AceptacionSolicitudPage
+import com.example.appzervycliente.Views.Cliente.ActivacionInspeccionPage
 import com.example.appzervycliente.Views.Cliente.CarritoPage
 import com.example.appzervycliente.Views.Cliente.EsperaPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
@@ -22,6 +23,8 @@ import com.example.appzervycliente.Views.Cliente.SolicitudServicioDias
 import com.example.appzervycliente.Views.Cliente.SplashScreen
 import com.example.appzervycliente.Views.Cliente.WelcomeScreen
 import com.example.appzervycliente.Views.Cliente.EmailVerificationScreen
+import com.example.appzervycliente.Views.Cliente.PagoPosteriorPage
+import com.example.appzervycliente.Views.Cliente.PagoPrevioPage
 import com.example.appzervycliente.Views.Cliente.PropuestaDetallePage
 import com.example.appzervycliente.Views.Cliente.PropuestaInfoSocioPage
 import com.example.appzervycliente.Views.Cliente.PropuestaServicioPage
@@ -35,7 +38,7 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.PropuestaInfoSocioPage.route
+        startDestination = Routes.CarritoPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
@@ -53,6 +56,16 @@ fun SetupNavGraph(
         composable(Routes.EsperaPage.route) {
             EsperaPage(navController)
         }
+        composable(Routes.PagoPosteriorPage.route) {
+            PagoPosteriorPage(navController)
+        }
+        composable(Routes.PagoPrevioPage.route) {
+            PagoPrevioPage(navController)
+        }
+        composable(Routes.ActivacionInspeccionPage.route) {
+            ActivacionInspeccionPage(navController)
+        }
+
         composable(Routes.SolicitudDiaPage.route) {
             SolicitudServicioDia(navController)
         }

@@ -1,5 +1,6 @@
 package com.example.appzervycliente.Components.common
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,13 +32,6 @@ fun SettingTopBar(
     onNavigationIconClick: () -> Unit
 ){
     TopAppBar(
-        modifier = Modifier
-            .padding(
-                top = 12.dp,
-                bottom = 12.dp,
-                start = 15.dp,
-                end = 15.dp
-            ),
         scrollBehavior = scrollBehavior,
         title = { Text("") },
         navigationIcon = {
@@ -76,7 +70,8 @@ fun SettingTopBar(
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.White
-        )
+        ),
+        windowInsets = WindowInsets(left = 25.dp, right = 25.dp, top = 20.dp)
     )
 
 }

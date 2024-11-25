@@ -34,7 +34,7 @@ fun TextUserProfileSection(
 
         ){
             Image(
-                painter = painterResource(R.drawable.visa_icon),
+                painter = painterResource(R.drawable.visaicon),
                 contentDescription = ""
             )
         }
