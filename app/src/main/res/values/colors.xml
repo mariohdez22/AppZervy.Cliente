@@ -14,5 +14,6 @@
     <color name="cardInsepccionActiva">#7847BD</color>
     <color name="standar">#FFCCC2DC</color>
     <color name="btnCerrarPropuesta">#E2C0FF</color>
+    <color name="ratingIcon">#FFD062</color>
 
 </resources>

@@ -1,16 +1,12 @@
 package com.example.appzervycliente.Views.Cliente
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -70,7 +65,7 @@ fun PropuestaDetallePage(
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { TopBar() }
+        topBar = { TopBar(navController) }
     ) {
         paddingValues ->
         Column(
@@ -109,7 +104,7 @@ private fun PropuestaPreview(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(
-
+    navController: NavHostController,
 ){
     TopAppBar(
         title = { Text("") },
@@ -148,7 +143,7 @@ private fun TopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.White
+            containerColor = Color.White,
         ),
         windowInsets = WindowInsets(left = 25.dp, right = 25.dp, top = 23.dp)
     )
@@ -282,7 +277,7 @@ private fun RatingBar(
             Icon(
                 imageVector = Icons.Outlined.Star,
                 contentDescription = null,
-                tint = if(i <= rating) Color.Yellow else Color.Gray,
+                tint = if(i <= rating) colorResource(R.color.ratingIcon) else Color.Gray,
                 modifier = Modifier
                     .size(20.dp)
                     //.clickable { onRatingChange(i) }
