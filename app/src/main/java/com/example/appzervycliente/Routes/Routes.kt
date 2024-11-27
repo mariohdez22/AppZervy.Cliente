@@ -94,6 +94,9 @@ const val ROOT_VISTA_ESPERA_ACTIVACION_SERVICIO_PAGE = "vistaEsperaActivacionSer
 const val ROOT_MODIFICACION_DE_SERVICIO_PAGE = "modificacionDeServicio"
 const val ROOT_RECHAZO_DE_SERVICIO_PAGE = "rechazoDeServicio"
 
+//----------------------------------------------------- [EMAIL]
+
+
 //----------------------------------------------------- [REGISTRO]
 
 //------------------------------------------------------[PRUEBAS]

@@ -52,7 +52,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -61,17 +60,23 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.google.maps)
+    implementation(libs.google.location)
 
-    // Coil para cargar imagenes en Compose y Multiplatform
-    implementation("io.coil-kt:coil-compose:2.1.0")
 
-    // Retrofit
+    implementation(libs.androidx.navigation.compose)
+
+    // Animación
+    implementation(libs.compose.animation)
+
+    // Coil para cargar imágenes
+    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("io.coil-kt:coil-gif:2.7.0")
+
+    // Retrofit y Moshi
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
-
-    // Converter de Moshi para Retrofit
     implementation("com.squareup.retrofit2:converter-moshi:2.11.0")
-
-    // Moshi
     implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
     implementation("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
 
@@ -81,26 +86,18 @@ dependencies {
     // ViewModel y LiveData
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
-
-    // Para utilizar ViewModel en Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
-    implementation(libs.androidx.navigation.compose)
 
     //Para poder hacer Menús desplegables
     implementation ("androidx.compose.material:material-icons-core:1.4.0")
     implementation ("androidx.compose.material:material-icons-extended:1.4.0")
 
-    //coil
-    implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("io.coil-kt:coil-gif:2.7.0")
-
-    // Import the Firebase BoM
+    // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
     implementation(libs.firebase.common.ktx)
     implementation(libs.firebase.auth.ktx)
 
-    implementation(libs.compose.animation)
-
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -108,4 +105,13 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //map
+    // Agrega las nuevas dependencias aquí:
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson.converter)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.google.maps.utils)
+
 }

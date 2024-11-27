@@ -18,5 +18,6 @@
     <color name="iconPerfilTint">#7982FF</color>
     <color name="cardPerfilBackground">#F2F3FF</color>
     <color name="txtPerfil">#7982FF</color>
+    <color name="BLUE">#FFCCC2DC</color>
 
 </resources>
