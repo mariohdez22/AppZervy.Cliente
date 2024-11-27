@@ -31,7 +31,7 @@ import com.example.appzervycliente.Views.Cliente.EmailVerificationPreview
 import com.example.appzervycliente.Views.Cliente.EmailVerificationScreen
 import com.example.appzervycliente.Views.Cliente.WelcomeScreenPreview
 import com.example.appzervycliente.Views.Cliente.PreviewMapPage
-import com.example.appzervycliente.Views.Cliente.ServiceDetailsScreen
+import com.example.appzervycliente.Views.Cliente.ServiceMapsScreen
 import com.example.appzervycliente.Views.Cliente.InformacionPersonalPage
 import com.example.appzervycliente.Views.Cliente.PagoPosteriorPage
 import com.example.appzervycliente.Views.Cliente.PagoPrevioPage
@@ -44,6 +44,7 @@ import com.example.appzervycliente.Views.Cliente.VistaPagoPrevioVariosDiasPage
 import com.example.appzervycliente.Views.Cliente.VistaPagoPosteriorVariosDiasEfectivosPage
 import com.example.appzervycliente.Views.Cliente.ModificacionDeServicioPage
 import com.example.appzervycliente.Views.Cliente.PublicacionDeConsultasAsistenciaCliente
+import com.example.appzervycliente.Views.Cliente.ServiceMapsScreen
 import com.example.appzervycliente.Views.Cliente.VistaEsperaActivacionServicioPendientePage
 
 @Composable
@@ -55,7 +56,7 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.ArranquePage.route
+        startDestination = Routes.MapPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
@@ -107,6 +108,10 @@ fun SetupNavGraph(
         }
         composable(Routes.InspeccionPage.route) {
             InspeccionPage(navController)
+        }
+
+        composable(Routes.MapPage.route) {
+            ServiceMapsScreen(navController)
         }
 
         composable(Routes.MainPage.route) {

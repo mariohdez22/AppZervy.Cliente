@@ -98,7 +98,7 @@ import java.net.URL
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ServiceDetailsScreen(navController: NavHostController) {
+fun ServiceMapsScreen(navController: NavHostController) {
     val bottomSheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.PartiallyExpanded
     )
@@ -109,7 +109,7 @@ fun ServiceDetailsScreen(navController: NavHostController) {
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TopBar(navController = navController)
+            TopBarw(navController = navController)
         },
         sheetContent = {
             BottomSheetContent()
@@ -481,7 +481,7 @@ fun AnimatedProgressBar() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavHostController) {
+fun TopBarw(navController: NavHostController) {
     TopAppBar(
         title = { Text("") },
         navigationIcon = {
@@ -573,5 +573,5 @@ fun DetailRow(label: String, value: String) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewMapPage() {
-    ServiceDetailsScreen(navController = rememberNavController())
+    ServiceMapsScreen(navController = rememberNavController())
 }

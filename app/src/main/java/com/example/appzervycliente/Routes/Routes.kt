@@ -150,6 +150,7 @@ sealed class Routes(
     object PerfilClientePage : Routes(ROOT_PERFIL_CLIENTE_PAGE)
     object InformacionPersonalPage : Routes(ROOT_INFORMACION_PERSONAL_PAGE)
     object DireccionesPage : Routes(ROOT_DIRECCIONES_PAGE)
+    object MapPage : Routes(ROOT_MAP_PAGE)
 
     // Nuevas rutas - Michael Torres
     object VistaPagoPosteriorVariosDiasEfectivosPage : Routes(ROOT_VISTA_PAGO_POSTERIOR_VARIOS_DIAS_PAGE)
