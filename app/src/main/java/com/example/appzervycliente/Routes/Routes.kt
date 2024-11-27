@@ -116,6 +116,9 @@ const val ROOT_ASISTENCIA_AL_CLIENTE_PAGE = "asistenciaAlCliente"
 //----------------------------------------------------- [PUBLICACIONES DE ASISTENCIA] - Michael Torres
 const val ROOT_PUBLICACIONES_ASISTENCIA_PAGE = "publicacionesAsistenciaPage"
 
+//----------------------------------------------------- [CREAR PUBLICACION DE ASISTENCIA] - Michael Torres
+const val ROOT_CREAR_PUBLICACION_ASISTENCIA_PAGE = "crearPublicacionAsistencia"
+
 
 sealed class Routes(
     val route: String
@@ -152,6 +155,7 @@ sealed class Routes(
     object RechazoDeServicioPage : Routes(ROOT_RECHAZO_DE_SERVICIO_PAGE)
     object AsistenciaAlClientePage : Routes(ROOT_ASISTENCIA_AL_CLIENTE_PAGE)
     object PublicacionesAsistenciaPage : Routes(ROOT_PUBLICACIONES_ASISTENCIA_PAGE)
+    object CrearPublicacionAsistenciaPage : Routes(ROOT_CREAR_PUBLICACION_ASISTENCIA_PAGE)
 
 
     object PerfilAgregarDireccionPage : Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
