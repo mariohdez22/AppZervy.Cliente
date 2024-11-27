@@ -87,7 +87,7 @@ const val ROOT_WELCOME = "welcome"
 
 const val ROOT_EMAIL_PAGE = "email"
 
-//----------------------------------------------------- [NUEVAS VISTAS]
+//----------------------------------------------------- [NUEVAS VISTAS] - Michael Torres
 const val ROOT_VISTA_PAGO_POSTERIOR_VARIOS_DIAS_PAGE = "vistaPagoPosteriorVariosDias"
 const val ROOT_VISTA_PAGO_PREVIO_VARIOS_DIAS_PAGE = "vistaPagoPrevioVariosDias"
 const val ROOT_VISTA_ESPERA_ACTIVACION_SERVICIO_PAGE = "vistaEsperaActivacionServicio"
@@ -109,6 +109,10 @@ const val ARG_CLIENTE_ID = "cliente_id"
 
 //----------------------------------------------------- [PERFIL AGREGAR DIRECCIÓN]
 const val ROOT_PERFIL_AGREGAR_DIRECCION_PAGE = "perfil_agregar_direccion"
+
+// ----------------------------------------------------- [ASISTENCIA AL CLIENTE] - Michael Torres
+const val ROOT_ASISTENCIA_AL_CLIENTE_PAGE = "asistenciaAlCliente"
+
 
 sealed class Routes(
     val route: String
@@ -137,12 +141,14 @@ sealed class Routes(
     object InformacionPersonalPage : Routes(ROOT_INFORMACION_PERSONAL_PAGE)
     object DireccionesPage : Routes(ROOT_DIRECCIONES_PAGE)
 
-    // Nuevas rutas
+    // Nuevas rutas - Michael Torres
     object VistaPagoPosteriorVariosDiasEfectivosPage : Routes(ROOT_VISTA_PAGO_POSTERIOR_VARIOS_DIAS_PAGE)
     object VistaPagoPrevioVariosDiasPage : Routes(ROOT_VISTA_PAGO_PREVIO_VARIOS_DIAS_PAGE)
     object VistaEsperaActivacionServicioPendientePage : Routes(ROOT_VISTA_ESPERA_ACTIVACION_SERVICIO_PAGE)
     object ModificacionDeServicioPage : Routes(ROOT_MODIFICACION_DE_SERVICIO_PAGE)
     object RechazoDeServicioPage : Routes(ROOT_RECHAZO_DE_SERVICIO_PAGE)
+    object AsistenciaAlClientePage : Routes(ROOT_ASISTENCIA_AL_CLIENTE_PAGE)
+
 
     object PerfilAgregarDireccionPage : Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 

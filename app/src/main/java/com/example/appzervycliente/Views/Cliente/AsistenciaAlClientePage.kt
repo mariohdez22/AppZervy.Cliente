@@ -1,14 +1,16 @@
 package com.example.appzervycliente.Views.Cliente
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,12 +31,11 @@ fun AsistenciaAlClientePage(
     navController: NavHostController
 ) {
     val preguntasFrecuentes = listOf(
-        "Sed ut perspiciatis unde omnis",
-        "Doloremque laudantium",
-        "Totam rem aperiam",
-        "Inventore veritatis et",
-        "Quasi architecto beatae",
-        "Sed quia consequop"
+        "¿Cómo puedo cambiar mi dirección de servicio?" to "Puedes cambiar tu dirección desde tu perfil en la sección de direcciones.",
+        "¿Qué métodos de pago están disponibles?" to "Aceptamos tarjetas de crédito, débito y pagos en efectivo al finalizar el servicio.",
+        "¿Cómo puedo cancelar un servicio agendado?" to "Puedes cancelar el servicio desde la sección de tus servicios activos en la aplicación.",
+        "¿Cuánto tiempo tarda en confirmarse un servicio?" to "La confirmación puede tomar hasta 24 horas dependiendo del socio.",
+        "¿Puedo solicitar un reembolso?" to "Sí, los reembolsos están sujetos a los términos y condiciones de cada servicio."
     )
 
     Box(
@@ -45,6 +46,7 @@ fun AsistenciaAlClientePage(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState()) // Permite que toda la vista sea desplazable
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -64,7 +66,7 @@ fun AsistenciaAlClientePage(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
+                    text = "Encuentra respuestas a tus preguntas frecuentes o solicita ayuda personalizada.",
                     fontSize = 14.sp,
                     color = Color.Gray,
                     textAlign = TextAlign.Start
@@ -80,13 +82,9 @@ fun AsistenciaAlClientePage(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(preguntasFrecuentes) { pregunta ->
-                    PreguntaFrecuenteItem(pregunta)
-                }
+            preguntasFrecuentes.forEach { (pregunta, respuesta) ->
+                PreguntaFrecuenteItem(pregunta, respuesta)
+                Spacer(modifier = Modifier.height(0.dp))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -113,25 +111,42 @@ fun AsistenciaAlClientePage(
 }
 
 @Composable
-fun PreguntaFrecuenteItem(pregunta: String) {
-    Row(
+fun PreguntaFrecuenteItem(pregunta: String, respuesta: String) {
+    var expandida by remember { mutableStateOf(false) }
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFFF7F7F7), shape = MaterialTheme.shapes.small)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(16.dp)
     ) {
-        Text(
-            text = pregunta,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Normal
-        )
-        Icon(
-            imageVector = Icons.Default.MoreVert,
-            contentDescription = "Opciones",
-            tint = Color.Gray
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = pregunta,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+            IconButton(onClick = { expandida = !expandida }) {
+                Icon(
+                    imageVector = if (expandida) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                    contentDescription = "Expandir o contraer",
+                    tint = Color.Gray
+                )
+            }
+        }
+        if (expandida) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = respuesta,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Light,
+                color = Color.Gray
+            )
+        }
     }
 }
 
@@ -158,11 +173,6 @@ fun OpcionAsistenciaItem(texto: String, icono: Int) {
                 fontWeight = FontWeight.Medium
             )
         }
-        Icon(
-            imageVector = Icons.Default.MoreVert,
-            contentDescription = "Opciones",
-            tint = Color.Gray
-        )
     }
 }
 

@@ -86,6 +86,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     implementation(libs.androidx.navigation.compose)
 
+    //Para poder hacer Menús desplegables
+    implementation ("androidx.compose.material:material-icons-core:1.4.0")
+    implementation ("androidx.compose.material:material-icons-extended:1.4.0")
+
     //coil
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("io.coil-kt:coil-gif:2.7.0")
