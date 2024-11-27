@@ -96,6 +96,7 @@ const val ROOT_RECHAZO_DE_SERVICIO_PAGE = "rechazoDeServicio"
 
 //----------------------------------------------------- [EMAIL]
 
+const val ROOT_MAP_PAGE = "map"
 
 //----------------------------------------------------- [REGISTRO]
 
