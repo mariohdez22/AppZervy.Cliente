@@ -31,6 +31,11 @@ import com.example.appzervycliente.Views.Cliente.PerfilClientePage
 import com.example.appzervycliente.Views.Cliente.PropuestaDetallePage
 import com.example.appzervycliente.Views.Cliente.PropuestaInfoSocioPage
 import com.example.appzervycliente.Views.Cliente.PropuestaServicioPage
+import com.example.appzervycliente.Views.Cliente.RechazoDeServicioPage
+import com.example.appzervycliente.Views.Cliente.VistaPagoPrevioVariosDiasPage
+import com.example.appzervycliente.views.Cliente.VistaPagoPosteriorVariosDiasEfectivosPage
+import com.example.appzervycliente.views.servicio.ModificacionDeServicioPage
+import com.example.appzervycliente.views.servicio.VistaEsperaActivacionServicioPendientePage
 
 @Composable
 fun SetupNavGraph(
@@ -119,6 +124,23 @@ fun SetupNavGraph(
         }
         composable(Routes.Email.route) {
             EmailVerificationScreen(navController)
+        }
+
+        // Nuevas vistas (Michael Torres)
+        composable(Routes.VistaPagoPosteriorVariosDiasEfectivosPage.route) {
+            VistaPagoPosteriorVariosDiasEfectivosPage(navController)
+        }
+        composable(Routes.VistaPagoPrevioVariosDiasPage.route) {
+            VistaPagoPrevioVariosDiasPage(navController)
+        }
+        composable(Routes.VistaEsperaActivacionServicioPendientePage.route) {
+            VistaEsperaActivacionServicioPendientePage(navController)
+        }
+        composable(Routes.ModificacionDeServicioPage.route) {
+            ModificacionDeServicioPage(navController)
+        }
+        composable(Routes.RechazoDeServicioPage.route) {
+            RechazoDeServicioPage(navController)
         }
 
 //-------------------------------------------------------------[PRUEBAS]
