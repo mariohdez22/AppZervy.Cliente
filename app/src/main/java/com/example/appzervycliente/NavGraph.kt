@@ -33,9 +33,9 @@ import com.example.appzervycliente.Views.Cliente.PropuestaInfoSocioPage
 import com.example.appzervycliente.Views.Cliente.PropuestaServicioPage
 import com.example.appzervycliente.Views.Cliente.RechazoDeServicioPage
 import com.example.appzervycliente.Views.Cliente.VistaPagoPrevioVariosDiasPage
-import com.example.appzervycliente.views.Cliente.VistaPagoPosteriorVariosDiasEfectivosPage
-import com.example.appzervycliente.views.servicio.ModificacionDeServicioPage
-import com.example.appzervycliente.views.servicio.VistaEsperaActivacionServicioPendientePage
+import com.example.appzervycliente.Views.Cliente.VistaPagoPosteriorVariosDiasEfectivosPage
+import com.example.appzervycliente.Views.Cliente.ModificacionDeServicioPage
+import com.example.appzervycliente.Views.Cliente.VistaEsperaActivacionServicioPendientePage
 
 @Composable
 fun SetupNavGraph(

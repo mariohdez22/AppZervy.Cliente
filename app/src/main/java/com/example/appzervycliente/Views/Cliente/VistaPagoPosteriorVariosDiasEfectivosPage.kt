@@ -1,4 +1,4 @@
-package com.example.appzervycliente.views.Cliente
+package com.example.appzervycliente.Views.Cliente
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
