@@ -1,9 +1,7 @@
 package com.example.appzervycliente.Components.common
 
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -28,7 +26,7 @@ import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingTopBar(
-    scrollBehavior : TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
+    scrollBehavior: TopAppBarScrollBehavior? = TopAppBarDefaults.enterAlwaysScrollBehavior(),
     onNavigationIconClick: () -> Unit
 ){
     TopAppBar(
