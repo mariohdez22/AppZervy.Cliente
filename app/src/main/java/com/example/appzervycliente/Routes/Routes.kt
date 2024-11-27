@@ -1,5 +1,7 @@
 package com.example.appzervycliente.Routes
 
+import com.example.appzervycliente.Services.Repository.Route
+
 //----------------------------------------------------- [LOGIN]
 const val ROOT_LOGIN_PAGE = "login_screen"
 
@@ -74,6 +76,10 @@ const val ROOT_INFORMACION_PERSONAL_PAGE = "informacionPersonal"
 //----------------------------------------------------- [DIRECCIONES]
 
 const val ROOT_DIRECCIONES_PAGE = "direccionesPage"
+
+//----------------------------------------------------- [DIRECCIONES FORM]
+
+const val ROOT_DIRECCIONES_FORM_PAGE = "direccionesFormPage"
 
 //----------------------------------------------------- [INICIO]
 
@@ -162,6 +168,7 @@ sealed class Routes(
     object PublicacionesAsistenciaPage : Routes(ROOT_PUBLICACIONES_ASISTENCIA_PAGE)
     object CrearPublicacionAsistenciaPage : Routes(ROOT_CREAR_PUBLICACION_ASISTENCIA_PAGE)
 
+    object DireccionesFormPage: Routes(ROOT_DIRECCIONES_FORM_PAGE)
 
     object PerfilAgregarDireccionPage : Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 

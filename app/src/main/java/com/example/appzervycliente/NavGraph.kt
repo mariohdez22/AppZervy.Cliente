@@ -14,6 +14,7 @@ import com.example.appzervycliente.Views.Cliente.ActivacionInspeccionPage
 import com.example.appzervycliente.Views.Cliente.AsistenciaAlClientePage
 import com.example.appzervycliente.Views.Cliente.CarritoPage
 import com.example.appzervycliente.Views.Cliente.CrearPublicacionDeAsistenciaClientePage
+import com.example.appzervycliente.Views.Cliente.DireccionesFormPage
 import com.example.appzervycliente.Views.Cliente.DireccionesPage
 import com.example.appzervycliente.Views.Cliente.EsperaPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
@@ -56,7 +57,7 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.MapPage.route
+        startDestination = Routes.DireccionesFormPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
@@ -95,6 +96,9 @@ fun SetupNavGraph(
         }
         composable(Routes.DireccionesPage.route) {
             DireccionesPage(navController)
+        }
+        composable(Routes.DireccionesFormPage.route) {
+            DireccionesFormPage(navController)
         }
 
         composable(Routes.SolicitudDiaPage.route) {
