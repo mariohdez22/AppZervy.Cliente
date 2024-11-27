@@ -1,7 +1,5 @@
 package com.example.appzervycliente.Routes
 
-import okhttp3.Route
-
 //----------------------------------------------------- [LOGIN]
 const val ROOT_LOGIN_PAGE = "login_screen"
 
@@ -89,6 +87,13 @@ const val ROOT_WELCOME = "welcome"
 
 const val ROOT_EMAIL_PAGE = "email"
 
+//----------------------------------------------------- [NUEVAS VISTAS]
+const val ROOT_VISTA_PAGO_POSTERIOR_VARIOS_DIAS_PAGE = "vistaPagoPosteriorVariosDias"
+const val ROOT_VISTA_PAGO_PREVIO_VARIOS_DIAS_PAGE = "vistaPagoPrevioVariosDias"
+const val ROOT_VISTA_ESPERA_ACTIVACION_SERVICIO_PAGE = "vistaEsperaActivacionServicio"
+const val ROOT_MODIFICACION_DE_SERVICIO_PAGE = "modificacionDeServicio"
+const val ROOT_RECHAZO_DE_SERVICIO_PAGE = "rechazoDeServicio"
+
 //----------------------------------------------------- [REGISTRO]
 
 //------------------------------------------------------[PRUEBAS]
@@ -106,35 +111,41 @@ const val ARG_CLIENTE_ID = "cliente_id"
 const val ROOT_PERFIL_AGREGAR_DIRECCION_PAGE = "perfil_agregar_direccion"
 
 sealed class Routes(
-    val route : String
-){
-    object CarritoPage: Routes(ROOT_CARRITO_COMPRAS_PAGE)
-    object InspeccionPage: Routes(ROOT_INSPECCION_PAGE)
-    object LoginPage: Routes(ROOT_LOGIN_PAGE)
-    object ResenaPage: Routes(ROOT_RESENA_PAGE)
-    object RegistroPage: Routes(ROOT_REGISTRO_PAGE)
-    object InicioPage: Routes(ROOT_INICIO_PAGE)
-    object ArranquePage: Routes(ROOT_ARRANQUE_PAGE)
-    object MainPage: Routes(ROOT_MAIN_PAGE)
-    object Welcome: Routes(ROOT_WELCOME)
-    object Email: Routes(ROOT_EMAIL_PAGE)
-    object SolicitudDiaPage: Routes(ROOT_SOLICITUD_DIA_PAGE)
-    object SolicitudDiasPage: Routes(ROOT_SOLICITUD_DIAS_PAGE)
-    object EsperaPage: Routes(ROOT_ESPERA_PAGE)
-    object AceptacionSolicitudPage: Routes(ROOT_ACEPTACION_SOLICITUD_PAGE)
-    object PropuestaServicioPage: Routes(ROOT_PROPUESTA_SERVICIO_PAGE)
-    object PropuestaDetallePage: Routes(ROOT_PROPUESTA_DETALLE_PAGE)
-    object PropuestaInfoSocioPage: Routes(ROOT_PROPUESTA_INFOSOCIO_PAGE)
-    object PagoPosteriorPage: Routes(ROOT_PAGO_POSTERIOR_PAGE)
-    object PagoPrevioPage: Routes(ROOT_PAGO_PREVIO_PAGE)
-    object ActivacionInspeccionPage: Routes(ROOT_ACTIVACION_INS_PAGE)
-    object PerfilClientePage: Routes(ROOT_PERFIL_CLIENTE_PAGE)
-    object InformacionPersonalPage: Routes(ROOT_INFORMACION_PERSONAL_PAGE)
-    object DireccionesPage: Routes(ROOT_DIRECCIONES_PAGE)
+    val route: String
+) {
+    object CarritoPage : Routes(ROOT_CARRITO_COMPRAS_PAGE)
+    object InspeccionPage : Routes(ROOT_INSPECCION_PAGE)
+    object LoginPage : Routes(ROOT_LOGIN_PAGE)
+    object ResenaPage : Routes(ROOT_RESENA_PAGE)
+    object RegistroPage : Routes(ROOT_REGISTRO_PAGE)
+    object InicioPage : Routes(ROOT_INICIO_PAGE)
+    object ArranquePage : Routes(ROOT_ARRANQUE_PAGE)
+    object MainPage : Routes(ROOT_MAIN_PAGE)
+    object Welcome : Routes(ROOT_WELCOME)
+    object Email : Routes(ROOT_EMAIL_PAGE)
+    object SolicitudDiaPage : Routes(ROOT_SOLICITUD_DIA_PAGE)
+    object SolicitudDiasPage : Routes(ROOT_SOLICITUD_DIAS_PAGE)
+    object EsperaPage : Routes(ROOT_ESPERA_PAGE)
+    object AceptacionSolicitudPage : Routes(ROOT_ACEPTACION_SOLICITUD_PAGE)
+    object PropuestaServicioPage : Routes(ROOT_PROPUESTA_SERVICIO_PAGE)
+    object PropuestaDetallePage : Routes(ROOT_PROPUESTA_DETALLE_PAGE)
+    object PropuestaInfoSocioPage : Routes(ROOT_PROPUESTA_INFOSOCIO_PAGE)
+    object PagoPosteriorPage : Routes(ROOT_PAGO_POSTERIOR_PAGE)
+    object PagoPrevioPage : Routes(ROOT_PAGO_PREVIO_PAGE)
+    object ActivacionInspeccionPage : Routes(ROOT_ACTIVACION_INS_PAGE)
+    object PerfilClientePage : Routes(ROOT_PERFIL_CLIENTE_PAGE)
+    object InformacionPersonalPage : Routes(ROOT_INFORMACION_PERSONAL_PAGE)
+    object DireccionesPage : Routes(ROOT_DIRECCIONES_PAGE)
 
-    object PerfilAgregarDireccionPage: Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
+    // Nuevas rutas
+    object VistaPagoPosteriorVariosDiasEfectivosPage : Routes(ROOT_VISTA_PAGO_POSTERIOR_VARIOS_DIAS_PAGE)
+    object VistaPagoPrevioVariosDiasPage : Routes(ROOT_VISTA_PAGO_PREVIO_VARIOS_DIAS_PAGE)
+    object VistaEsperaActivacionServicioPendientePage : Routes(ROOT_VISTA_ESPERA_ACTIVACION_SERVICIO_PAGE)
+    object ModificacionDeServicioPage : Routes(ROOT_MODIFICACION_DE_SERVICIO_PAGE)
+    object RechazoDeServicioPage : Routes(ROOT_RECHAZO_DE_SERVICIO_PAGE)
 
+    object PerfilAgregarDireccionPage : Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 
-    object CrearClientePage: Routes(ROOT_CREAR_CLIENTE_PAGE)
-    object EditarClientPage: Routes("${ROOT_EDITAR_CLIENTE_PAGE}/{${ARG_CLIENTE_ID}}")
+    object CrearClientePage : Routes(ROOT_CREAR_CLIENTE_PAGE)
+    object EditarClientPage : Routes("${ROOT_EDITAR_CLIENTE_PAGE}/{${ARG_CLIENTE_ID}}")
 }
