@@ -36,6 +36,7 @@ import com.example.appzervycliente.Views.Cliente.RechazoDeServicioPage
 import com.example.appzervycliente.Views.Cliente.VistaPagoPrevioVariosDiasPage
 import com.example.appzervycliente.Views.Cliente.VistaPagoPosteriorVariosDiasEfectivosPage
 import com.example.appzervycliente.Views.Cliente.ModificacionDeServicioPage
+import com.example.appzervycliente.Views.Cliente.PublicacionDeConsultasAsistenciaCliente
 import com.example.appzervycliente.Views.Cliente.VistaEsperaActivacionServicioPendientePage
 
 @Composable
@@ -147,6 +148,10 @@ fun SetupNavGraph(
         composable(Routes.RechazoDeServicioPage.route) {
             RechazoDeServicioPage(navController)
         }
+        composable(Routes.PublicacionesAsistenciaPage.route) {
+            PublicacionDeConsultasAsistenciaCliente(navController)
+        }
+
 
 //-------------------------------------------------------------[PRUEBAS]
 //        composable(Routes.MainPage.route) {
