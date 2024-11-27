@@ -11,6 +11,7 @@ import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Views.Cliente.AceptacionSolicitudPage
 import com.example.appzervycliente.Views.Cliente.ActivacionInspeccionPage
 import com.example.appzervycliente.Views.Cliente.CarritoPage
+import com.example.appzervycliente.Views.Cliente.DireccionesPage
 import com.example.appzervycliente.Views.Cliente.EsperaPage
 import com.example.appzervycliente.Views.Cliente.InspeccionPage
 import com.example.appzervycliente.Views.Cliente.LoginScreen
@@ -23,8 +24,10 @@ import com.example.appzervycliente.Views.Cliente.SolicitudServicioDias
 import com.example.appzervycliente.Views.Cliente.SplashScreen
 import com.example.appzervycliente.Views.Cliente.WelcomeScreen
 import com.example.appzervycliente.Views.Cliente.EmailVerificationScreen
+import com.example.appzervycliente.Views.Cliente.InformacionPersonalPage
 import com.example.appzervycliente.Views.Cliente.PagoPosteriorPage
 import com.example.appzervycliente.Views.Cliente.PagoPrevioPage
+import com.example.appzervycliente.Views.Cliente.PerfilClientePage
 import com.example.appzervycliente.Views.Cliente.PropuestaDetallePage
 import com.example.appzervycliente.Views.Cliente.PropuestaInfoSocioPage
 import com.example.appzervycliente.Views.Cliente.PropuestaServicioPage
@@ -38,7 +41,7 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.CarritoPage.route
+        startDestination = Routes.DireccionesPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
@@ -64,6 +67,15 @@ fun SetupNavGraph(
         }
         composable(Routes.ActivacionInspeccionPage.route) {
             ActivacionInspeccionPage(navController)
+        }
+        composable(Routes.PerfilClientePage.route) {
+            PerfilClientePage(navController)
+        }
+        composable(Routes.InformacionPersonalPage.route) {
+            InformacionPersonalPage(navController)
+        }
+        composable(Routes.DireccionesPage.route) {
+            DireccionesPage(navController)
         }
 
         composable(Routes.SolicitudDiaPage.route) {

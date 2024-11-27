@@ -15,5 +15,8 @@
     <color name="standar">#FFCCC2DC</color>
     <color name="btnCerrarPropuesta">#E2C0FF</color>
     <color name="ratingIcon">#FFD062</color>
+    <color name="iconPerfilTint">#7982FF</color>
+    <color name="cardPerfilBackground">#F2F3FF</color>
+    <color name="txtPerfil">#7982FF</color>
 
 </resources>

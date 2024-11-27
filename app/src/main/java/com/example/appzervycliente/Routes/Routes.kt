@@ -61,11 +61,21 @@ const val ROOT_PAGO_PREVIO_PAGE = "pagoPrevio"
 
 const val ROOT_ACTIVACION_INS_PAGE = "activacionInspeccion"
 
+//----------------------------------------------------- [PERFIL CLIENTE]
+
+const val ROOT_PERFIL_CLIENTE_PAGE = "perfilCliente"
+
 //----------------------------------------------------- [ACEPTACION SOLICITUD]
 
 const val ROOT_ACEPTACION_SOLICITUD_PAGE = "aceptacionSolicitud"
 
+//----------------------------------------------------- [INFORMACION PERSONAL]
 
+const val ROOT_INFORMACION_PERSONAL_PAGE = "informacionPersonal"
+
+//----------------------------------------------------- [DIRECCIONES]
+
+const val ROOT_DIRECCIONES_PAGE = "direccionesPage"
 
 //----------------------------------------------------- [INICIO]
 
@@ -118,6 +128,9 @@ sealed class Routes(
     object PagoPosteriorPage: Routes(ROOT_PAGO_POSTERIOR_PAGE)
     object PagoPrevioPage: Routes(ROOT_PAGO_PREVIO_PAGE)
     object ActivacionInspeccionPage: Routes(ROOT_ACTIVACION_INS_PAGE)
+    object PerfilClientePage: Routes(ROOT_PERFIL_CLIENTE_PAGE)
+    object InformacionPersonalPage: Routes(ROOT_INFORMACION_PERSONAL_PAGE)
+    object DireccionesPage: Routes(ROOT_DIRECCIONES_PAGE)
 
     object PerfilAgregarDireccionPage: Routes(ROOT_PERFIL_AGREGAR_DIRECCION_PAGE)
 
