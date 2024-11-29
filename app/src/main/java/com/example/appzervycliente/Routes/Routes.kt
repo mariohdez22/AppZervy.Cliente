@@ -89,6 +89,19 @@ const val ROOT_METODOS_PAGO_PAGE = "metodosPago"
 
 const val ROOT_INGRESAR_TARGETA_PAGE = "ingresoTargeta"
 
+//----------------------------------------------------- [HISTORIAL INSPECCION]
+
+const val ROOT_HISTORIAL_INSPECCION_PAGE = "historialInspeccion"
+
+//----------------------------------------------------- [HISTORIAL INSPECCION DETALLE]
+
+const val ROOT_HISTORIAL_INSPECCION_DETALLE_PAGE = "historialInspeccionDetalle"
+
+//----------------------------------------------------- [FACTURA]
+
+const val ROOT_FACTURA_PAGE = "factura"
+
+
 //----------------------------------------------------- [INICIO]
 
 const val ROOT_INICIO_PAGE = "inicio"
@@ -167,6 +180,9 @@ sealed class Routes(
     object MapPage : Routes(ROOT_MAP_PAGE)
     object MetodosPagoPage: Routes(ROOT_METODOS_PAGO_PAGE)
     object IngresoTargetoPage: Routes(ROOT_INGRESAR_TARGETA_PAGE)
+    object HistorialInspeccionesPage: Routes(ROOT_HISTORIAL_INSPECCION_PAGE)
+    object HistorialInspeccionDetallePage: Routes(ROOT_HISTORIAL_INSPECCION_DETALLE_PAGE)
+    object FacturaPage: Routes(ROOT_FACTURA_PAGE)
 
     // Nuevas rutas - Michael Torres
     object VistaPagoPosteriorVariosDiasEfectivosPage : Routes(ROOT_VISTA_PAGO_POSTERIOR_VARIOS_DIAS_PAGE)

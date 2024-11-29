@@ -193,7 +193,7 @@ fun ModificacionDeServicioPage(
 }
 
 @Composable
-fun IconTextRow(label: String, value: String) {
+private fun IconTextRow(label: String, value: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,

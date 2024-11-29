@@ -21,5 +21,6 @@
     <color name="BLUE">#FFCCC2DC</color>
     <color name="cardPago1">#FF8181</color>
     <color name="cardPago2">#FFBD72</color>
+    <color name="txtInspeccionDetalle">#F2F2F2</color>
 
 </resources>
