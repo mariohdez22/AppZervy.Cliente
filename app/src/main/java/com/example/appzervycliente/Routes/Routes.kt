@@ -81,6 +81,14 @@ const val ROOT_DIRECCIONES_PAGE = "direccionesPage"
 
 const val ROOT_DIRECCIONES_FORM_PAGE = "direccionesFormPage"
 
+//----------------------------------------------------- [METODOS PAGO]
+
+const val ROOT_METODOS_PAGO_PAGE = "metodosPago"
+
+//----------------------------------------------------- [INGRESO TARGETA]
+
+const val ROOT_INGRESAR_TARGETA_PAGE = "ingresoTargeta"
+
 //----------------------------------------------------- [INICIO]
 
 const val ROOT_INICIO_PAGE = "inicio"
@@ -157,6 +165,8 @@ sealed class Routes(
     object InformacionPersonalPage : Routes(ROOT_INFORMACION_PERSONAL_PAGE)
     object DireccionesPage : Routes(ROOT_DIRECCIONES_PAGE)
     object MapPage : Routes(ROOT_MAP_PAGE)
+    object MetodosPagoPage: Routes(ROOT_METODOS_PAGO_PAGE)
+    object IngresoTargetoPage: Routes(ROOT_INGRESAR_TARGETA_PAGE)
 
     // Nuevas rutas - Michael Torres
     object VistaPagoPosteriorVariosDiasEfectivosPage : Routes(ROOT_VISTA_PAGO_POSTERIOR_VARIOS_DIAS_PAGE)

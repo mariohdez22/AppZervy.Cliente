@@ -34,6 +34,8 @@ import com.example.appzervycliente.Views.Cliente.WelcomeScreenPreview
 import com.example.appzervycliente.Views.Cliente.PreviewMapPage
 import com.example.appzervycliente.Views.Cliente.ServiceMapsScreen
 import com.example.appzervycliente.Views.Cliente.InformacionPersonalPage
+import com.example.appzervycliente.Views.Cliente.IngresoTargetPage
+import com.example.appzervycliente.Views.Cliente.MetodosPagoPage
 import com.example.appzervycliente.Views.Cliente.PagoPosteriorPage
 import com.example.appzervycliente.Views.Cliente.PagoPrevioPage
 import com.example.appzervycliente.Views.Cliente.PerfilClientePage
@@ -57,7 +59,7 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.DireccionesFormPage.route
+        startDestination = Routes.IngresoTargetoPage.route
     ) {
         composable(Routes.CarritoPage.route) {
             viewModel.cliente
@@ -99,6 +101,12 @@ fun SetupNavGraph(
         }
         composable(Routes.DireccionesFormPage.route) {
             DireccionesFormPage(navController)
+        }
+        composable(Routes.MetodosPagoPage.route) {
+            MetodosPagoPage(navController)
+        }
+        composable(Routes.IngresoTargetoPage.route) {
+            IngresoTargetPage(navController)
         }
 
         composable(Routes.SolicitudDiaPage.route) {

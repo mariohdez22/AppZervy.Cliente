@@ -19,5 +19,7 @@
     <color name="cardPerfilBackground">#F2F3FF</color>
     <color name="txtPerfil">#7982FF</color>
     <color name="BLUE">#FFCCC2DC</color>
+    <color name="cardPago1">#FF8181</color>
+    <color name="cardPago2">#FFBD72</color>
 
 </resources>
