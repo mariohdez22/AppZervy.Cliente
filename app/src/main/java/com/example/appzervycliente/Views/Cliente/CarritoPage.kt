@@ -70,18 +70,20 @@ fun CarritoPage(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TitleSection()
-            HorizontalDivider(thickness = 2.5.dp)
+            HorizontalDivider(thickness = 1.dp)
             DirectionSection()
-            HorizontalDivider(thickness = 2.5.dp)
+            HorizontalDivider(thickness = 1.dp)
             ServicioSection()
-            HorizontalDivider(thickness = 2.5.dp)
+            HorizontalDivider(thickness = 1.dp)
             MetodoPagoSection()
-            HorizontalDivider(thickness = 2.5.dp)
+            HorizontalDivider(thickness = 1.dp)
             DetallesPago()
-            HorizontalDivider(thickness = 2.5.dp)
+            HorizontalDivider(thickness = 1.dp)
             Button(
                 modifier = Modifier.fillMaxWidth(0.45f),
-                onClick = {}
+                onClick = {
+                    navController.navigate(Routes.PagoPrevioPage.route)
+                }
             ) {
                 Text(
                     text = stringResource(R.string.btnPagar)
@@ -111,14 +113,15 @@ private fun TitleSection(){
 
     Column(
         modifier = Modifier
-            .padding(start = 15.dp, end = 15.dp),
+            .padding(start = 25.dp, end = 25.dp),
         verticalArrangement = Arrangement.spacedBy(35.dp)
     ) {
         TextSection(
             title = stringResource(R.string.lblPagarServicio),
             content = stringResource(R.string.txtPagarServicio),
             titleSize = 30.sp,
-            titleWeight = FontWeight.W600,
+            titleWeight = FontWeight.W400,
+            contentWeight = FontWeight.W300
         )
     }
 
@@ -133,14 +136,15 @@ private fun DirectionSection(){
 
     Column(
         modifier = Modifier
-            .padding(start = 15.dp, end = 15.dp),
+            .padding(start = 25.dp, end = 25.dp),
         verticalArrangement = Arrangement.spacedBy(35.dp)
     ) {
         TextSection(
             title = stringResource(R.string.lblDireccion),
             content = stringResource(R.string.txtEjemplo),
             titleSize = 18.5.sp,
-            titleWeight = FontWeight.W500
+            titleWeight = FontWeight.W500,
+            contentWeight = FontWeight.W300
         )
         TextCommentSection(
             title = stringResource(R.string.lblNota),
@@ -159,7 +163,7 @@ private fun ServicioSection(){
 
     Column(
         modifier = Modifier
-            .padding(start = 15.dp, end = 15.dp),
+            .padding(start = 25.dp, end = 25.dp),
         verticalArrangement = Arrangement.spacedBy(7.5.dp)
     ) {
         IconTextHorizontalSection(
@@ -172,7 +176,7 @@ private fun ServicioSection(){
             title = "Instalacion de televisiones",
             content = stringResource(R.string.txtEjemplo),
             titleSize = 16.sp,
-            titleWeight = FontWeight.W300,
+            contentWeight = FontWeight.W300,
             contentSize = 13.5.sp
         )
         IconTextHorizontalSection(
@@ -202,7 +206,7 @@ private fun MetodoPagoSection(){
 
     Column(
         modifier = Modifier
-            .padding(start = 15.dp, end = 15.dp),
+            .padding(start = 25.dp, end = 25.dp),
         verticalArrangement = Arrangement.spacedBy(7.5.dp)
     ){
         Text(
@@ -230,7 +234,7 @@ private fun DetallesPago(){
 
     Column(
         modifier = Modifier
-            .padding(start = 15.dp, end = 15.dp),
+            .padding(start = 25.dp, end = 25.dp),
         verticalArrangement = Arrangement.spacedBy(7.5.dp)
     ){
 

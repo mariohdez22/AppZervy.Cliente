@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,12 +28,21 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun AceptacionSolicitudPage(
     navController: NavHostController
 ){
+    LaunchedEffect(Unit) {
+        delay(7000)
+        navController.navigate(Routes.PropuestaServicioPage.route){
+            popUpTo(Routes.SolicitudDiaPage.route) { inclusive = false }
+        }
+    }
+
     val transition = rememberInfiniteTransition(label = "initialtransition")
     val alpha by transition.animateFloat(
         initialValue = 0f,

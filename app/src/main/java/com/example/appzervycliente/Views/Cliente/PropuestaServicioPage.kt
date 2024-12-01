@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @Composable
@@ -54,7 +55,7 @@ fun PropuestaServicioPage(
 ){
 
     Scaffold(
-        topBar = { TopBar() }
+        topBar = { TopBar(navController) }
     ) {
         paddingValues ->
         Column(
@@ -68,7 +69,7 @@ fun PropuestaServicioPage(
         ) {
             Header()
             HorizontalDivider(thickness = 1.dp)
-            Body()
+            Body(navController)
         }
     }
 
@@ -89,7 +90,9 @@ private fun PropuestaPreview(){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(){
+private fun TopBar(
+    navController: NavHostController
+){
 
     TopAppBar(
         title = { Text("") },
@@ -101,7 +104,12 @@ private fun TopBar(){
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = colorResource(R.color.btnCarritoTopBar)
                 ),
-                onClick = {}
+                onClick = {
+                    navController.popBackStack(
+                        Routes.SolicitudDiaPage.route,
+                        inclusive = false
+                    )
+                }
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -162,7 +170,7 @@ private fun Header(
 
 @Composable
 private fun Body(
-
+    navController: NavHostController
 ){
     LazyColumn(
         modifier = Modifier
@@ -178,7 +186,9 @@ private fun Body(
                 elevation = CardDefaults.elevatedCardElevation(
                     defaultElevation = 3.dp,
                 ),
-                onClick = {},
+                onClick = {
+                    navController.navigate(Routes.PropuestaDetallePage.route)
+                },
                 colors = CardDefaults.elevatedCardColors(
                     containerColor = Color.White
                 )

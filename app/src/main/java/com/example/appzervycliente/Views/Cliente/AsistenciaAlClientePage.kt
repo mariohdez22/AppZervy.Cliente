@@ -7,8 +7,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
+//import androidx.compose.material.icons.filled.ExpandLess
+//import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -132,7 +133,8 @@ fun PreguntaFrecuenteItem(pregunta: String, respuesta: String) {
             )
             IconButton(onClick = { expandida = !expandida }) {
                 Icon(
-                    imageVector = if (expandida) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                    //imageVector = if (expandida) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                    imageVector = Icons.Default.Info,
                     contentDescription = "Expandir o contraer",
                     tint = Color.Gray
                 )

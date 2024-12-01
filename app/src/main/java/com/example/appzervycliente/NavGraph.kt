@@ -5,7 +5,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
@@ -22,22 +21,18 @@ import com.example.appzervycliente.Views.Cliente.LoginScreen
 import com.example.appzervycliente.Views.Cliente.Login
 import com.example.appzervycliente.Views.Cliente.ResenaSocioPage
 import com.example.appzervycliente.Views.Cliente.MainScreen
-import com.example.appzervycliente.Views.Cliente.MainScreen
 import com.example.appzervycliente.Views.Cliente.SignUpScreen
 import com.example.appzervycliente.Views.Cliente.SolicitudServicioDia
 import com.example.appzervycliente.Views.Cliente.SolicitudServicioDias
 import com.example.appzervycliente.Views.Cliente.SplashScreen
 import com.example.appzervycliente.Views.Cliente.WelcomeScreen
-import com.example.appzervycliente.Views.Cliente.EmailVerificationPreview
 import com.example.appzervycliente.Views.Cliente.EmailVerificationScreen
 import com.example.appzervycliente.Views.Cliente.FacturaPage
 import com.example.appzervycliente.Views.Cliente.HistorialInspeccionDetallePage
 import com.example.appzervycliente.Views.Cliente.HistorialInspeccionPage
-import com.example.appzervycliente.Views.Cliente.WelcomeScreenPreview
-import com.example.appzervycliente.Views.Cliente.PreviewMapPage
 import com.example.appzervycliente.Views.Cliente.ServiceMapsScreen
 import com.example.appzervycliente.Views.Cliente.InformacionPersonalPage
-import com.example.appzervycliente.Views.Cliente.IngresoTargetPage
+import com.example.appzervycliente.Views.Cliente.IngresoTargetaPage
 import com.example.appzervycliente.Views.Cliente.MetodosPagoPage
 import com.example.appzervycliente.Views.Cliente.PagoPosteriorPage
 import com.example.appzervycliente.Views.Cliente.PagoPrevioPage
@@ -50,7 +45,6 @@ import com.example.appzervycliente.Views.Cliente.VistaPagoPrevioVariosDiasPage
 import com.example.appzervycliente.Views.Cliente.VistaPagoPosteriorVariosDiasEfectivosPage
 import com.example.appzervycliente.Views.Cliente.ModificacionDeServicioPage
 import com.example.appzervycliente.Views.Cliente.PublicacionDeConsultasAsistenciaCliente
-import com.example.appzervycliente.Views.Cliente.ServiceMapsScreen
 import com.example.appzervycliente.Views.Cliente.VistaEsperaActivacionServicioPendientePage
 
 @Composable
@@ -62,16 +56,55 @@ fun SetupNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.FacturaPage.route
+        startDestination = Routes.ArranquePage.route
     ) {
-        composable(Routes.CarritoPage.route) {
-            viewModel.cliente
-            CarritoPage(navController)
+        //--------------------------------------------------------------[VISTAS LOGIN]
+        composable(Routes.ArranquePage.route) {
+            SplashScreen(navController)
         }
-        composable(Routes.AsistenciaAlClientePage.route) {
-            viewModel.cliente
-            AsistenciaAlClientePage(navController)
+        composable(Routes.InicioPage.route) {
+            LoginScreen(navController)
         }
+        composable(Routes.LoginPage.route) {
+            Login(navController)
+        }
+        composable(Routes.RegistroPage.route) {
+            SignUpScreen(navController)
+        }
+        composable(Routes.Email.route) {
+            EmailVerificationScreen(navController)
+        }
+        composable(Routes.Welcome.route) {
+            WelcomeScreen(navController)
+        }
+
+        //--------------------------------------------------------------[VISTA MAIN]
+        composable(Routes.MainPage.route) {
+            MainScreen(
+                viewModel = categoryViewModel,
+                navController = navController
+            )
+        }
+
+        //--------------------------------------------------------------[VISTAS SOLICITUD SERVICIO]
+        composable(Routes.SolicitudDiaPage.route) {
+            SolicitudServicioDia(navController)
+        }
+        composable(Routes.SolicitudDiasPage.route) {
+            SolicitudServicioDias(navController)
+        }
+
+        //--------------------------------------------------------------[VISTA ESPERA]
+        composable(Routes.EsperaPage.route) {
+            EsperaPage(navController)
+        }
+
+        //--------------------------------------------------------------[VISTA ACEPTACION]
+        composable(Routes.AceptacionSolicitudPage.route) {
+            AceptacionSolicitudPage(navController)
+        }
+
+        //--------------------------------------------------------------[VISTAS PROPUESTA]
         composable(Routes.PropuestaServicioPage.route) {
             PropuestaServicioPage(navController)
         }
@@ -81,18 +114,31 @@ fun SetupNavGraph(
         composable(Routes.PropuestaInfoSocioPage.route) {
             PropuestaInfoSocioPage(navController)
         }
-        composable(Routes.EsperaPage.route) {
-            EsperaPage(navController)
-        }
+
+        //--------------------------------------------------------------[VISTA PAGO POSTERIOR]
         composable(Routes.PagoPosteriorPage.route) {
             PagoPosteriorPage(navController)
         }
-        composable(Routes.PagoPrevioPage.route) {
-            PagoPrevioPage(navController)
-        }
+
+        //--------------------------------------------------------------[VISTA ACTIVACION]
         composable(Routes.ActivacionInspeccionPage.route) {
             ActivacionInspeccionPage(navController)
         }
+
+        //--------------------------------------------------------------[VISTA CARRITO]
+        composable(Routes.CarritoPage.route) {
+            viewModel.cliente
+            CarritoPage(navController)
+        }
+
+        //--------------------------------------------------------------[VISTA PAGO PREVIO]
+        composable(Routes.PagoPrevioPage.route) {
+            PagoPrevioPage(navController)
+        }
+
+
+
+        //--------------------------------------------------------------[VISTAS PERFIL CLIENTE]
         composable(Routes.PerfilClientePage.route) {
             PerfilClientePage(navController)
         }
@@ -108,8 +154,8 @@ fun SetupNavGraph(
         composable(Routes.MetodosPagoPage.route) {
             MetodosPagoPage(navController)
         }
-        composable(Routes.IngresoTargetoPage.route) {
-            IngresoTargetPage(navController)
+        composable(Routes.IngresoTargetaPage.route) {
+            IngresoTargetaPage(navController)
         }
         composable(Routes.HistorialInspeccionesPage.route) {
             HistorialInspeccionPage(navController)
@@ -121,15 +167,17 @@ fun SetupNavGraph(
             FacturaPage(navController)
         }
 
-        composable(Routes.SolicitudDiaPage.route) {
-            SolicitudServicioDia(navController)
+
+
+
+
+        //--------------------------------------------------------------[PENDIENTE DE ENRUTAR]
+
+        composable(Routes.AsistenciaAlClientePage.route) {
+            viewModel.cliente
+            AsistenciaAlClientePage(navController)
         }
-        composable(Routes.SolicitudDiasPage.route) {
-            SolicitudServicioDias(navController)
-        }
-        composable(Routes.AceptacionSolicitudPage.route) {
-            AceptacionSolicitudPage(navController)
-        }
+
         composable(Routes.InspeccionPage.route) {
             InspeccionPage(navController)
         }
@@ -138,35 +186,10 @@ fun SetupNavGraph(
             ServiceMapsScreen(navController)
         }
 
-        composable(Routes.MainPage.route) {
-           MainScreen(
-               viewModel = categoryViewModel,
-               navController = navController
-           )
-        }
-        composable(Routes.LoginPage.route) {
-            Login(navController)
-        }
-        composable(Routes.InicioPage.route) {
-            LoginScreen(navController)
-        }
-        composable(Routes.RegistroPage.route) {
-            SignUpScreen(navController)
-        }
-        composable(Routes.ArranquePage.route) {
-            SplashScreen(navController)
-        }
-
         composable(Routes.ResenaPage.route) {
             ResenaSocioPage(navController)
         }
 
-        composable(Routes.Welcome.route) {
-            WelcomeScreen(navController)
-        }
-        composable(Routes.Email.route) {
-            EmailVerificationScreen(navController)
-        }
 
         // Nuevas vistas (Michael Torres)
         composable(Routes.VistaPagoPosteriorVariosDiasEfectivosPage.route) {

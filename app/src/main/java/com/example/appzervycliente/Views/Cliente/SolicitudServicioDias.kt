@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,7 +84,7 @@ fun SolicitudServicioDias(
             Header()
             ArticuloDescripcion()
             Solicitud()
-            TipoPago()
+            TipoPago(navController)
         }
     }
 
@@ -113,7 +114,9 @@ private fun TopBar(
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = Color.White
                 ),
-                onClick = {}
+                onClick = {
+                    navController.popBackStack()
+                }
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -371,7 +374,9 @@ private fun Solicitud(){
 }
 
 @Composable
-private fun TipoPago(){
+private fun TipoPago(
+    navController: NavHostController
+){
 
     var isTargeta by remember { mutableStateOf(false) }
     var isEfectivo by remember { mutableStateOf(false) }
@@ -429,7 +434,9 @@ private fun TipoPago(){
         ) {
             Button(
                 modifier = Modifier.fillMaxWidth(0.75f),
-                onClick = {},
+                onClick = {
+                    navController.navigate(Routes.EsperaPage.route)
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.btnEnviarSolicitud),
                     contentColor = Color.White

@@ -44,6 +44,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,8 +70,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Components.common.IconTextHorizontalSection
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,8 +97,9 @@ fun EsperaPage(
         scaffoldState = scaffoldState,
         topBar = {
             TopBar(
-                bottomSheetState.currentValue == SheetValue.Expanded ||
-                showImagePreview
+                navController = navController,
+                visible = bottomSheetState.currentValue == SheetValue.Expanded
+                        || showImagePreview
             )
         },
         sheetContent = {
@@ -120,7 +124,7 @@ fun EsperaPage(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Cargando()
+                Cargando(navController)
                 Publicidad()
             }
 
@@ -188,6 +192,7 @@ private fun EsperaPreview(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(
+    navController: NavHostController,
     visible: Boolean
 ){
     val containerColor by animateColorAsState(
@@ -215,7 +220,12 @@ private fun TopBar(
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = iconButtonColor
                 ),
-                onClick = {}
+                onClick = {
+                    navController.popBackStack(
+                        Routes.SolicitudDiaPage.route,
+                        inclusive = false
+                    )
+                }
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -424,7 +434,17 @@ private fun Detalles(){
 
 
 @Composable
-private fun Cargando(){
+private fun Cargando(
+    navController: NavHostController
+){
+
+    LaunchedEffect(Unit) {
+        delay(7000)
+        navController.navigate(Routes.AceptacionSolicitudPage.route){
+            popUpTo(Routes.SolicitudDiaPage.route) { inclusive = false }
+        }
+    }
+
 
     Column(
         modifier = Modifier

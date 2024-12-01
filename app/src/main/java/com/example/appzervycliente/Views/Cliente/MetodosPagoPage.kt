@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @Composable
@@ -60,6 +62,13 @@ fun MetodosPagoPage(
         "Google Pay",
         "Apple Pay"
     )
+
+    LaunchedEffect(optionSelected) {
+        if(optionSelected == "Targeta de credito/debito"){
+            showFormatoPago = false
+            navController.navigate(Routes.IngresoTargetaPage.route)
+        }
+    }
 
 
     Scaffold(
@@ -163,7 +172,7 @@ private fun Header(){
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(
-            text = "Direcciones",
+            text = "Metodos de pago",
             fontSize = 25.sp,
             fontWeight = FontWeight.W400,
         )
@@ -215,10 +224,10 @@ private fun Item(){
 
     Row(
         modifier = Modifier
+            .clickable {  }
             .padding(top = 5.dp, bottom = 5.dp, start = 25.dp, end = 25.dp)
             .height(50.dp)
-            .fillMaxWidth()
-            .clickable {  },
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(30.dp)
     ){

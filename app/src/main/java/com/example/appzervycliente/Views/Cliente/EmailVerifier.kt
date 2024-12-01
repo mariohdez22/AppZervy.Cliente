@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.R
 import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
@@ -224,5 +225,9 @@ fun VerificationBackgroundImages() {
 @Preview(showBackground = true)
 @Composable
 fun EmailVerificationPreview() {
-    EmailVerificationScreen(navController = rememberNavController())
+    AppZervyClienteTheme(
+        dynamicColor = false
+    ) {
+        EmailVerificationScreen(navController = rememberNavController())
+    }
 }

@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.Services.Repository.Route
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @Composable
@@ -84,7 +86,9 @@ fun PagoPosteriorPage(
             Body()
             Button(
                 modifier = Modifier.fillMaxWidth(0.6f),
-                onClick = {},
+                onClick = {
+                    navController.navigate(Routes.ActivacionInspeccionPage.route)
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.btnEnviarSolicitud)
                 )

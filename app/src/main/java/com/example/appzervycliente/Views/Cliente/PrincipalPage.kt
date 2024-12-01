@@ -1,7 +1,6 @@
 package com.example.appzervycliente.Views.Cliente
 
-import android.app.Service
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,10 +15,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,8 +34,9 @@ import com.example.appzervycliente.DTOs.CategoriaServicioDTO
 import com.example.appzervycliente.Routes.ROOT_CARRITO_COMPRAS_PAGE
 import com.example.appzervycliente.Routes.ROOT_INSPECCION_PAGE
 import com.example.appzervycliente.Routes.ROOT_MAIN_PAGE
+import com.example.appzervycliente.Routes.ROOT_SOLICITUD_DIA_PAGE
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
-import okhttp3.internal.wait
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,7 +68,7 @@ fun MainScreen(viewModel: CategoriaServicioViewModel,navController: NavHostContr
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            HeaderSection()
+            HeaderSection(navController)
 
             Column(
                 modifier = Modifier
@@ -111,7 +111,7 @@ fun MainScreen(viewModel: CategoriaServicioViewModel,navController: NavHostContr
                             .fillMaxWidth()
                             .padding(start = 12.dp, end = 12.dp, bottom = 5.dp)
                     ){
-                        ServiceActive()
+                        ServiceActive(navController)
                     }
 
                     LazyColumn(
@@ -121,9 +121,7 @@ fun MainScreen(viewModel: CategoriaServicioViewModel,navController: NavHostContr
                             ServiceItem(
                                 categoria = categoria,
                                 onClick = {
-                                // Manejar el clic en el servicio
-                                // Por ejemplo, navegar a la pantalla de detalles del servicio
-                                // navController.navigate("service_detail/${service.title}")
+                                    navController.navigate(Routes.SolicitudDiaPage.route)
                                 })
                         }
                     }
@@ -138,55 +136,66 @@ fun MainScreen(viewModel: CategoriaServicioViewModel,navController: NavHostContr
 }
 
 @Composable
-fun HeaderSection() {
+fun HeaderSection(
+    navController: NavHostController
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
             .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        // Imagen de perfil
-        Image(
-            painter = painterResource(id = R.drawable.profile_placeholder),
-            contentDescription = "Imagen de perfil",
+        Row(
             modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .background(MaterialTheme.colorScheme.primary)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        // Nombre de usuario
-        Text(
-            text = "Mario H.",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.W300,
-            color = Color.Black
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        // Icono de configuración
-        IconButton(onClick = {
-            // Manejar clic en configuración
-        }) {
-            Icon(
-                painter = painterResource(id = R.drawable.settings),
-                contentDescription = "Configuración"
+                .padding(top = 2.5.dp, bottom = 2.5.dp)
+                .clickable {
+                    navController.navigate(Routes.PerfilClientePage.route)
+                },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.profile_placeholder),
+                contentDescription = "Imagen de perfil",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(MaterialTheme.colorScheme.primary)
+            )
+            Text(
+                text = "Mario H.",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.W300,
+                color = Color.Black
             )
         }
-        // Icono del carrito
-        IconButton(onClick = {
-            // Manejar clic en carrito
-        }) {
-            Icon(
-                painter = painterResource(id = R.drawable.inboxicon),
-                contentDescription = "Carrito"
-            )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            IconButton(onClick = {
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.settings),
+                    contentDescription = "Configuración"
+                )
+            }
+            IconButton(onClick = {
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.inboxicon),
+                    contentDescription = "Carrito"
+                )
+            }
         }
     }
 }
 
 @Composable
-fun ServiceActive(){
+fun ServiceActive(
+    navController: NavHostController
+){
 
     Card(
         modifier = Modifier
@@ -194,7 +203,10 @@ fun ServiceActive(){
             .height(150.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.cardInsepccionActiva)
-        )
+        ),
+        onClick = {
+            navController.navigate(Routes.InspeccionPage.route)
+        }
     ) {
         Box(
             modifier = Modifier
@@ -351,10 +363,12 @@ fun ServiceItem(categoria: CategoriaServicioDTO, onClick: () -> Unit) {
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         BottomNavItem("Home", R.drawable.homeicon, ROOT_MAIN_PAGE),
-        BottomNavItem("Search", R.drawable.search, "stores"),
+        BottomNavItem("Search", R.drawable.search, ROOT_SOLICITUD_DIA_PAGE),
         BottomNavItem("Cart", R.drawable.carticon, ROOT_CARRITO_COMPRAS_PAGE),
         BottomNavItem("History", R.drawable.history, ROOT_INSPECCION_PAGE)
     )
+
+    val context = LocalContext.current
 
     NavigationBar{
         items.forEach { item ->
@@ -366,7 +380,15 @@ fun BottomNavigationBar(navController: NavHostController) {
                 selected = false, // Puedes manejar el estado seleccionado
                 onClick = {
                     // Manejar la navegación
-                    navController.navigate(item.route)
+                    if(item.title == "Search" || item.title == "History"){
+                        Toast.makeText(
+                            context,
+                            "Opcion en mantenimiento",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }else{
+                        navController.navigate(item.route)
+                    }
                 }
             )
         }

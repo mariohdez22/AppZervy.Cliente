@@ -48,6 +48,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Components.common.CardIconText
 import com.example.appzervycliente.Components.common.IconLabelHorizontalSection
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +72,7 @@ fun PerfilClientePage(
                 .verticalScroll(scrollState)
         ){
             Header()
-            Opciones()
+            Opciones(navController)
             Body()
         }
     }
@@ -188,7 +189,7 @@ private fun Header(){
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Opciones(
-
+    navController: NavHostController
 ){
     FlowRow(
         modifier = Modifier
@@ -201,7 +202,9 @@ private fun Opciones(
             cardModifier = Modifier
                 .height(120.dp)
                 .width(110.dp),
-            cardOnClick = {},
+            cardOnClick = {
+                navController.navigate(Routes.InformacionPersonalPage.route)
+            },
             cardElevation = CardDefaults.elevatedCardElevation(
                 defaultElevation = 3.dp
             ),
@@ -222,7 +225,9 @@ private fun Opciones(
             cardModifier = Modifier
                 .height(120.dp)
                 .width(110.dp),
-            cardOnClick = {},
+            cardOnClick = {
+                navController.navigate(Routes.DireccionesPage.route)
+            },
             cardElevation = CardDefaults.elevatedCardElevation(
                 defaultElevation = 3.dp
             ),
@@ -243,7 +248,9 @@ private fun Opciones(
             cardModifier = Modifier
                 .height(120.dp)
                 .width(110.dp),
-            cardOnClick = {},
+            cardOnClick = {
+                navController.navigate(Routes.MetodosPagoPage.route)
+            },
             cardElevation = CardDefaults.elevatedCardElevation(
                 defaultElevation = 3.dp
             ),

@@ -16,8 +16,6 @@ retrofit = "2.9.0"
 coroutines = "1.5.2"
 mapsutils = "2.2.5"
 
-
-
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

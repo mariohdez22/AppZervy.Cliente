@@ -19,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -53,11 +54,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Components.common.ComboBox
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IngresoTargetPage(
+fun IngresoTargetaPage(
     navController: NavHostController
 ){
     val scrollState = rememberScrollState()
@@ -87,6 +89,23 @@ fun IngresoTargetPage(
                 dataCard = it
             }
             HorizontalDivider(thickness = 1.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Button(
+                    onClick = {
+                        navController.popBackStack()
+                    }
+                ) {
+                    Text(
+                        text = "Agregar Targeta",
+                        color = Color.White
+                    )
+                }
+            }
+
         }
     }
 
@@ -98,7 +117,7 @@ private fun Preview(){
     AppZervyClienteTheme(
         dynamicColor = false
     ) {
-        IngresoTargetPage(rememberNavController())
+        IngresoTargetaPage(rememberNavController())
     }
 }
 
@@ -119,7 +138,9 @@ private fun TopBar(
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = colorResource(R.color.btnCarritoTopBar)
                 ),
-                onClick = {}
+                onClick = {
+                    navController.popBackStack()
+                }
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,

@@ -2,6 +2,7 @@ package com.example.appzervycliente.Views.Cliente
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,6 +53,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Components.common.IconLabelHorizontalSection
 import com.example.appzervycliente.Components.common.IconTextHorizontalSection
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,13 +79,13 @@ fun PropuestaDetallePage(
         ) {
             Header()
             HorizontalDivider(thickness = 1.dp)
-            SocioDetalle()
+            SocioDetalle(navController)
             HorizontalDivider(thickness = 1.dp)
             Detalles()
             HorizontalDivider(thickness = 1.dp)
             SubTotal()
             HorizontalDivider(thickness = 1.dp)
-            AceptarPropuesta()
+            AceptarPropuesta(navController)
         }
     }
 
@@ -116,7 +118,12 @@ private fun TopBar(
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = colorResource(R.color.btnCarritoTopBar)
                 ),
-                onClick = {}
+                onClick = {
+                    navController.popBackStack(
+                        Routes.PropuestaServicioPage.route,
+                        inclusive = false
+                    )
+                }
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -202,14 +209,19 @@ private fun Header(){
 }
 
 @Composable
-private fun SocioDetalle(){
+private fun SocioDetalle(
+    navController: NavHostController
+){
 
     var rating by remember { mutableStateOf(5) }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 25.dp, end = 25.dp)
+            .clickable {
+                navController.navigate(Routes.PropuestaInfoSocioPage.route)
+            }
+            .padding(start = 25.dp, end = 25.dp, bottom = 10.dp, top = 10.dp)
     ){
         Row(
             modifier = Modifier
@@ -423,7 +435,7 @@ private fun SubTotal(){
 
 @Composable
 private fun AceptarPropuesta(
-
+    navController: NavHostController
 ){
     Row(
         modifier = Modifier
@@ -433,7 +445,9 @@ private fun AceptarPropuesta(
     ){
         Button(
             modifier = Modifier,
-            onClick = {},
+            onClick = {
+                navController.navigate(Routes.PagoPosteriorPage.route)
+            },
         ) {
             Text(
                 text = "Aceptar Propuesta",

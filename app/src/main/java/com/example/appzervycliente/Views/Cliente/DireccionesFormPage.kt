@@ -81,7 +81,9 @@ fun DireccionesFormPage(
             ){
                 Button(
                     modifier = Modifier.fillMaxWidth(0.65f),
-                    onClick = {}
+                    onClick = {
+                        navController.popBackStack()
+                    }
                 ) {
                     Text(
                         text = "Agregar Direccion"

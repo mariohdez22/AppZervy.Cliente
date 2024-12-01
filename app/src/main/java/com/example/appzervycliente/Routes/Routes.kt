@@ -1,73 +1,131 @@
 package com.example.appzervycliente.Routes
 
-import com.example.appzervycliente.Services.Repository.Route
+
+//**************************************************************************************************
+//----------------------------------------------------- [ARRANQUE]
+const val ROOT_ARRANQUE_PAGE = "arranque"
+
+//----------------------------------------------------- [INICIO]
+const val ROOT_INICIO_PAGE = "inicio"
 
 //----------------------------------------------------- [LOGIN]
 const val ROOT_LOGIN_PAGE = "login_screen"
 
+//----------------------------------------------------- [REGISTRO]
+const val ROOT_REGISTRO_PAGE = "registro"
+
+//----------------------------------------------------- [EMAIL]
+const val ROOT_EMAIL_PAGE = "email"
+
+//----------------------------------------------------- [WELCOME]
+const val ROOT_WELCOME = "welcome"
+//**************************************************************************************************
+
+
+
+//**************************************************************************************************
+//----------------------------------------------------- [PRINCIPAL]
+const val ROOT_MAIN_PAGE = "principal"
+//**************************************************************************************************
+
+
+
+//**************************************************************************************************
+//----------------------------------------------------- [SOLICITUD DIA]
+const val ROOT_SOLICITUD_DIA_PAGE = "solicitudDia"
+
+//----------------------------------------------------- [SOLICITUD DIAS]
+const val ROOT_SOLICITUD_DIAS_PAGE = "solicitudDias"
+//**************************************************************************************************
+
+
+
+//**************************************************************************************************
+//----------------------------------------------------- [ESPERA]
+const val ROOT_ESPERA_PAGE = "espera"
+//**************************************************************************************************
+
+
+
+//**************************************************************************************************
+//----------------------------------------------------- [ACEPTACION SOLICITUD]
+const val ROOT_ACEPTACION_SOLICITUD_PAGE = "aceptacionSolicitud"
+//**************************************************************************************************
+
+
+
+//**************************************************************************************************
+//----------------------------------------------------- [PROPUESTA SERVICIO]
+const val ROOT_PROPUESTA_SERVICIO_PAGE = "propuestaServicio"
+
+//----------------------------------------------------- [PROPUESTA DETALLE]
+const val ROOT_PROPUESTA_DETALLE_PAGE = "propuestaDetalle"
+
+//----------------------------------------------------- [PROPUESTA INFO SOCIO]
+const val ROOT_PROPUESTA_INFOSOCIO_PAGE = "propuestaInfoSocio"
+//**************************************************************************************************
+
+
+
+//**************************************************************************************************
+//----------------------------------------------------- [PAGO POSTERIOR]
+const val ROOT_PAGO_POSTERIOR_PAGE = "pagoPosterior"
+//**************************************************************************************************
+
+
+
+//**************************************************************************************************
+//----------------------------------------------------- [ACTIVACION INSPECCION]
+const val ROOT_ACTIVACION_INS_PAGE = "activacionInspeccion"
+//**************************************************************************************************
+
+
+
+//**************************************************************************************************
 //----------------------------------------------------- [CARRITO DE COMPRAS]
 const val ROOT_CARRITO_COMPRAS_PAGE = "carrito_compra"
+//**************************************************************************************************
+
+
+
+//**************************************************************************************************
+//----------------------------------------------------- [PAGO PREVIO]
+const val ROOT_PAGO_PREVIO_PAGE = "pagoPrevio"
+//**************************************************************************************************
+
+
+
+//**************************************************************************************************
+//**************************************************************************************************
+
 
 //----------------------------------------------------- [INSPECCION]
 const val ROOT_INSPECCION_PAGE = "inspeccion"
 
 //----------------------------------------------------- [RESENA]
 const val ROOT_RESENA_PAGE = "resena"
-//----------------------------------------------------- [REGISTRO]
 
-const val ROOT_REGISTRO_PAGE = "registro"
 
-//----------------------------------------------------- [ARRANQUE]
 
-const val ROOT_ARRANQUE_PAGE = "arranque"
 
-//----------------------------------------------------- [PRINCIPAL]
 
-const val ROOT_MAIN_PAGE = "principal"
 
-//----------------------------------------------------- [SOLICITUD DIA]
 
-const val ROOT_SOLICITUD_DIA_PAGE = "solicitudDia"
 
-//----------------------------------------------------- [SOLICITUD DIAS]
 
-const val ROOT_SOLICITUD_DIAS_PAGE = "solicitudDias"
 
-//----------------------------------------------------- [ESPERA]
 
-const val ROOT_ESPERA_PAGE = "espera"
 
-//----------------------------------------------------- [PROPUESTA SERVICIO]
 
-const val ROOT_PROPUESTA_SERVICIO_PAGE = "propuestaServicio"
 
-//----------------------------------------------------- [PROPUESTA DETALLE]
 
-const val ROOT_PROPUESTA_DETALLE_PAGE = "propuestaDetalle"
 
-//----------------------------------------------------- [PROPUESTA INFO SOCIO]
-
-const val ROOT_PROPUESTA_INFOSOCIO_PAGE = "propuestaInfoSocio"
-
-//----------------------------------------------------- [PAGO POSTERIOR]
-
-const val ROOT_PAGO_POSTERIOR_PAGE = "pagoPosterior"
-
-//----------------------------------------------------- [PAGO PREVIO]
-
-const val ROOT_PAGO_PREVIO_PAGE = "pagoPrevio"
-
-//----------------------------------------------------- [ACTIVACION INSPECCION]
-
-const val ROOT_ACTIVACION_INS_PAGE = "activacionInspeccion"
 
 //----------------------------------------------------- [PERFIL CLIENTE]
 
 const val ROOT_PERFIL_CLIENTE_PAGE = "perfilCliente"
 
-//----------------------------------------------------- [ACEPTACION SOLICITUD]
 
-const val ROOT_ACEPTACION_SOLICITUD_PAGE = "aceptacionSolicitud"
 
 //----------------------------------------------------- [INFORMACION PERSONAL]
 
@@ -102,17 +160,11 @@ const val ROOT_HISTORIAL_INSPECCION_DETALLE_PAGE = "historialInspeccionDetalle"
 const val ROOT_FACTURA_PAGE = "factura"
 
 
-//----------------------------------------------------- [INICIO]
 
-const val ROOT_INICIO_PAGE = "inicio"
 
-//----------------------------------------------------- [WELCOME]
 
-const val ROOT_WELCOME = "welcome"
 
-//----------------------------------------------------- [EMAIL]
 
-const val ROOT_EMAIL_PAGE = "email"
 
 //----------------------------------------------------- [NUEVAS VISTAS] - Michael Torres
 const val ROOT_VISTA_PAGO_POSTERIOR_VARIOS_DIAS_PAGE = "vistaPagoPosteriorVariosDias"
@@ -154,32 +206,45 @@ const val ROOT_CREAR_PUBLICACION_ASISTENCIA_PAGE = "crearPublicacionAsistencia"
 sealed class Routes(
     val route: String
 ) {
-    object CarritoPage : Routes(ROOT_CARRITO_COMPRAS_PAGE)
-    object InspeccionPage : Routes(ROOT_INSPECCION_PAGE)
-    object LoginPage : Routes(ROOT_LOGIN_PAGE)
-    object ResenaPage : Routes(ROOT_RESENA_PAGE)
-    object RegistroPage : Routes(ROOT_REGISTRO_PAGE)
-    object InicioPage : Routes(ROOT_INICIO_PAGE)
     object ArranquePage : Routes(ROOT_ARRANQUE_PAGE)
-    object MainPage : Routes(ROOT_MAIN_PAGE)
-    object Welcome : Routes(ROOT_WELCOME)
+    object InicioPage : Routes(ROOT_INICIO_PAGE)
+    object LoginPage : Routes(ROOT_LOGIN_PAGE)
+    object RegistroPage : Routes(ROOT_REGISTRO_PAGE)
     object Email : Routes(ROOT_EMAIL_PAGE)
+    object Welcome : Routes(ROOT_WELCOME)
+
+    object MainPage : Routes(ROOT_MAIN_PAGE)
+
     object SolicitudDiaPage : Routes(ROOT_SOLICITUD_DIA_PAGE)
     object SolicitudDiasPage : Routes(ROOT_SOLICITUD_DIAS_PAGE)
+
     object EsperaPage : Routes(ROOT_ESPERA_PAGE)
+
     object AceptacionSolicitudPage : Routes(ROOT_ACEPTACION_SOLICITUD_PAGE)
+
     object PropuestaServicioPage : Routes(ROOT_PROPUESTA_SERVICIO_PAGE)
     object PropuestaDetallePage : Routes(ROOT_PROPUESTA_DETALLE_PAGE)
     object PropuestaInfoSocioPage : Routes(ROOT_PROPUESTA_INFOSOCIO_PAGE)
+
     object PagoPosteriorPage : Routes(ROOT_PAGO_POSTERIOR_PAGE)
-    object PagoPrevioPage : Routes(ROOT_PAGO_PREVIO_PAGE)
+
     object ActivacionInspeccionPage : Routes(ROOT_ACTIVACION_INS_PAGE)
+
+    object CarritoPage : Routes(ROOT_CARRITO_COMPRAS_PAGE)
+
+    object PagoPrevioPage : Routes(ROOT_PAGO_PREVIO_PAGE)
+
+
+
+
+    object InspeccionPage : Routes(ROOT_INSPECCION_PAGE)
+    object ResenaPage : Routes(ROOT_RESENA_PAGE)
     object PerfilClientePage : Routes(ROOT_PERFIL_CLIENTE_PAGE)
     object InformacionPersonalPage : Routes(ROOT_INFORMACION_PERSONAL_PAGE)
     object DireccionesPage : Routes(ROOT_DIRECCIONES_PAGE)
     object MapPage : Routes(ROOT_MAP_PAGE)
     object MetodosPagoPage: Routes(ROOT_METODOS_PAGO_PAGE)
-    object IngresoTargetoPage: Routes(ROOT_INGRESAR_TARGETA_PAGE)
+    object IngresoTargetaPage: Routes(ROOT_INGRESAR_TARGETA_PAGE)
     object HistorialInspeccionesPage: Routes(ROOT_HISTORIAL_INSPECCION_PAGE)
     object HistorialInspeccionDetallePage: Routes(ROOT_HISTORIAL_INSPECCION_DETALLE_PAGE)
     object FacturaPage: Routes(ROOT_FACTURA_PAGE)
