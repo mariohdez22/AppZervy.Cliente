@@ -1,5 +1,7 @@
 package com.example.appzervycliente.Views.Cliente
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -29,15 +31,21 @@ import com.google.firebase.ktx.Firebase
 fun WelcomeScreen(
     navController: NavHostController,
 ) {
-    // Obtener el usuario autenticado de Firebase
     val user = Firebase.auth.currentUser
-    val displayName = user?.displayName ?: user?.email ?: "Usuario" // Prioriza el nombre, luego el correo
+    //val displayName = user?.displayName ?: user?.email ?: "Usuario"
+    val displayName = user?.email ?: "Usuario"
+    val context = LocalContext.current
 
-    // Usar LaunchedEffect para redirigir después de 7 segundos
+    BackHandler(
+        enabled = true
+    ) {
+        Toast.makeText(context, "Accion no permitida", Toast.LENGTH_SHORT).show()
+    }
+
     LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(7000) // Espera 7 segundos
+        kotlinx.coroutines.delay(7000)
         navController.navigate(Routes.MainPage.route) {
-            popUpTo(Routes.MainPage.route) { inclusive = true } // Limpia el stack de navegación
+            popUpTo(Routes.Welcome.route) { inclusive = true }
         }
     }
 

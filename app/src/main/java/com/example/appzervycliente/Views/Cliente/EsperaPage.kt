@@ -441,6 +441,7 @@ private fun Cargando(
     LaunchedEffect(Unit) {
         delay(7000)
         navController.navigate(Routes.AceptacionSolicitudPage.route){
+            popUpTo(Routes.EsperaPage.route){ inclusive = true }
             popUpTo(Routes.SolicitudDiaPage.route) { inclusive = false }
         }
     }

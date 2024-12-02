@@ -1,5 +1,6 @@
 package com.example.appzervycliente.Views.Cliente
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,13 +30,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.R
 import com.example.appzervycliente.Routes.Routes
-import com.example.appzervycliente.Services.Repository.Route
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @Composable
 fun PagoPosteriorPage(
     navController: NavHostController
 ){
+    BackHandler(
+        enabled = true
+    ) {}
+
 
     Box(
         modifier = Modifier
@@ -87,7 +91,9 @@ fun PagoPosteriorPage(
             Button(
                 modifier = Modifier.fillMaxWidth(0.6f),
                 onClick = {
-                    navController.navigate(Routes.ActivacionInspeccionPage.route)
+                    navController.navigate(Routes.ActivacionInspeccionPage.route){
+                        popUpTo(Routes.PagoPosteriorPage.route){ inclusive = true }
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.btnEnviarSolicitud)

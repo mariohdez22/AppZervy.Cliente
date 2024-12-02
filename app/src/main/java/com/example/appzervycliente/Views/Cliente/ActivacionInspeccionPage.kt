@@ -1,5 +1,6 @@
 package com.example.appzervycliente.Views.Cliente
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +35,14 @@ import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 fun ActivacionInspeccionPage(
     navController: NavHostController
 ){
+
+    BackHandler(
+        enabled = true
+    ) {
+        navController.navigate(Routes.MainPage.route){
+            popUpTo(Routes.ActivacionInspeccionPage.route) { inclusive = true }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -85,7 +93,7 @@ fun ActivacionInspeccionPage(
                 modifier = Modifier.fillMaxWidth(0.7f),
                 onClick = {
                     navController.navigate(Routes.MainPage.route){
-                        popUpTo(Routes.SolicitudDiaPage.route) { inclusive = true }
+                        popUpTo(Routes.ActivacionInspeccionPage.route) { inclusive = true }
                     }
                 },
                 colors = ButtonDefaults.buttonColors(

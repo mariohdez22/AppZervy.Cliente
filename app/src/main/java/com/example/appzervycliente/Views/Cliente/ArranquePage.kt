@@ -1,7 +1,10 @@
 package com.example.appzervycliente.Views.Cliente
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
@@ -21,25 +24,32 @@ import kotlinx.coroutines.delay
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.*
-
-//class SplashScreenActivity : ComponentActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//            val navController = rememberNavController()
-//            AppZervyClienteTheme {
-//                SplashScreen(navController = navController)
-//            }
-//        }
-//    }
-//}
+import androidx.compose.ui.platform.LocalContext
+import com.example.appzervycliente.Routes.Routes
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @Composable
 fun SplashScreen(navController: NavHostController) {
+
+    val context = LocalContext.current
+    val user = Firebase.auth.currentUser
+
+    BackHandler(
+        enabled = true
+    ) {
+        Toast.makeText(context, "Accion no permitida", Toast.LENGTH_SHORT).show()
+    }
+
     SplashScreenContent {
-        // Navegar a la pantalla de inicio de sesión cuando se complete el splash screen
-        navController.navigate("inicio") {
-            popUpTo("splash_screen") { inclusive = true }
+        if(user == null){
+            navController.navigate(Routes.InicioPage.route) {
+                popUpTo(Routes.ArranquePage.route) { inclusive = true }
+            }
+        }else{
+            navController.navigate(Routes.Welcome.route) {
+                popUpTo(Routes.ArranquePage.route) { inclusive = true }
+            }
         }
     }
 }
@@ -47,16 +57,14 @@ fun SplashScreen(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SplashScreenContent(onSplashFinished: () -> Unit) {
-    // Transición infinita para el efecto de parpadeo (fade in y fade out)
     val transition = rememberInfiniteTransition(label = "fadeTransition")
 
-    // Animación de opacidad (de transparente a opaco) con repetición infinita
     val alpha by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 1000,  // Duración de la animación
+                durationMillis = 1000,
                 easing = LinearEasing
             ),
             repeatMode = RepeatMode.Reverse
@@ -64,25 +72,23 @@ fun SplashScreenContent(onSplashFinished: () -> Unit) {
         label = "alphaAnimation"
     )
 
-    // Introduce un retraso de 3 segundos antes de navegar al LoginScreen
     LaunchedEffect(Unit) {
         delay(3000)
-        onSplashFinished() // Llama a la función para finalizar el splash y navegar
+        onSplashFinished()
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1A1A40)),  // Fondo color #1A1A40
-        contentAlignment = Alignment.Center // Centrar el contenido
+            .background(Color(0xFF1A1A40)),
+        contentAlignment = Alignment.Center
     ) {
-        // Imagen animada solo con el efecto de parpadeo (fade in y fade out)
         Image(
             painter = painterResource(id = R.drawable.union),
             contentDescription = null,
             modifier = Modifier
                 .size(150.dp)
-                .graphicsLayer(alpha = alpha) // Solo afecta la opacidad
+                .graphicsLayer(alpha = alpha)
         )
     }
 }

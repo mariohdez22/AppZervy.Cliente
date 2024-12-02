@@ -1,5 +1,7 @@
 package com.example.appzervycliente.Views.Cliente
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -22,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,10 +39,18 @@ import kotlinx.coroutines.delay
 fun AceptacionSolicitudPage(
     navController: NavHostController
 ){
+    val context = LocalContext.current
+
+    BackHandler(
+        enabled = true
+    ) {
+        Toast.makeText(context, "Accion no permitida", Toast.LENGTH_SHORT).show()
+    }
+
     LaunchedEffect(Unit) {
         delay(7000)
         navController.navigate(Routes.PropuestaServicioPage.route){
-            popUpTo(Routes.SolicitudDiaPage.route) { inclusive = false }
+            popUpTo(Routes.AceptacionSolicitudPage.route){ inclusive = true }
         }
     }
 

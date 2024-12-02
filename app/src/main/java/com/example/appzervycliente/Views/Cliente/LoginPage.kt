@@ -139,6 +139,7 @@ fun Login(
                         if (result.success) {
                             navController.navigate(Routes.Welcome.route) {
                                 popUpTo(Routes.LoginPage.route) { inclusive = true }
+                                popUpTo(Routes.InicioPage.route) { inclusive = true }
                             }
                         } else {
                             errorMessage = result.message

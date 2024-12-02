@@ -1,5 +1,6 @@
 package com.example.appzervycliente.Views.Cliente
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,6 +36,9 @@ import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 fun PagoPrevioPage(
     navController: NavHostController
 ){
+    BackHandler(
+        enabled = true
+    ) {}
 
     Box(
         modifier = Modifier
@@ -86,7 +90,9 @@ fun PagoPrevioPage(
             Button(
                 modifier = Modifier.fillMaxWidth(0.6f),
                 onClick = {
-                    navController.navigate(Routes.MainPage.route)
+                    navController.navigate(Routes.MainPage.route){
+                        popUpTo(Routes.PagoPrevioPage.route){ inclusive = true }
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.btnEnviarSolicitud)

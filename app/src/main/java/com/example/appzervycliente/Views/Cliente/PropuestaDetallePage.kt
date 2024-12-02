@@ -446,7 +446,11 @@ private fun AceptarPropuesta(
         Button(
             modifier = Modifier,
             onClick = {
-                navController.navigate(Routes.PagoPosteriorPage.route)
+                navController.navigate(Routes.PagoPosteriorPage.route){
+                    popUpTo(Routes.SolicitudDiaPage.route) { inclusive = true }
+                    popUpTo(Routes.PropuestaServicioPage.route){ inclusive = true }
+                    popUpTo(Routes.PropuestaDetallePage.route){ inclusive = true }
+                }
             },
         ) {
             Text(
