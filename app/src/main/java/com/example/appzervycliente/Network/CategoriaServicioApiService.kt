@@ -13,5 +13,6 @@ interface CategoriaServicioApiService {
     suspend fun obtenerCategoriaServicios(): Response<ApiResponse<List<CategoriaServicioDTO>>>
 
     @POST("categoriasServicios/crearCategoriaServicio")
-    suspend fun crearCategoriaServicio(@Body categoria: CategoriaServicioDTO): Response<ApiResponse<CategoriaServicioDTO>>
+    suspend fun crearCategoriaServicio(@Body categoria: CategoriaServicioDTO):
+            Response<ApiResponse<CategoriaServicioDTO>>
 }

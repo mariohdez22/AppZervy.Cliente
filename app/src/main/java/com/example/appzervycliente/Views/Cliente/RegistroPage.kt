@@ -163,15 +163,14 @@ suspend fun signUpUser(
         val user = authResult.user
 
         if (user != null) {
-            // Enviar el correo de verificación
             try {
                 user.sendEmailVerification().await()
             } catch (e: Exception) {
                 return SignUpResult(success = false, message = "Error al enviar el correo de verificación: ${e.message}")
             }
 
-            // Crear el cliente en el backend
             val clienteDTO = ClienteDTO(
+                idCliente = user.uid,
                 nombres = name,
                 celular = phone,
                 correo = email,

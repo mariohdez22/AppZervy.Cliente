@@ -1,5 +1,7 @@
 package com.example.appzervycliente.Views.Cliente
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,9 +9,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,6 +29,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -40,6 +43,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,30 +52,84 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
+import com.example.appzervycliente.DTOs.CategoriaServicioDTO
+import com.example.appzervycliente.DTOs.SolicitudServicioDTO
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.ROOT_ESPERA_PAGE
 import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.Services.ViewModels.FotoSolicitudViewModel
+import com.example.appzervycliente.Services.ViewModels.SolicitudServicioViewModel
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
-import kotlin.math.sin
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SolicitudServicioDia(
-    navController: NavHostController
+    navController: NavHostController,
+    vmSolicitud: SolicitudServicioViewModel,
+    vmFotoSolicitud: FotoSolicitudViewModel,
+    categoria: CategoriaServicioDTO? = null
 ){
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val context = LocalContext.current
+    val newSolicitud by remember { mutableStateOf(SolicitudServicioDTO()) }
+    val failed by vmSolicitud.isFailed
+    val success by vmSolicitud.isSuccessfull
+
+    var showDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        Log.e("UID", Firebase.auth.uid ?: "SIN UID")
+        newSolicitud.idCliente = Firebase.auth.uid ?: ""
+        newSolicitud.nombreCliente = Firebase.auth.currentUser?.displayName ?: ""
+        newSolicitud.idCategoriaServicio = categoria?.idCategoriaServicio ?: ""
+        newSolicitud.foto = categoria?.foto ?: ""
+        newSolicitud.tituloCategoria = categoria?.tituloCategoria ?: ""
+        newSolicitud.tipoCategoria = categoria?.tipoCategoria ?: ""
+    }
+
+    LaunchedEffect(success, failed) {
+        when{
+            success -> {
+                val jsonArg = Gson().toJson(newSolicitud)
+                val encodeJson = URLEncoder.encode(jsonArg,"UTF-8")
+                navController.navigate(
+                    "${ROOT_ESPERA_PAGE}/${encodeJson}"
+                )
+                vmSolicitud.restartViewModel()
+            }
+            failed -> {
+                Toast.makeText(
+                    context,
+                    "Oops!, Algo Salio mal",
+                    Toast.LENGTH_SHORT
+                ).show()
+                vmSolicitud.restartViewModel()
+            }
+        }
+    }
+
 
     Scaffold(
         topBar = { TopBar(navController, scrollBehavior) },
@@ -79,15 +137,53 @@ fun SolicitudServicioDia(
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             .background(Color.White)
     ) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(scrollState)
-        ) {
-            Header()
-            ArticuloDescripcion()
-            Solicitud()
-            TipoPago(navController)
+
+        if(categoria != null){
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
+            ) {
+                Header(categoria.foto, categoria.tituloCategoria)
+                ArticuloDescripcion(
+                    categoria.descripcion ?: "Indefinido",
+                    categoria.horarioServicio ?: "Indefinido")
+                Solicitud(newSolicitud)
+                TipoPago(newSolicitud){
+                    showDialog = true
+                }
+            }
+        }else{
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                FailCategoria()
+            }
         }
+
+        if(showDialog){
+            PopUp(
+                onDimissRequest = { showDialog = false },
+                onSuccessRequest = {
+                    if( newSolicitud.tituloSolicitud.isEmpty() ||
+                        newSolicitud.descripcionSolicitud.isEmpty() ||
+                        newSolicitud.tipoPago.isEmpty()
+                    ){
+                        Toast.makeText(
+                            context,
+                            "Faltan datos por llenar",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        showDialog = false
+                    }else{
+                        showDialog = false
+                        vmSolicitud.crearSolicitud(newSolicitud)
+                    }
+                },
+                onCancelRequest = { showDialog = false }
+            )
+        }
+
     }
 
 }
@@ -96,7 +192,7 @@ fun SolicitudServicioDia(
 @Preview(showBackground = true)
 private fun Preview(){
     AppZervyClienteTheme(dynamicColor = false) {
-        SolicitudServicioDia(rememberNavController())
+        SolicitudServicioDia(rememberNavController(), viewModel(), viewModel())
     }
 }
 
@@ -155,11 +251,14 @@ private fun TopBar(
 }
 
 @Composable
-private fun Header(){
+private fun Header(
+    foto: String,
+    titulo: String
+){
 
     Box{
         Image(
-            painter = painterResource(R.drawable.carpinteria),
+            painter = rememberAsyncImagePainter(foto),
             contentDescription = "image",
             modifier = Modifier
                 .fillMaxWidth()
@@ -173,7 +272,7 @@ private fun Header(){
                 .align(Alignment.BottomStart)
         ) {
             Text(
-                "Carpinteria",
+                titulo,
                 color = Color.White,
                 fontSize = 25.sp,
                 fontWeight = FontWeight.W600
@@ -184,15 +283,17 @@ private fun Header(){
 }
 
 @Composable
-private fun ArticuloDescripcion(){
-
+private fun ArticuloDescripcion(
+    descripcion: String,
+    horario: String,
+){
     Column(
         modifier = Modifier
             .padding(top = 25.dp, bottom = 20.dp, start = 25.dp, end = 25.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         Text(
-            text = stringResource(R.string.example)
+            text = descripcion
         )
         Row(
             modifier = Modifier
@@ -209,7 +310,7 @@ private fun ArticuloDescripcion(){
                     fontWeight = FontWeight.W600
                 )
                 Text(
-                    text = "7:00 AM a 10:00 PM",
+                    text = horario,
                     fontSize = 13.sp,
                 )
             }
@@ -234,16 +335,20 @@ private fun ArticuloDescripcion(){
 }
 
 @Composable
-private fun Solicitud(){
+private fun Solicitud(
+    solicitud: SolicitudServicioDTO
+){
+//    val images = emptyList<Painter>()
 
-    var titulo by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
-    val images = listOf(
-        painterResource(R.drawable.furniture_assembly_image),
-        painterResource(R.drawable.garden_care_image),
-        painterResource(R.drawable.tv),
-        painterResource(R.drawable.mueble)
-    )
+    var titulo by remember { mutableStateOf("") }
+
+    LaunchedEffect(
+        descripcion, titulo
+    ) {
+        solicitud.tituloSolicitud = titulo
+        solicitud.descripcionSolicitud = descripcion
+    }
 
     Column(
         modifier = Modifier
@@ -293,75 +398,83 @@ private fun Solicitud(){
             )
         }
 
-        Column{
-            Text(
-                text = "Agregar fotos de la zona de trabajo",
-                fontSize = 16.5.sp,
-                fontWeight = FontWeight.W500
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ){
-                LazyRow(
-                    modifier = Modifier
-                        .weight(1f),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    items(images) { image ->
-                        Image(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(100.dp)
-                                .clip(shape = RoundedCornerShape(10.dp)),
-                            painter = image,
-                            contentDescription = "image",
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                }
-                Button(
-                    modifier = Modifier
-                        .width(100.dp)
-                        .fillMaxHeight(),
-                    onClick = {},
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White,
-                        contentColor = Color.Black
-                    ),
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(50.dp)
-                            .border(2.dp, Color.LightGray, CircleShape)
-                    ){
-                        Icon(
-                            modifier = Modifier
-                                .size(30.dp)
-                                .align(Alignment.Center),
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = "",
-                            tint = Color.LightGray
-                        )
-                    }
-                }
-            }
-
-        }
+//        Column(
+//            verticalArrangement = Arrangement.spacedBy(10.dp)
+//        ){
+//            Text(
+//                text = "Agregar fotos de la zona de trabajo",
+//                fontSize = 16.5.sp,
+//                fontWeight = FontWeight.W500
+//            )
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(100.dp),
+//                horizontalArrangement = Arrangement.spacedBy(5.dp)
+//            ){
+//                LazyRow(
+//                    modifier = Modifier
+//                        .weight(1f),
+//                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+//                ) {
+//                    items(images) { image ->
+//                        Image(
+//                            modifier = Modifier
+//                                .fillMaxHeight()
+//                                .width(100.dp)
+//                                .clip(shape = RoundedCornerShape(10.dp)),
+//                            painter = image,
+//                            contentDescription = "image",
+//                            contentScale = ContentScale.Crop
+//                        )
+//                    }
+//                }
+//                Button(
+//                    modifier = Modifier
+//                        .width(100.dp)
+//                        .fillMaxHeight(),
+//                    onClick = {},
+//                    shape = RoundedCornerShape(10.dp),
+//                    colors = ButtonDefaults.buttonColors(
+//                        containerColor = Color.White,
+//                        contentColor = Color.Black
+//                    ),
+//                ) {
+//                    Box(
+//                        modifier = Modifier
+//                            .size(50.dp)
+//                            .border(2.dp, Color.LightGray, CircleShape)
+//                    ){
+//                        Icon(
+//                            modifier = Modifier
+//                                .size(30.dp)
+//                                .align(Alignment.Center),
+//                            imageVector = Icons.Filled.Add,
+//                            contentDescription = "",
+//                            tint = Color.LightGray
+//                        )
+//                    }
+//                }
+//            }
+//
+//        }
 
     }
 }
 
 @Composable
 private fun TipoPago(
-    navController: NavHostController
+    solicitud: SolicitudServicioDTO,
+    onClick: () -> Unit
 ){
-
     var isTargeta by remember { mutableStateOf(false) }
     var isEfectivo by remember { mutableStateOf(false) }
+    var tipoPago by remember { mutableStateOf("") }
+
+
+    LaunchedEffect(tipoPago) {
+        solicitud.tipoPago = tipoPago
+    }
 
     Column (
         modifier = Modifier
@@ -386,6 +499,7 @@ private fun TipoPago(
                     onCheckedChange = {
                         if(!isEfectivo){
                             isTargeta = it
+                            tipoPago = "Targeta"
                         }
                     }
                 )
@@ -402,6 +516,7 @@ private fun TipoPago(
                     onCheckedChange = {
                         if(!isTargeta){
                             isEfectivo = it
+                            tipoPago = "Efectivo"
                         }
                     }
                 )
@@ -416,9 +531,7 @@ private fun TipoPago(
         ) {
             Button(
                 modifier = Modifier.fillMaxWidth(0.75f),
-                onClick = {
-                    navController.navigate(Routes.EsperaPage.route)
-                },
+                onClick = onClick,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.btnEnviarSolicitud),
                     contentColor = Color.White
@@ -430,4 +543,78 @@ private fun TipoPago(
 
     }
 
+}
+
+@Composable
+private fun FailCategoria(){
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Oops! Ha ocurrido un error, estamos trabajando en ello",
+            fontWeight = FontWeight.W300,
+            fontSize = 20.sp,
+            color = Color.Black,
+            textAlign = TextAlign.Center
+        )
+    }
+
+}
+
+@Composable
+private fun PopUp(
+    onDimissRequest: () -> Unit,
+    onSuccessRequest: () -> Unit,
+    onCancelRequest: () -> Unit
+){
+
+
+    Dialog(
+        onDismissRequest = onDimissRequest
+    ) {
+        Card(
+            modifier = Modifier.fillMaxWidth(0.9f)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(35.dp)
+            ){
+                Text(
+                    text = "Aviso de acuerdo",
+                    fontWeight = FontWeight.W500,
+                    fontSize = 22.sp
+                )
+                Text(
+                    text = "Esta de acuerdo con su solicitud?",
+                    fontWeight = FontWeight.W300,
+                    fontSize = 18.sp
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Button(
+                        onClick = onSuccessRequest,
+                    ) {
+                        Text(
+                            "Aceptar"
+                        )
+                    }
+                    Button(
+                        onClick = onCancelRequest,
+                    ) {
+                        Text(
+                            "Cancelar"
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

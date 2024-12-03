@@ -63,7 +63,6 @@ class ClientesViewModel : ViewModel() {
         }
     }
 
-    // Método para crear un nuevo cliente
     fun crearCliente(clienteCreateDTO: ClienteDTO) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -71,7 +70,6 @@ class ClientesViewModel : ViewModel() {
             try {
                 val response = repository.crearCliente(clienteCreateDTO)
                 if (response.isSuccessful && response.body()?.success == true) {
-                    // Puedes actualizar la lista de clientes después de crear uno nuevo
                     obtenerClientes()
                 } else {
                     _errorMessage.value = response.body()?.message ?: "Error al crear el cliente"

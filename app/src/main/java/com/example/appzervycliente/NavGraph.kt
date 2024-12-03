@@ -5,9 +5,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.appzervycliente.DTOs.CategoriaServicioDTO
+import com.example.appzervycliente.DTOs.SolicitudServicioDTO
+import com.example.appzervycliente.Routes.ARG_ESPERA
+import com.example.appzervycliente.Routes.ARG_SOLICITUD_DIA
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
+import com.example.appzervycliente.Services.ViewModels.FotoSolicitudViewModel
+import com.example.appzervycliente.Services.ViewModels.SolicitudServicioViewModel
 import com.example.appzervycliente.Views.Cliente.AceptacionSolicitudPage
 import com.example.appzervycliente.Views.Cliente.ActivacionInspeccionPage
 import com.example.appzervycliente.Views.Cliente.AsistenciaAlClientePage
@@ -46,12 +52,17 @@ import com.example.appzervycliente.Views.Cliente.VistaPagoPosteriorVariosDiasEfe
 import com.example.appzervycliente.Views.Cliente.ModificacionDeServicioPage
 import com.example.appzervycliente.Views.Cliente.PublicacionDeConsultasAsistenciaCliente
 import com.example.appzervycliente.Views.Cliente.VistaEsperaActivacionServicioPendientePage
+import com.google.gson.Gson
+import java.net.URLDecoder
+import java.net.URLEncoder
 
 @Composable
 fun SetupNavGraph(
     navController: NavHostController
 ){
     val viewModel: ClientesViewModel = viewModel()
+    val vmSolicitud: SolicitudServicioViewModel = viewModel()
+    val vmFotoSolicitud: FotoSolicitudViewModel = viewModel()
     val categoryViewModel: CategoriaServicioViewModel = viewModel()
 
     NavHost(
@@ -88,15 +99,24 @@ fun SetupNavGraph(
 
         //--------------------------------------------------------------[VISTAS SOLICITUD SERVICIO]
         composable(Routes.SolicitudDiaPage.route) {
-            SolicitudServicioDia(navController)
+            val jsonData = it.arguments?.getString(ARG_SOLICITUD_DIA)
+            val decodeJson = URLDecoder.decode(jsonData,"UTF-8")
+            val catDto = Gson().fromJson(decodeJson, CategoriaServicioDTO::class.java)
+            SolicitudServicioDia(navController, vmSolicitud, vmFotoSolicitud, catDto)
         }
         composable(Routes.SolicitudDiasPage.route) {
-            SolicitudServicioDias(navController)
+            val jsonData = it.arguments?.getString(ARG_SOLICITUD_DIA)
+            val decodeJson = URLDecoder.decode(jsonData,"UTF-8")
+            val catDto = Gson().fromJson(decodeJson, CategoriaServicioDTO::class.java)
+            SolicitudServicioDias(navController, vmSolicitud, vmFotoSolicitud, catDto)
         }
 
         //--------------------------------------------------------------[VISTA ESPERA]
         composable(Routes.EsperaPage.route) {
-            EsperaPage(navController)
+            val jsonData = it.arguments?.getString(ARG_ESPERA)
+            val decodeJson = URLDecoder.decode(jsonData,"UTF-8")
+            val solicitudDto = Gson().fromJson(decodeJson, SolicitudServicioDTO::class.java)
+            EsperaPage(navController, solicitudDto)
         }
 
         //--------------------------------------------------------------[VISTA ACEPTACION]

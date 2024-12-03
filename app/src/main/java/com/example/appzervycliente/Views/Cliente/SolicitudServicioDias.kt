@@ -56,17 +56,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.appzervycliente.DTOs.CategoriaServicioDTO
 import com.example.appzervycliente.R
 import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.Services.ViewModels.FotoSolicitudViewModel
+import com.example.appzervycliente.Services.ViewModels.SolicitudServicioViewModel
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SolicitudServicioDias(
-    navController: NavHostController
+    navController: NavHostController,
+    vmSolicitud: SolicitudServicioViewModel,
+    vmFotoSolicitud: FotoSolicitudViewModel,
+    categoria: CategoriaServicioDTO? = null
 ){
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -94,7 +101,7 @@ fun SolicitudServicioDias(
 @Preview(showBackground = true)
 private fun Preview(){
     AppZervyClienteTheme(dynamicColor = false) {
-        SolicitudServicioDias(rememberNavController())
+        SolicitudServicioDias(rememberNavController(), viewModel(), viewModel())
     }
 }
 

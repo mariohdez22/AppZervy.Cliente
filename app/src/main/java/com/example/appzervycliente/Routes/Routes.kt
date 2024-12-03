@@ -33,6 +33,7 @@ const val ROOT_MAIN_PAGE = "principal"
 //**************************************************************************************************
 //----------------------------------------------------- [SOLICITUD DIA]
 const val ROOT_SOLICITUD_DIA_PAGE = "solicitudDia"
+const val ARG_SOLICITUD_DIA = "argCat"
 
 //----------------------------------------------------- [SOLICITUD DIAS]
 const val ROOT_SOLICITUD_DIAS_PAGE = "solicitudDias"
@@ -43,6 +44,7 @@ const val ROOT_SOLICITUD_DIAS_PAGE = "solicitudDias"
 //**************************************************************************************************
 //----------------------------------------------------- [ESPERA]
 const val ROOT_ESPERA_PAGE = "espera"
+const val ARG_ESPERA = "argSoli"
 //**************************************************************************************************
 
 
@@ -215,10 +217,10 @@ sealed class Routes(
 
     object MainPage : Routes(ROOT_MAIN_PAGE)
 
-    object SolicitudDiaPage : Routes(ROOT_SOLICITUD_DIA_PAGE)
+    object SolicitudDiaPage : Routes(route = "${ROOT_SOLICITUD_DIA_PAGE}/{${ARG_SOLICITUD_DIA}}")
     object SolicitudDiasPage : Routes(ROOT_SOLICITUD_DIAS_PAGE)
 
-    object EsperaPage : Routes(ROOT_ESPERA_PAGE)
+    object EsperaPage : Routes(route = "$ROOT_ESPERA_PAGE/{${ARG_ESPERA}}")
 
     object AceptacionSolicitudPage : Routes(ROOT_ACEPTACION_SOLICITUD_PAGE)
 

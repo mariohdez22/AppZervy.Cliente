@@ -3,6 +3,10 @@ package com.example.appzervycliente.InstanceApi
 import com.example.appzervycliente.Network.AuthInterceptor
 import com.example.appzervycliente.Network.CategoriaServicioApiService
 import com.example.appzervycliente.Network.ClientesApiService
+import com.example.appzervycliente.Network.FotoSolicitudService
+import com.example.appzervycliente.Network.PropuestaServicioService
+import com.example.appzervycliente.Network.SocioService
+import com.example.appzervycliente.Network.SolicitudServicioService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -37,5 +41,41 @@ object InstanceApi {
             .client(client)
             .build()
             .create(CategoriaServicioApiService::class.java)
+    }
+
+    val apiPropuestaServicio: PropuestaServicioService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
+            .create(PropuestaServicioService::class.java)
+    }
+
+    val apiSocio: SocioService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
+            .create(SocioService::class.java)
+    }
+
+    val apiSolicitudServicio: SolicitudServicioService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
+            .create(SolicitudServicioService::class.java)
+    }
+
+    val apiFotoSolicitud: FotoSolicitudService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
+            .create(FotoSolicitudService::class.java)
     }
 }

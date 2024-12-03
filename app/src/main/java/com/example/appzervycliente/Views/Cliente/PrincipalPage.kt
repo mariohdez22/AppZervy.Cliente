@@ -1,5 +1,6 @@
 package com.example.appzervycliente.Views.Cliente
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -22,7 +23,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appzervycliente.R
@@ -38,32 +41,27 @@ import com.example.appzervycliente.Routes.ROOT_MAIN_PAGE
 import com.example.appzervycliente.Routes.ROOT_SOLICITUD_DIA_PAGE
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
+import com.google.gson.Gson
+import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(viewModel: CategoriaServicioViewModel,navController: NavHostController) {
+fun MainScreen(viewModel: CategoriaServicioViewModel, navController: NavHostController) {
 
     val categorias by viewModel.categorias
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
 
+    var showInspeccionActiva by remember { mutableStateOf(false) }
+
     BackHandler(
         enabled = true
-    ) {
-
-    }
+    ) {}
 
     LaunchedEffect(Unit) {
         viewModel.obtenerCategoriaServicios()
     }
 
-//    val servicesList = listOf(
-//        Service("Instalación de TV", R.drawable.tv),
-//        Service("Ensamblaje de Muebles", R.drawable.mueble),
-//        Service("Cuidado del Jardín", R.drawable.jardin),
-//        Service("Cuidado del Jardín", R.drawable.carpinteria)
-//        // Agrega más servicios si es necesario
-//    )
 
     Scaffold(
         bottomBar = {
@@ -106,29 +104,52 @@ fun MainScreen(viewModel: CategoriaServicioViewModel,navController: NavHostContr
                     }
                 }
                 errorMessage != null -> {
-                    Text(
-                        text = errorMessage ?: "Error desconocido",
-                        color = MaterialTheme.colorScheme.error,
-                    )
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Oops! Ha ocurrido un error, estamos trabajando en ello",
+                            fontWeight = FontWeight.W300,
+                            fontSize = 20.sp,
+                            color = Color.Black,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
                 else -> {
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 12.dp, end = 12.dp, bottom = 5.dp)
-                    ){
-                        ServiceActive(navController)
+                    if(showInspeccionActiva){
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp, end = 12.dp, bottom = 5.dp)
+                        ){
+                            ServiceActive(navController)
+                        }
                     }
 
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(categorias) { categoria ->
+                            Log.e("Tipo Categoria", categoria.tipoCategoria ?: "xd")
+
                             ServiceItem(
                                 categoria = categoria,
                                 onClick = {
-                                    navController.navigate(Routes.SolicitudDiaPage.route)
+                                    val jsonArg = Gson().toJson(categoria)
+                                    val encodeJson = URLEncoder.encode(jsonArg,"UTF-8")
+                                    if(categoria.tipoCategoria == "Servicio de un solo dia"){
+                                        navController.navigate(
+                                            "${ROOT_SOLICITUD_DIA_PAGE}/${encodeJson}"
+                                        )
+                                    }else{
+                                        navController.navigate(Routes.SolicitudDiasPage.route)
+                                    }
                                 })
                         }
                     }

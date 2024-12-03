@@ -69,6 +69,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Components.common.IconTextHorizontalSection
+import com.example.appzervycliente.DTOs.SolicitudServicioDTO
 import com.example.appzervycliente.R
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
@@ -79,7 +80,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EsperaPage(
-    navController: NavHostController
+    navController: NavHostController,
+    solicitud: SolicitudServicioDTO? = null
 ){
     val bottomSheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.PartiallyExpanded,
@@ -90,8 +92,8 @@ fun EsperaPage(
     )
     val scope = rememberCoroutineScope()
 
-    var showImagePreview by remember { mutableStateOf(false) }
-    var imagePreview by remember { mutableStateOf<Painter?>(null) }
+    //var showImagePreview by remember { mutableStateOf(false) }
+    //var imagePreview by remember { mutableStateOf<Painter?>(null) }
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -99,13 +101,13 @@ fun EsperaPage(
             TopBar(
                 navController = navController,
                 visible = bottomSheetState.currentValue == SheetValue.Expanded
-                        || showImagePreview
+                        //|| showImagePreview
             )
         },
         sheetContent = {
             BodySheet(scope, bottomSheetState){
-                showImagePreview = !showImagePreview
-                imagePreview = it
+                //showImagePreview = !showImagePreview
+                //imagePreview = it
             }
         },
         sheetPeekHeight = 58.dp
@@ -130,8 +132,8 @@ fun EsperaPage(
 
             AnimatedVisibility(
                 visible =
-                        bottomSheetState.currentValue == SheetValue.Expanded ||
-                        showImagePreview
+                        bottomSheetState.currentValue == SheetValue.Expanded
+                        //|| showImagePreview
                 ,
                 enter = fadeIn(animationSpec = tween(durationMillis = 300)),
                 exit = fadeOut(animationSpec = tween(durationMillis = 300))
@@ -148,34 +150,34 @@ fun EsperaPage(
 
     }
 
-    AnimatedVisibility(
-        visible = showImagePreview,
-        enter = fadeIn(animationSpec = tween(durationMillis = 300)),
-        exit = fadeOut(animationSpec = tween(durationMillis = 300))
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    showImagePreview = !showImagePreview
-                    scope.launch {
-                        bottomSheetState.expand()
-                    }
-                }
-        ){
-            imagePreview?.let {
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.4f)
-                        .align(Alignment.Center),
-                    painter = it,
-                    contentDescription = "imagePreview",
-                    contentScale = ContentScale.FillBounds
-                )
-            }
-        }
-    }
+//    AnimatedVisibility(
+//        visible = showImagePreview,
+//        enter = fadeIn(animationSpec = tween(durationMillis = 300)),
+//        exit = fadeOut(animationSpec = tween(durationMillis = 300))
+//    ) {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .clickable {
+//                    showImagePreview = !showImagePreview
+//                    scope.launch {
+//                        bottomSheetState.expand()
+//                    }
+//                }
+//        ){
+//            imagePreview?.let {
+//                Image(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .fillMaxHeight(0.4f)
+//                        .align(Alignment.Center),
+//                    painter = it,
+//                    contentDescription = "imagePreview",
+//                    contentScale = ContentScale.FillBounds
+//                )
+//            }
+//        }
+//    }
 
 }
 
@@ -267,18 +269,18 @@ private fun BodySheet(
     onClickImage: (Painter) -> Unit
 ){
     val scrollState = rememberScrollState()
-    val context = LocalContext.current
-
-    val images = listOf(
-        painterResource(R.drawable.furniture_assembly_image),
-        painterResource(R.drawable.garden_care_image),
-        painterResource(R.drawable.tv),
-        painterResource(R.drawable.mueble),
-        painterResource(R.drawable.furniture_assembly_image),
-        painterResource(R.drawable.garden_care_image),
-        painterResource(R.drawable.tv),
-        painterResource(R.drawable.mueble),
-    )
+//    val context = LocalContext.current
+//
+//    val images = listOf(
+//        painterResource(R.drawable.furniture_assembly_image),
+//        painterResource(R.drawable.garden_care_image),
+//        painterResource(R.drawable.tv),
+//        painterResource(R.drawable.mueble),
+//        painterResource(R.drawable.furniture_assembly_image),
+//        painterResource(R.drawable.garden_care_image),
+//        painterResource(R.drawable.tv),
+//        painterResource(R.drawable.mueble),
+//    )
 
     Column(
         modifier = Modifier
@@ -317,48 +319,48 @@ private fun BodySheet(
             Detalles()
         }
 
-        Column(
-            modifier = Modifier
-                .padding(start = 25.dp, end = 25.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ){
-            Text(
-                text = "Detalles de la solicitud",
-                fontSize = 17.sp,
-                fontWeight = FontWeight.W500,
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ){
-                LazyRow(
-                    modifier = Modifier
-                        .padding(bottom = 10.dp)
-                        .weight(1f),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    items(images) { image ->
-                        Image(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(110.dp)
-                                .clip(shape = RoundedCornerShape(10.dp))
-                                .clickable {
-                                    scope.launch {
-                                        sheetState.partialExpand()
-                                    }
-                                    onClickImage(image)
-                                },
-                            painter = image,
-                            contentDescription = "image",
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                }
-            }
-        }
+//        Column(
+//            modifier = Modifier
+//                .padding(start = 25.dp, end = 25.dp),
+//            verticalArrangement = Arrangement.spacedBy(10.dp)
+//        ){
+//            Text(
+//                text = "Detalles de la solicitud",
+//                fontSize = 17.sp,
+//                fontWeight = FontWeight.W500,
+//            )
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(100.dp),
+//                horizontalArrangement = Arrangement.spacedBy(5.dp)
+//            ){
+//                LazyRow(
+//                    modifier = Modifier
+//                        .padding(bottom = 10.dp)
+//                        .weight(1f),
+//                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+//                ) {
+//                    items(images) { image ->
+//                        Image(
+//                            modifier = Modifier
+//                                .fillMaxHeight()
+//                                .width(110.dp)
+//                                .clip(shape = RoundedCornerShape(10.dp))
+//                                .clickable {
+//                                    scope.launch {
+//                                        sheetState.partialExpand()
+//                                    }
+//                                    onClickImage(image)
+//                                },
+//                            painter = image,
+//                            contentDescription = "image",
+//                            contentScale = ContentScale.Crop
+//                        )
+//                    }
+//                }
+//            }
+//        }
     }
 
 }
