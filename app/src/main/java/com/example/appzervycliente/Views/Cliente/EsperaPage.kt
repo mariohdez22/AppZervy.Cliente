@@ -400,17 +400,17 @@ private fun Detalles(
             iconGap = 7.dp,
             horizontalArrangement = Arrangement.SpaceBetween
         )
-        IconTextHorizontalSection(
-            painter = painterResource(R.drawable.start_icon),
-            label = "Fecha",
-            text = solicitud?.fechaSolicitud ?: "Indefinido",
-            labelSize = 14.5.sp,
-            textSize = 14.5.sp,
-            labelWeight = FontWeight.W500,
-            textWeight = FontWeight.W300,
-            iconGap = 7.dp,
-            horizontalArrangement = Arrangement.SpaceBetween
-        )
+//        IconTextHorizontalSection(
+//            painter = painterResource(R.drawable.start_icon),
+//            label = "Fecha",
+//            text = solicitud?.fechaSolicitud ?: "Indefinido",
+//            labelSize = 14.5.sp,
+//            textSize = 14.5.sp,
+//            labelWeight = FontWeight.W500,
+//            textWeight = FontWeight.W300,
+//            iconGap = 7.dp,
+//            horizontalArrangement = Arrangement.SpaceBetween
+//        )
         IconTextHorizontalSection(
             painter = painterResource(R.drawable.start_icon),
             label = "Tipo de pago",
