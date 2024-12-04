@@ -1,5 +1,6 @@
 package com.example.appzervycliente.Views.Cliente
 
+import android.app.Activity
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -35,31 +36,43 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.appzervycliente.DTOs.CategoriaServicioDTO
+import com.example.appzervycliente.MainActivity
 import com.example.appzervycliente.Routes.ROOT_CARRITO_COMPRAS_PAGE
 import com.example.appzervycliente.Routes.ROOT_INSPECCION_PAGE
 import com.example.appzervycliente.Routes.ROOT_MAIN_PAGE
 import com.example.appzervycliente.Routes.ROOT_SOLICITUD_DIA_PAGE
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(viewModel: CategoriaServicioViewModel, navController: NavHostController) {
+fun MainScreen(
+    viewCategoriaModel: CategoriaServicioViewModel,
+    navController: NavHostController,
+    onClose: () -> Unit
+) {
 
-    val categorias by viewModel.categorias
-    val isLoading by viewModel.isLoading
-    val errorMessage by viewModel.errorMessage
+    val categorias by viewCategoriaModel.categorias
+    val isLoading by viewCategoriaModel.isLoading
+    val errorMessage by viewCategoriaModel.errorMessage
+    val context = LocalContext.current
 
     var showInspeccionActiva by remember { mutableStateOf(false) }
 
     BackHandler(
         enabled = true
-    ) {}
+    ) {
+        Firebase.auth.signOut()
+        onClose()
+    }
 
     LaunchedEffect(Unit) {
-        viewModel.obtenerCategoriaServicios()
+        viewCategoriaModel.obtenerCategoriaServicios()
     }
 
 
@@ -136,8 +149,6 @@ fun MainScreen(viewModel: CategoriaServicioViewModel, navController: NavHostCont
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(categorias) { categoria ->
-                            Log.e("Tipo Categoria", categoria.tipoCategoria ?: "xd")
-
                             ServiceItem(
                                 categoria = categoria,
                                 onClick = {
@@ -441,8 +452,8 @@ fun MainScreenPreview() {
         dynamicColor = true
     ) {
         MainScreen(
-            viewModel = CategoriaServicioViewModel(),
-            navController = rememberNavController()
-        )
+            viewCategoriaModel = CategoriaServicioViewModel(),
+            navController = rememberNavController(),
+        ){}
     }
 }

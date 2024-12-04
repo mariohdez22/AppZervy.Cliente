@@ -1,6 +1,7 @@
 package com.example.appzervycliente
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -8,11 +9,19 @@ import androidx.navigation.compose.composable
 import com.example.appzervycliente.DTOs.CategoriaServicioDTO
 import com.example.appzervycliente.DTOs.SolicitudServicioDTO
 import com.example.appzervycliente.Routes.ARG_ESPERA
+import com.example.appzervycliente.Routes.ARG_PROPUESTA_DETALLE
+import com.example.appzervycliente.Routes.ARG_PROPUESTA_INFOSOCIO
 import com.example.appzervycliente.Routes.ARG_SOLICITUD_DIA
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.Services.ViewModels.CategoriaServicioViewModel
 import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.example.appzervycliente.Services.ViewModels.FotoSolicitudViewModel
+import com.example.appzervycliente.Services.ViewModels.InspeccionViewModel
+import com.example.appzervycliente.Services.ViewModels.PropuestaServicioViewModel
+import com.example.appzervycliente.Services.ViewModels.ResenasViewModel
+import com.example.appzervycliente.Services.ViewModels.SocioComercialViewModel
+import com.example.appzervycliente.Services.ViewModels.SocioIndividualViewModel
+import com.example.appzervycliente.Services.ViewModels.SocioServicioViewModel
 import com.example.appzervycliente.Services.ViewModels.SolicitudServicioViewModel
 import com.example.appzervycliente.Views.Cliente.AceptacionSolicitudPage
 import com.example.appzervycliente.Views.Cliente.ActivacionInspeccionPage
@@ -50,20 +59,30 @@ import com.example.appzervycliente.Views.Cliente.RechazoDeServicioPage
 import com.example.appzervycliente.Views.Cliente.VistaPagoPrevioVariosDiasPage
 import com.example.appzervycliente.Views.Cliente.VistaPagoPosteriorVariosDiasEfectivosPage
 import com.example.appzervycliente.Views.Cliente.ModificacionDeServicioPage
+import com.example.appzervycliente.Views.Cliente.PropuestaItem
 import com.example.appzervycliente.Views.Cliente.PublicacionDeConsultasAsistenciaCliente
 import com.example.appzervycliente.Views.Cliente.VistaEsperaActivacionServicioPendientePage
 import com.google.gson.Gson
 import java.net.URLDecoder
-import java.net.URLEncoder
+import kotlin.math.log
 
 @Composable
 fun SetupNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    onClose: () -> Unit
 ){
     val viewModel: ClientesViewModel = viewModel()
     val vmSolicitud: SolicitudServicioViewModel = viewModel()
     val vmFotoSolicitud: FotoSolicitudViewModel = viewModel()
+    val vmPropuestas: PropuestaServicioViewModel = viewModel()
+    val vmSocio: SocioServicioViewModel = viewModel()
+    val vmSocioComercial: SocioComercialViewModel = viewModel()
+    val vmSocioIndividual: SocioIndividualViewModel = viewModel()
+    val vmResenas: ResenasViewModel = viewModel()
+    val vmInspeccion: InspeccionViewModel = viewModel()
     val categoryViewModel: CategoriaServicioViewModel = viewModel()
+
+    val propuestas by vmPropuestas.propuestas
 
     NavHost(
         navController = navController,
@@ -92,8 +111,9 @@ fun SetupNavGraph(
         //--------------------------------------------------------------[VISTA MAIN]
         composable(Routes.MainPage.route) {
             MainScreen(
-                viewModel = categoryViewModel,
-                navController = navController
+                viewCategoriaModel = categoryViewModel,
+                navController = navController,
+                onClose = onClose
             )
         }
 
@@ -116,23 +136,79 @@ fun SetupNavGraph(
             val jsonData = it.arguments?.getString(ARG_ESPERA)
             val decodeJson = URLDecoder.decode(jsonData,"UTF-8")
             val solicitudDto = Gson().fromJson(decodeJson, SolicitudServicioDTO::class.java)
-            EsperaPage(navController, solicitudDto)
+            EsperaPage(navController, vmPropuestas, solicitudDto)
         }
 
         //--------------------------------------------------------------[VISTA ACEPTACION]
         composable(Routes.AceptacionSolicitudPage.route) {
-            AceptacionSolicitudPage(navController)
+
+            if(propuestas.isEmpty()){
+                AceptacionSolicitudPage(navController, false)
+            }
+            else{
+                AceptacionSolicitudPage(navController, true)
+            }
+
         }
 
         //--------------------------------------------------------------[VISTAS PROPUESTA]
         composable(Routes.PropuestaServicioPage.route) {
-            PropuestaServicioPage(navController)
+            val lista = mutableListOf<PropuestaItem>()
+            propuestas.forEach { p ->
+                val item = PropuestaItem(
+                    nombreCliente = p.nombreCliente,
+                    tituloCategoria = p.tituloCategoria,
+                    descripcionPropuesta = p.descripcionPropuesta,
+                    duracionServicio = p.duracionServicio,
+                    precioBase = p.precioBase,
+                    tipoPago = p.tipoPago,
+                    tipoCategoria = p.tipoCategoria,
+                )
+                p.idSocio?.let { id ->
+                    vmSocio.obtenerSocioPorId(id)
+                    val socio by vmSocio.socio
+                    socio?.let { s ->
+                        item.tipoSocio = s.tipoServicio
+                        item.idSocio = s.idSocio ?: ""
+                        item.experienciaSocio = s.anosExperiencia
+                        when{
+                            s.idSocioIndividual != null -> {
+                                vmSocioIndividual
+                                    .obtenerSocioIndividualPorId(s.idSocioIndividual)
+                                val socioind by vmSocioIndividual.socioIndividual
+                                socioind?.let { si ->
+                                    item.nombreSocio = si.nombres
+                                    item.fotoSocio = si.foto
+                                }
+                            }
+                            s.idSocioComercial != null ->{
+                                vmSocioComercial
+                                    .obtenerSocioIndividualPorId(s.idSocioComercial)
+                                val sociocom by vmSocioComercial.socioComercial
+                                sociocom?.let { sc ->
+                                    item.nombreSocio = sc.nombreComercial
+                                    item.fotoSocio = sc.fotoComercial
+                                }
+                            }
+                            else -> {}
+                        }
+                    }
+                }
+                lista.add(item)
+            }
+            PropuestaServicioPage(navController, lista)
         }
         composable(Routes.PropuestaDetallePage.route) {
-            PropuestaDetallePage(navController)
+            val jsonData = it.arguments?.getString(ARG_PROPUESTA_DETALLE)
+            val decodeJson = URLDecoder.decode(jsonData,"UTF-8")
+            val propuestaItem = Gson().fromJson(decodeJson, PropuestaItem::class.java)
+            PropuestaDetallePage(navController, propuestaItem)
         }
         composable(Routes.PropuestaInfoSocioPage.route) {
-            PropuestaInfoSocioPage(navController)
+            val jsonData = it.arguments?.getString(ARG_PROPUESTA_INFOSOCIO)
+            val decodeJson = URLDecoder.decode(jsonData,"UTF-8")
+            val propuestaItem = Gson().fromJson(decodeJson, PropuestaItem::class.java)
+            PropuestaInfoSocioPage(navController, propuestaItem, vmResenas, vmInspeccion)
         }
 
         //--------------------------------------------------------------[VISTA PAGO POSTERIOR]

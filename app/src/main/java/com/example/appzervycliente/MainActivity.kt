@@ -12,6 +12,7 @@ import com.google.firebase.FirebaseApp
 class MainActivity : ComponentActivity() {
 
     lateinit var navController: NavHostController
+    val onClose = { this.finishAffinity() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppZervyClienteTheme {
                 navController = rememberNavController()
-                SetupNavGraph(navController)
+                SetupNavGraph(navController, onClose)
             }
         }
     }

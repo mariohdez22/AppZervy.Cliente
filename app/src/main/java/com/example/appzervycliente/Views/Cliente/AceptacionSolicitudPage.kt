@@ -28,16 +28,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.R
 import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.Services.ViewModels.PropuestaServicioViewModel
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 import kotlinx.coroutines.delay
 
 @Composable
 fun AceptacionSolicitudPage(
-    navController: NavHostController
+    navController: NavHostController,
+    found: Boolean,
 ){
     val context = LocalContext.current
 
@@ -49,8 +52,15 @@ fun AceptacionSolicitudPage(
 
     LaunchedEffect(Unit) {
         delay(7000)
-        navController.navigate(Routes.PropuestaServicioPage.route){
-            popUpTo(Routes.AceptacionSolicitudPage.route){ inclusive = true }
+        if(found){
+            navController.navigate(Routes.PropuestaServicioPage.route){
+                popUpTo(Routes.AceptacionSolicitudPage.route){ inclusive = true }
+            }
+        }else{
+            navController.navigate(Routes.MainPage.route){
+                popUpTo(Routes.SolicitudDiaPage.route){ inclusive = true }
+                popUpTo(Routes.AceptacionSolicitudPage.route){ inclusive = true }
+            }
         }
     }
 
@@ -101,18 +111,35 @@ fun AceptacionSolicitudPage(
             contentScale = ContentScale.FillBounds
         )
 
-        Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .graphicsLayer(alpha = alpha)
-        ) {
-            Image(
+        if(found){
+            Column(
                 modifier = Modifier
-                    .size(175.dp),
-                painter = painterResource(R.drawable.socios),
-                contentDescription = "image"
-            )
-            Text("!Socios encontrados¡")
+                    .align(Alignment.Center)
+                    .graphicsLayer(alpha = alpha)
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(175.dp),
+                    painter = painterResource(R.drawable.socios),
+                    contentDescription = "image"
+                )
+                Text("!Socios encontrados¡")
+            }
+        }
+        else{
+            Column(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .graphicsLayer(alpha = alpha)
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(175.dp),
+                    painter = painterResource(R.drawable.sociosnotfound),
+                    contentDescription = "image"
+                )
+                Text("!No hay socios disponibles¡")
+            }
         }
 
 
@@ -125,6 +152,6 @@ private fun Preview(){
     AppZervyClienteTheme(
         dynamicColor = false
     ) {
-        AceptacionSolicitudPage(rememberNavController())
+        AceptacionSolicitudPage(rememberNavController(), true)
     }
 }

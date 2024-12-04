@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">AppZervy.Cliente</string>
 
+    <string name="adtestbannerid">ca-app-pub-3940256099942544/9214589741</string>
+    <string name="imgNotFound">https://cdn-icons-png.flaticon.com/512/2748/2748558.png</string>
+    
     <string name="txtEjemplo">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut auctor ligula nec mollis
         commodo. Donec in turpis vitae nisl congue accumsan eget ac nulla.

@@ -9,4 +9,6 @@ class SocioRepository {
 
     suspend fun obtenerSocios() = apiService.obtenerSocios()
 
+    suspend fun obtenerSocioPorId(id: String) = apiService.obtenerSocioPorId(id)
+
 }

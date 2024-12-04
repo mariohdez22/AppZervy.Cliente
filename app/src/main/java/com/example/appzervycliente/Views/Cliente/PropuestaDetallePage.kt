@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -38,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,16 +54,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.appzervycliente.Components.common.IconLabelHorizontalSection
 import com.example.appzervycliente.Components.common.IconTextHorizontalSection
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.ROOT_PROPUESTA_INFOSOCIO_PAGE
 import com.example.appzervycliente.Routes.Routes
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
+import com.google.gson.Gson
+import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PropuestaDetallePage(
-    navController: NavHostController
+    navController: NavHostController,
+    propuestaItem: PropuestaItem? = null
 ){
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -67,23 +76,33 @@ fun PropuestaDetallePage(
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { TopBar(navController) }
+        topBar = { TopBar(navController) },
+        containerColor = Color.White
     ) {
         paddingValues ->
         Column(
             modifier = Modifier
                 .padding(top = paddingValues.calculateTopPadding(), bottom = 25.dp)
                 .background(color = Color.White)
-                .verticalScroll(scrollState),
+                .verticalScroll(scrollState)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            Header()
+            Header(
+                titulo = propuestaItem?.tituloCategoria ?: "Sin titulo",
+                descripcion = propuestaItem?.descripcionPropuesta ?: "Sin Descripcion",
+                precio = propuestaItem?.precioBase ?: "Sin precio",
+                duracion = propuestaItem?.duracionServicio ?: "Sin duracion"
+            )
             HorizontalDivider(thickness = 1.dp)
-            SocioDetalle(navController)
+            SocioDetalle(
+                navController = navController,
+                propuestaItem = propuestaItem
+            )
             HorizontalDivider(thickness = 1.dp)
-            Detalles()
+            Detalles(propuestaItem)
             HorizontalDivider(thickness = 1.dp)
-            SubTotal()
+            SubTotal(subTotal = propuestaItem?.precioBase ?: "0")
             HorizontalDivider(thickness = 1.dp)
             AceptarPropuesta(navController)
         }
@@ -157,7 +176,12 @@ private fun TopBar(
 }
 
 @Composable
-private fun Header(){
+private fun Header(
+    titulo: String,
+    descripcion: String,
+    precio: String,
+    duracion: String
+){
 
     Column(
         modifier = Modifier
@@ -166,12 +190,12 @@ private fun Header(){
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(
-            text = "Propuesta de servicio",
+            text = titulo,
             fontSize = 25.sp,
             fontWeight = FontWeight.W400,
         )
         Text(
-            text = stringResource(R.string.example),
+            text = descripcion,
             fontSize = 14.sp,
             fontWeight = FontWeight.W300,
             lineHeight = 15.sp
@@ -186,7 +210,7 @@ private fun Header(){
                     withStyle(style = SpanStyle(fontWeight = FontWeight.W500)){
                         append("Precio: ")
                     }
-                    append("$ 35 USD")
+                    append(precio)
                 },
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W300,
@@ -197,7 +221,7 @@ private fun Header(){
                     withStyle(style = SpanStyle(fontWeight = FontWeight.W500)){
                         append("Duracion: ")
                     }
-                    append("3h Aprox")
+                    append(duracion)
                 },
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W300,
@@ -210,7 +234,8 @@ private fun Header(){
 
 @Composable
 private fun SocioDetalle(
-    navController: NavHostController
+    navController: NavHostController,
+    propuestaItem: PropuestaItem? = null
 ){
 
     var rating by remember { mutableStateOf(5) }
@@ -219,7 +244,11 @@ private fun SocioDetalle(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                navController.navigate(Routes.PropuestaInfoSocioPage.route)
+                val jsonArg = Gson().toJson(propuestaItem)
+                val encodeJson = URLEncoder.encode(jsonArg,"UTF-8")
+                navController.navigate(
+                    "${ROOT_PROPUESTA_INFOSOCIO_PAGE}/${encodeJson}"
+                )
             }
             .padding(start = 25.dp, end = 25.dp, bottom = 10.dp, top = 10.dp)
     ){
@@ -231,18 +260,21 @@ private fun SocioDetalle(
         ) {
             Image(
                 modifier = Modifier.size(35.dp),
-                painter = painterResource(R.drawable.avatarcard),
-                contentDescription = "image"
+                painter = rememberAsyncImagePainter(
+                    model = propuestaItem?.fotoSocio ?: stringResource(R.string.imgNotFound)
+                ),
+                contentDescription = "image",
+                contentScale = ContentScale.FillBounds
             )
             Column {
                 Text(
-                    text = "Josue Hernandez",
+                    text = propuestaItem?.nombreSocio ?: "Sin nombre",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W500,
                     lineHeight = 15.sp
                 )
                 Text(
-                    text = "Proveedor de servicios",
+                    text = propuestaItem?.tipoSocio ?: "Indefinido",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.W300,
                     lineHeight = 15.sp
@@ -300,7 +332,7 @@ private fun RatingBar(
 
 @Composable
 private fun Detalles(
-
+    propuestaItem: PropuestaItem? = null
 ){
     Column(
         modifier = Modifier
@@ -308,13 +340,23 @@ private fun Detalles(
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ){
-        DetallesLista()
-        DetalleInfo()
+        DetallesLista(
+            tituloCategoria = propuestaItem?.tituloCategoria ?: "Sin titulo",
+            tipoPago = propuestaItem?.tipoPago ?: "Indefinido",
+            tipoCategoria = propuestaItem?.tipoCategoria ?: "Indefinido"
+        )
+        DetalleInfo(
+            descripcion = propuestaItem?.descripcionPropuesta ?: "Sin Descripcion"
+        )
     }
 }
 
 @Composable
-private fun DetallesLista(){
+private fun DetallesLista(
+    tituloCategoria: String,
+    tipoPago: String,
+    tipoCategoria: String,
+){
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -327,19 +369,19 @@ private fun DetallesLista(){
         )
         IconTextHorizontalSection(
             painter = painterResource(R.drawable.start_icon),
-            label = "Montaje Articulos",
+            label = tituloCategoria,
             fontWeight = FontWeight.W300,
             contentDescription = "icon"
         )
         IconTextHorizontalSection(
             painter = painterResource(R.drawable.start_icon),
-            label = "Pago con targeta",
+            label = tipoPago,
             fontWeight = FontWeight.W300,
             contentDescription = "icon"
         )
         IconTextHorizontalSection(
             painter = painterResource(R.drawable.start_icon),
-            label = "Servicio de un solo dia",
+            label = tipoCategoria,
             fontWeight = FontWeight.W300,
             contentDescription = "icon"
         )
@@ -347,7 +389,9 @@ private fun DetallesLista(){
 }
 
 @Composable
-private fun DetalleInfo(){
+private fun DetalleInfo(
+    descripcion: String
+){
 
     Column(
         modifier = Modifier
@@ -360,60 +404,17 @@ private fun DetalleInfo(){
             fontSize = 15.sp
         )
         Text(
-            text = stringResource(R.string.example),
+            text = descripcion,
             fontWeight = FontWeight.W300,
             fontSize = 15.sp
         )
-        Text(
-            text = stringResource(R.string.example3),
-            fontWeight = FontWeight.W300,
-            fontSize = 15.sp
-        )
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            IconLabelHorizontalSection(
-                painter = painterResource(R.drawable.circle),
-                label = "item 1",
-                labelSize = 15.sp,
-                labelWeight = FontWeight.W300,
-                iconWidth = 5.dp,
-                iconHeight = 5.dp,
-                iconGap = 10.dp
-            )
-            IconLabelHorizontalSection(
-                painter = painterResource(R.drawable.circle),
-                label = "item 2",
-                labelSize = 15.sp,
-                labelWeight = FontWeight.W300,
-                iconWidth = 5.dp,
-                iconHeight = 5.dp,
-                iconGap = 10.dp
-            )
-            IconLabelHorizontalSection(
-                painter = painterResource(R.drawable.circle),
-                label = "item 3",
-                labelSize = 15.sp,
-                labelWeight = FontWeight.W300,
-                iconWidth = 5.dp,
-                iconHeight = 5.dp,
-                iconGap = 10.dp
-            )
-            IconLabelHorizontalSection(
-                painter = painterResource(R.drawable.circle),
-                label = "item 4",
-                labelSize = 15.sp,
-                labelWeight = FontWeight.W300,
-                iconWidth = 5.dp,
-                iconHeight = 5.dp,
-                iconGap = 10.dp
-            )
-        }
     }
 }
 
 @Composable
-private fun SubTotal(){
+private fun SubTotal(
+    subTotal: String,
+){
     Row(
         modifier = Modifier
             .padding(start = 25.dp, end = 25.dp)
@@ -426,7 +427,7 @@ private fun SubTotal(){
             fontWeight = FontWeight.W500
         )
         Text(
-            text = "$ 35 USD",
+            text = "$ $subTotal USD",
             fontSize = 18.sp,
             fontWeight = FontWeight.W300
         )
@@ -452,6 +453,10 @@ private fun AceptarPropuesta(
                     popUpTo(Routes.PropuestaDetallePage.route){ inclusive = true }
                 }
             },
+            colors = ButtonDefaults.buttonColors(
+                contentColor = Color.White,
+                containerColor = colorResource(R.color.btnEnviarSolicitud)
+            )
         ) {
             Text(
                 text = "Aceptar Propuesta",

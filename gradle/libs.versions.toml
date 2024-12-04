@@ -50,7 +50,7 @@ kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "ko
 google-maps-utils = { group = "com.google.maps.android", name = "android-maps-utils", version.ref = "mapsutils" }
 
 # Google admobs
-#google-admobs = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "admobs" }
+google-admobs = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "admobs" }
 
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtx" }

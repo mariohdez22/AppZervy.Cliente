@@ -2,6 +2,7 @@
 package com.example.appzervycliente
 
 import android.app.Application
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
 
 class MyApp : Application() {
@@ -9,5 +10,6 @@ class MyApp : Application() {
         super.onCreate()
         // Inicializar Firebase
         FirebaseApp.initializeApp(this)
+        MobileAds.initialize(this)
     }
 }

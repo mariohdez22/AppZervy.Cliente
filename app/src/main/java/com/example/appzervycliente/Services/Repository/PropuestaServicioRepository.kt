@@ -8,6 +8,8 @@ class PropuestaServicioRepository {
 
     private val apiService: PropuestaServicioService = InstanceApi.apiPropuestaServicio
 
+    suspend fun obtenerPropuestas() = apiService.obtenerPropuestas()
+
     suspend fun crearPropuesta(propuesta: PropuestaServicioDTO) =
         apiService.crearPropuesta(propuesta)
 

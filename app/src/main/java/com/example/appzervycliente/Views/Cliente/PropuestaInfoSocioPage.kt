@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -28,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,46 +38,128 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.appzervycliente.Components.common.IconLabelHorizontalSection
 import com.example.appzervycliente.Components.common.IconTextHorizontalSection
+import com.example.appzervycliente.DTOs.ReseñasDTO
 import com.example.appzervycliente.R
 import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.Services.ViewModels.InspeccionViewModel
+import com.example.appzervycliente.Services.ViewModels.ResenasViewModel
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
 
 @Composable
 fun PropuestaInfoSocioPage(
-    navController: NavHostController
+    navController: NavHostController,
+    propuestaItem: PropuestaItem? = null,
+    vmResenas: ResenasViewModel,
+    vmInspeccion: InspeccionViewModel
 ){
     val scrollState = rememberScrollState()
 
+    val resenas by vmResenas.resenasSocios
+    val isLoading by vmResenas.isLoading
+    val errorMessage by vmResenas.errorMessage
+
+    LaunchedEffect(Unit) {
+        vmResenas.obtenerResenasPorIdSocio(propuestaItem?.idSocio ?: "")
+    }
+
     Scaffold(
-        topBar = { TopBar(navController) }
+        topBar = { TopBar(navController) },
+        containerColor = Color.White
     ) {
         paddingValues ->
         Column(
             modifier = Modifier
                 .padding(top = paddingValues.calculateTopPadding(), bottom = 25.dp)
                 .background(color = Color.White)
-                .fillMaxWidth()
-                .verticalScroll(scrollState),
+                .verticalScroll(scrollState)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            Header()
+            Header(
+                nombreSocio = propuestaItem?.nombreSocio ?: "Sin nombre",
+                tipoSocio = propuestaItem?.tipoSocio ?: "Indefinido",
+                foto = propuestaItem?.fotoSocio ?: stringResource(R.string.imgNotFound)
+            )
             HorizontalDivider(thickness = 1.dp)
-            DatosSocio()
+            DatosSocio(
+                tipoSocio = propuestaItem?.tipoSocio ?: "Indefinido",
+                experiencia = propuestaItem?.experienciaSocio ?: "Sin experiencia"
+            )
             HorizontalDivider(thickness = 1.dp)
-            repeat(5){
-                Resena()
+            when{
+                isLoading -> {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f, fill = true)
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                errorMessage != null -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Oops! Ha ocurrido un error, estamos trabajando en ello",
+                            fontWeight = FontWeight.W300,
+                            fontSize = 20.sp,
+                            color = Color.Black,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+                else -> {
+                    Column(
+                        modifier = Modifier.padding(start = 25.dp, end = 25.dp)
+                    ) {
+                        Text(
+                            text = "Reseña de inspecciones",
+                            fontWeight = FontWeight.W500
+                        )
+                    }
+                    if(resenas.isEmpty()){
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "No hay reseñas de momento, :)",
+                                fontWeight = FontWeight.W300,
+                                fontSize = 20.sp,
+                                color = Color.Black,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }else{
+                        resenas.forEach { r ->
+                            Resena(r, propuestaItem, vmInspeccion)
+                        }
+                    }
+                }
             }
         }
     }
@@ -84,7 +169,7 @@ fun PropuestaInfoSocioPage(
 @Preview(showBackground = true)
 private fun Preview(){
     AppZervyClienteTheme {
-        PropuestaInfoSocioPage(rememberNavController())
+        PropuestaInfoSocioPage(rememberNavController(), null, viewModel(), viewModel())
     }
 }
 
@@ -142,7 +227,11 @@ private fun TopBar(
 }
 
 @Composable
-private fun Header(){
+private fun Header(
+    nombreSocio: String,
+    tipoSocio: String,
+    foto: String,
+){
 
     var rating by remember { mutableStateOf(5) }
 
@@ -158,18 +247,19 @@ private fun Header(){
         ) {
             Image(
                 modifier = Modifier.size(width = 60.dp, height = 50.dp),
-                painter = painterResource(R.drawable.avatar3dimage),
-                contentDescription = "image"
+                painter = rememberAsyncImagePainter(model = foto),
+                contentDescription = "image",
+                contentScale = ContentScale.FillBounds
             )
             Column {
                 Text(
-                    text = "Dennis Alexander",
+                    text = nombreSocio,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.W500,
                     lineHeight = 15.sp
                 )
                 Text(
-                    text = "Armador de muebles",
+                    text = tipoSocio,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W300,
                     lineHeight = 15.sp
@@ -190,10 +280,10 @@ private fun Header(){
                         rating = rating
                     )
                 }
-                IconLabelHorizontalSection(
-                    painter = painterResource(R.drawable.time),
-                    label = "Cuenta creada en 2024"
-                )
+//                IconLabelHorizontalSection(
+//                    painter = painterResource(R.drawable.time),
+//                    label = "Cuenta creada en 2024"
+//                )
             }
         }
     }
@@ -203,7 +293,8 @@ private fun Header(){
 
 @Composable
 private fun DatosSocio(
-
+    tipoSocio: String,
+    experiencia: String
 ){
 
     Column(
@@ -220,7 +311,7 @@ private fun DatosSocio(
             painter = painterResource(R.drawable.start_icon),
             label = "Tipo socio: ",
             labelWeight = FontWeight.W500,
-            text = "Individual",
+            text = tipoSocio,
             textWeight = FontWeight.W300,
             iconWidth = 17.dp,
             iconHeight = 17.dp
@@ -229,26 +320,35 @@ private fun DatosSocio(
             painter = painterResource(R.drawable.start_icon),
             label = "Años de experiencia: ",
             labelWeight = FontWeight.W500,
-            text = "2 años",
+            text = experiencia,
             textWeight = FontWeight.W300,
             iconWidth = 17.dp,
             iconHeight = 17.dp
         )
-        IconTextHorizontalSection(
-            painter = painterResource(R.drawable.start_icon),
-            label = "Trabajos realizados: ",
-            labelWeight = FontWeight.W500,
-            text = "20 servicios",
-            textWeight = FontWeight.W300,
-            iconWidth = 17.dp,
-            iconHeight = 17.dp
-        )
+//        IconTextHorizontalSection(
+//            painter = painterResource(R.drawable.start_icon),
+//            label = "Trabajos realizados: ",
+//            labelWeight = FontWeight.W500,
+//            text = "20 servicios",
+//            textWeight = FontWeight.W300,
+//            iconWidth = 17.dp,
+//            iconHeight = 17.dp
+//        )
     }
 
 }
 
 @Composable
-private fun Resena(){
+private fun Resena(
+    resena: ReseñasDTO,
+    propuestaItem: PropuestaItem?,
+    vmInspeccion: InspeccionViewModel
+){
+//    val inspeccion by vmInspeccion.inspeccion
+//
+//    LaunchedEffect(Unit) {
+//        vmInspeccion.obtenerInspeccionPorId(resena.idInscripccion ?: "")
+//    }
 
     Column(
         modifier = Modifier
@@ -257,18 +357,22 @@ private fun Resena(){
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
 
-        Text(
-            text = "Reseña de inspecciones",
-            fontWeight = FontWeight.W500
+        ResenaComentario(
+            nombreCliente = propuestaItem?.nombreCliente ?: "Sin nombre",
+            descripcion = resena.cuerpoReseña
         )
-        ResenaComentario()
-        ResenaDescripcion()
+//        ResenaDescripcion(
+//            titulo = inspeccion.
+//        )
     }
     HorizontalDivider(thickness = 1.dp)
 }
 
 @Composable
-private fun ResenaComentario(){
+private fun ResenaComentario(
+    nombreCliente: String,
+    descripcion: String,
+){
 
     var rating by remember { mutableStateOf(5) }
 
@@ -282,20 +386,20 @@ private fun ResenaComentario(){
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                modifier = Modifier.size(35.dp),
-                painter = painterResource(R.drawable.avatarcard),
-                contentDescription = "image"
-            )
+//            Image(
+//                modifier = Modifier.size(35.dp),
+//                painter = painterResource(R.drawable.avatarcard),
+//                contentDescription = "image"
+//            )
             Column {
                 Text(
-                    text = "Josue Hernandez",
+                    text = nombreCliente,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W500,
                     lineHeight = 15.sp
                 )
                 Text(
-                    text = "Proveedor de servicios",
+                    text = "Cliente",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.W300,
                     lineHeight = 15.sp
@@ -325,7 +429,7 @@ private fun ResenaComentario(){
         }
 
         Text(
-            text = stringResource(R.string.example),
+            text = descripcion,
             fontSize = 13.sp,
             fontWeight = FontWeight.W300,
             lineHeight = 15.sp
@@ -336,7 +440,8 @@ private fun ResenaComentario(){
 
 @Composable
 private fun ResenaDescripcion(
-
+    titulo: String,
+    descripcion: String
 ){
 
     Column(
@@ -344,11 +449,11 @@ private fun ResenaDescripcion(
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         Text(
-            text = "Reparacion de ventilador",
+            text = titulo,
             fontWeight = FontWeight.W500
         )
         Text(
-            text = stringResource(R.string.example3),
+            text = descripcion,
             fontSize = 13.sp,
             fontWeight = FontWeight.W300,
             lineHeight = 15.sp

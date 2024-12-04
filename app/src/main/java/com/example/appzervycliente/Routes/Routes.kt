@@ -62,9 +62,11 @@ const val ROOT_PROPUESTA_SERVICIO_PAGE = "propuestaServicio"
 
 //----------------------------------------------------- [PROPUESTA DETALLE]
 const val ROOT_PROPUESTA_DETALLE_PAGE = "propuestaDetalle"
+const val ARG_PROPUESTA_DETALLE = "argPropuestaDetalle"
 
 //----------------------------------------------------- [PROPUESTA INFO SOCIO]
 const val ROOT_PROPUESTA_INFOSOCIO_PAGE = "propuestaInfoSocio"
+const val ARG_PROPUESTA_INFOSOCIO = "argPropuestaInf"
 //**************************************************************************************************
 
 
@@ -225,8 +227,8 @@ sealed class Routes(
     object AceptacionSolicitudPage : Routes(ROOT_ACEPTACION_SOLICITUD_PAGE)
 
     object PropuestaServicioPage : Routes(ROOT_PROPUESTA_SERVICIO_PAGE)
-    object PropuestaDetallePage : Routes(ROOT_PROPUESTA_DETALLE_PAGE)
-    object PropuestaInfoSocioPage : Routes(ROOT_PROPUESTA_INFOSOCIO_PAGE)
+    object PropuestaDetallePage : Routes(route =  "$ROOT_PROPUESTA_DETALLE_PAGE/{${ARG_PROPUESTA_DETALLE}}")
+    object PropuestaInfoSocioPage : Routes(route = "$ROOT_PROPUESTA_INFOSOCIO_PAGE/{${ARG_PROPUESTA_INFOSOCIO}}")
 
     object PagoPosteriorPage : Routes(ROOT_PAGO_POSTERIOR_PAGE)
 

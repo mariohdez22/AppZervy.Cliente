@@ -1,10 +1,15 @@
 package com.example.appzervycliente.InstanceApi
 
+import com.example.appzervycliente.DTOs.SocioComercialDTO
 import com.example.appzervycliente.Network.AuthInterceptor
 import com.example.appzervycliente.Network.CategoriaServicioApiService
 import com.example.appzervycliente.Network.ClientesApiService
 import com.example.appzervycliente.Network.FotoSolicitudService
+import com.example.appzervycliente.Network.InspeccionService
 import com.example.appzervycliente.Network.PropuestaServicioService
+import com.example.appzervycliente.Network.ResenasService
+import com.example.appzervycliente.Network.SocioComercialService
+import com.example.appzervycliente.Network.SocioIndividualService
 import com.example.appzervycliente.Network.SocioService
 import com.example.appzervycliente.Network.SolicitudServicioService
 import com.squareup.moshi.Moshi
@@ -61,6 +66,24 @@ object InstanceApi {
             .create(SocioService::class.java)
     }
 
+    val apiSocioIndividual: SocioIndividualService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
+            .create(SocioIndividualService::class.java)
+    }
+
+    val apiSocioComercial: SocioComercialService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
+            .create(SocioComercialService::class.java)
+    }
+
     val apiSolicitudServicio: SolicitudServicioService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -78,4 +101,23 @@ object InstanceApi {
             .build()
             .create(FotoSolicitudService::class.java)
     }
+
+    val apiResenas: ResenasService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
+            .create(ResenasService::class.java)
+    }
+
+    val apiInspeccion: InspeccionService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
+            .build()
+            .create(InspeccionService::class.java)
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.appzervycliente.Views.Cliente
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -45,6 +46,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,21 +68,33 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.appzervycliente.Components.common.IconTextHorizontalSection
+import com.example.appzervycliente.DTOs.PropuestaServicioDTO
 import com.example.appzervycliente.DTOs.SolicitudServicioDTO
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.ROOT_ACEPTACION_SOLICITUD_PAGE
 import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.Services.ViewModels.PropuestaServicioViewModel
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
+import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EsperaPage(
+fun  EsperaPage(
     navController: NavHostController,
+    vmPropuesta: PropuestaServicioViewModel,
     solicitud: SolicitudServicioDTO? = null
 ){
     val bottomSheetState = rememberStandardBottomSheetState(
@@ -105,7 +119,7 @@ fun EsperaPage(
             )
         },
         sheetContent = {
-            BodySheet(scope, bottomSheetState){
+            BodySheet(solicitud, scope, bottomSheetState){
                 //showImagePreview = !showImagePreview
                 //imagePreview = it
             }
@@ -126,8 +140,8 @@ fun EsperaPage(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Cargando(navController)
-                Publicidad()
+                Cargando(navController, vmPropuesta, solicitud?.tipoCategoria ?: "")
+                //Publicidad()
             }
 
             AnimatedVisibility(
@@ -187,7 +201,7 @@ private fun EsperaPreview(){
     AppZervyClienteTheme(
         dynamicColor = false
     ) {
-        EsperaPage(rememberNavController())
+        EsperaPage(rememberNavController(), viewModel())
     }
 }
 
@@ -264,6 +278,7 @@ private fun TopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BodySheet(
+    solicitud: SolicitudServicioDTO? = null,
     scope: CoroutineScope,
     sheetState: SheetState,
     onClickImage: (Painter) -> Unit
@@ -306,17 +321,14 @@ private fun BodySheet(
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             Text(
-                text = "Montaje de muebles para sala",
+                text = solicitud?.tituloCategoria ?: "Indefinido",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.W500,
             )
             Text(
-                text = stringResource(R.string.example2)
+                text = solicitud?.descripcionSolicitud ?: "Indefinido"
             )
-            Text(
-                text = stringResource(R.string.example)
-            )
-            Detalles()
+            Detalles(solicitud)
         }
 
 //        Column(
@@ -366,7 +378,9 @@ private fun BodySheet(
 }
 
 @Composable
-private fun Detalles(){
+private fun Detalles(
+    solicitud: SolicitudServicioDTO?
+){
 
     Column(
         modifier = Modifier
@@ -377,7 +391,7 @@ private fun Detalles(){
         IconTextHorizontalSection(
             painter = painterResource(R.drawable.start_icon),
             label = "Categoria",
-            text = "Montaje de Articulos",
+            text = solicitud?.tipoCategoria ?: "Indefinido",
             labelSize = 14.5.sp,
             textSize = 14.5.sp,
             labelWeight = FontWeight.W500,
@@ -388,7 +402,7 @@ private fun Detalles(){
         IconTextHorizontalSection(
             painter = painterResource(R.drawable.start_icon),
             label = "Fecha",
-            text = "24 de Abril 2024 | 6:34 PM",
+            text = solicitud?.fechaSolicitud ?: "Indefinido",
             labelSize = 14.5.sp,
             textSize = 14.5.sp,
             labelWeight = FontWeight.W500,
@@ -399,7 +413,7 @@ private fun Detalles(){
         IconTextHorizontalSection(
             painter = painterResource(R.drawable.start_icon),
             label = "Tipo de pago",
-            text = "En Curso",
+            text = solicitud?.tipoPago ?: "Indefinido",
             labelSize = 14.5.sp,
             textSize = 14.5.sp,
             labelWeight = FontWeight.W500,
@@ -437,74 +451,97 @@ private fun Detalles(){
 
 @Composable
 private fun Cargando(
-    navController: NavHostController
+    navController: NavHostController,
+    vmPropuesta: PropuestaServicioViewModel,
+    tipoCategoria: String
 ){
 
+    val isLoading by vmPropuesta.isLoading
+    val errorMessage by vmPropuesta.errorMessage
+    var propuestas by vmPropuesta.propuestas
+
     LaunchedEffect(Unit) {
-        delay(7000)
-        navController.navigate(Routes.AceptacionSolicitudPage.route){
-            popUpTo(Routes.EsperaPage.route){ inclusive = true }
-            popUpTo(Routes.SolicitudDiaPage.route) { inclusive = false }
-        }
+        vmPropuesta.obtenerPropuestas()
     }
 
+    when{
+        isLoading -> {
+            val time by vmPropuesta.time
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 25.dp),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 25.dp,
-                    end = 25.dp,
-                    bottom = 30.dp
-                ),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text(
-                text = "Encontrando socios cercanos...",
-                fontWeight = FontWeight.W500,
-                fontSize = 20.sp,
-            )
-            Text(
-                text = buildAnnotatedString {
-                    append("Estimado de espera: ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.W500)){
-                        append("30 min")
-                    }
-                },
-                fontWeight = FontWeight.W300,
-                fontSize = 14.sp,
-            )
-            LinearProgressIndicator(
+            Column(
                 modifier = Modifier
-                    .height(13.dp)
-                    .fillMaxWidth(),
-                color = Color.Magenta,
-            )
+                    .fillMaxWidth()
+                    .padding(top = 25.dp),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = 25.dp,
+                            end = 25.dp,
+                            bottom = 30.dp
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        text = "Encontrando socios cercanos...",
+                        fontWeight = FontWeight.W500,
+                        fontSize = 20.sp,
+                    )
+                    Text(
+                        text = buildAnnotatedString {
+                            append("Estimado de espera: ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.W500)){
+                                append(time.toString())
+                            }
+                        },
+                        fontWeight = FontWeight.W300,
+                        fontSize = 14.sp,
+                    )
+                    LinearProgressIndicator(
+                        modifier = Modifier
+                            .height(13.dp)
+                            .fillMaxWidth(),
+                        color = Color.Magenta,
+                    )
+                }
+            }
+            HorizontalDivider(thickness = 1.dp)
         }
+        errorMessage != null -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 25.dp, end = 25.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("No se pudo encontrar socios cercanos")
+            }
+        }
+        else -> {
+            LaunchedEffect(Unit) {
+
+//                propuestas = propuestas.filter {
+//                    it.idSocio != null &&
+//                    it.tipoCategoria == tipoCategoria
+//                }
+                navController.navigate(
+                    Routes.AceptacionSolicitudPage.route
+                ){
+                    popUpTo(Routes.EsperaPage.route){ inclusive = true }
+                    popUpTo(Routes.SolicitudDiaPage.route) { inclusive = false }
+                }
+            }
+        }
+
     }
-    HorizontalDivider(thickness = 1.dp)
+
+
 
 }
 
 @Composable
-private fun Publicidad(
-
-){
-
-    val images = listOf(
-        painterResource(R.drawable.furniture_assembly_image),
-        painterResource(R.drawable.garden_care_image),
-        painterResource(R.drawable.tv),
-        painterResource(R.drawable.mueble),
-        painterResource(R.drawable.furniture_assembly_image),
-        painterResource(R.drawable.tv),
-    )
-
+private fun Publicidad(){
     Column(
         modifier = Modifier
             .padding(
@@ -524,18 +561,29 @@ private fun Publicidad(
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            items(images){ image ->
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(160.dp)
-                        .clip(shape = RoundedCornerShape(10.dp)),
-                    painter = image,
-                    contentDescription = "image",
-                    contentScale = ContentScale.Crop,
-                )
+            items(5){
+                AdsPreview(adUnitId = stringResource(R.string.adtestbannerid))
             }
         }
     }
+
+}
+
+@Composable
+private fun AdsPreview(
+    adUnitId: String
+){
+    AndroidView(
+        factory = { ctx ->
+            AdView(ctx).apply {
+                setAdSize(AdSize.MEDIUM_RECTANGLE)
+                this.adUnitId = adUnitId
+                loadAd(AdRequest.Builder().build())
+            }
+        },
+        update = { adview ->
+            adview.loadAd(AdRequest.Builder().build())
+        }
+    )
 
 }

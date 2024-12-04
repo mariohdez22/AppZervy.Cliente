@@ -98,7 +98,7 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
 
     //google admob
-    //implementation(libs.google.admobs)
+    implementation(libs.google.admobs)
 
     // Testing
     testImplementation(libs.junit)

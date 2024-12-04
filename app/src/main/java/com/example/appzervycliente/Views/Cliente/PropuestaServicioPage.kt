@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
@@ -43,15 +44,38 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
+import com.example.appzervycliente.DTOs.PropuestaServicioDTO
 import com.example.appzervycliente.R
+import com.example.appzervycliente.Routes.ROOT_PROPUESTA_DETALLE_PAGE
 import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.Services.ViewModels.PropuestaServicioViewModel
 import com.example.appzervycliente.ui.theme.AppZervyClienteTheme
+import com.google.gson.Gson
+import java.net.URLEncoder
+
+data class PropuestaItem(
+    var nombreCliente: String = "",
+    var tituloCategoria: String = "",
+    var tipoCategoria: String = "",
+    var descripcionPropuesta: String = "",
+    var duracionServicio: String = "",
+    var precioBase: String = "",
+    var idSocio: String = "",
+    var nombreSocio: String = "",
+    var experienciaSocio: String = "",
+    var tipoSocio: String = "",
+    var tipoPago: String = "",
+    var fotoSocio: String? = null
+)
 
 @Composable
 fun PropuestaServicioPage(
-    navController: NavHostController
+    navController: NavHostController,
+    propuestas: List<PropuestaItem>
 ){
 
     Scaffold(
@@ -69,7 +93,7 @@ fun PropuestaServicioPage(
         ) {
             Header()
             HorizontalDivider(thickness = 1.dp)
-            Body(navController)
+            Body(navController, propuestas)
         }
     }
 
@@ -83,7 +107,7 @@ private fun PropuestaPreview(){
     AppZervyClienteTheme(
         dynamicColor = true
     ) {
-        PropuestaServicioPage(rememberNavController())
+        PropuestaServicioPage(rememberNavController(), emptyList())
     }
 
 }
@@ -160,9 +184,11 @@ private fun Header(
             fontWeight = FontWeight.W400,
         )
         Text(
-            text = stringResource(R.string.example3),
+            text = "Aqui se muestran las propuestas que hemos encontrado para ti, " +
+                    "al seleccionar una puedes ver a detalle todo lo que esta ofrece",
             fontSize = 14.sp,
-            fontWeight = FontWeight.W300
+            fontWeight = FontWeight.W300,
+            lineHeight = 15.sp
         )
     }
 
@@ -170,7 +196,8 @@ private fun Header(
 
 @Composable
 private fun Body(
-    navController: NavHostController
+    navController: NavHostController,
+    propuestas: List<PropuestaItem>
 ){
     LazyColumn(
         modifier = Modifier
@@ -178,7 +205,7 @@ private fun Body(
             .padding(start = 25.dp, end = 25.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        items(10) {
+        items(propuestas) { p ->
             ElevatedCard(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -187,7 +214,11 @@ private fun Body(
                     defaultElevation = 3.dp,
                 ),
                 onClick = {
-                    navController.navigate(Routes.PropuestaDetallePage.route)
+                    val jsonArg = Gson().toJson(p)
+                    val encodeJson = URLEncoder.encode(jsonArg,"UTF-8")
+                    navController.navigate(
+                        "${ROOT_PROPUESTA_DETALLE_PAGE}/${encodeJson}"
+                    )
                 },
                 colors = CardDefaults.elevatedCardColors(
                     containerColor = Color.White
@@ -198,9 +229,18 @@ private fun Body(
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
-                    CardHeader()
+                    CardHeader(
+                        nombreSocio = p.nombreSocio,
+                        tipoSocio = p.tipoSocio,
+                        foto = p.fotoSocio ?: stringResource(R.string.imgNotFound)
+                    )
                     HorizontalDivider(thickness = 1.dp)
-                    CardBody()
+                    CardBody(
+                        tituloCategoria = p.tituloCategoria,
+                        descripcionCategoria = p.descripcionPropuesta,
+                        duracionServicio = p.duracionServicio,
+                        precio = p.precioBase,
+                    )
                 }
             }
         }
@@ -209,7 +249,11 @@ private fun Body(
 }
 
 @Composable
-private fun CardHeader(){
+private fun CardHeader(
+    nombreSocio: String,
+    tipoSocio: String,
+    foto: String
+){
 
     Row(
         modifier = Modifier
@@ -245,18 +289,18 @@ private fun CardHeader(){
                 Image(
                     modifier = Modifier
                         .size(40.dp),
-                    painter = painterResource(R.drawable.avatarcard),
+                    painter = rememberAsyncImagePainter(model = foto),
                     contentDescription = "image"
                 )
                 Column{
                     Text(
-                        text = "Josue Hernandez",
+                        text = nombreSocio,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.W500,
                         lineHeight = 15.sp
                     )
                     Text(
-                        text = "Proveedor de servicios",
+                        text = tipoSocio,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.W300,
                         lineHeight = 15.sp
@@ -269,7 +313,12 @@ private fun CardHeader(){
 }
 
 @Composable
-private fun CardBody(){
+private fun CardBody(
+    tituloCategoria: String,
+    descripcionCategoria: String,
+    precio: String,
+    duracionServicio: String,
+){
 
     Column(
         modifier = Modifier
@@ -277,12 +326,12 @@ private fun CardBody(){
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = "Montaje Articulos",
+            text = tituloCategoria,
             fontSize = 20.sp,
             fontWeight = FontWeight.W400,
         )
         Text(
-            text = stringResource(R.string.example3),
+            text = descripcionCategoria,
             fontSize = 12.sp,
             fontWeight = FontWeight.W300,
             lineHeight = 15.sp
@@ -297,7 +346,7 @@ private fun CardBody(){
                     withStyle(style = SpanStyle(fontWeight = FontWeight.W500)){
                         append("Precio: ")
                     }
-                    append("$ 35 USD")
+                    append(precio)
                 },
                 fontSize = 12.sp,
                 fontWeight = FontWeight.W300,
@@ -308,7 +357,7 @@ private fun CardBody(){
                     withStyle(style = SpanStyle(fontWeight = FontWeight.W500)){
                         append("Duracion: ")
                     }
-                    append("3h Aprox")
+                    append(duracionServicio)
                 },
                 fontSize = 12.sp,
                 fontWeight = FontWeight.W300,

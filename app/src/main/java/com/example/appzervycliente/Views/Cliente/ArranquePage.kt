@@ -26,11 +26,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.*
 import androidx.compose.ui.platform.LocalContext
 import com.example.appzervycliente.Routes.Routes
+import com.example.appzervycliente.Services.ViewModels.ClientesViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun SplashScreen(navController: NavHostController) {
+fun SplashScreen(
+    navController: NavHostController
+) {
 
     val context = LocalContext.current
     val user = Firebase.auth.currentUser
