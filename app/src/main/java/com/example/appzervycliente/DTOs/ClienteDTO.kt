@@ -5,7 +5,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ClienteDTO (
-
     @Json(name = "idClienteDto") val idCliente: String? = null,
     @Json(name = "nombresDto") val nombres: String,
     @Json(name = "celularDto") val celular: String? = "",

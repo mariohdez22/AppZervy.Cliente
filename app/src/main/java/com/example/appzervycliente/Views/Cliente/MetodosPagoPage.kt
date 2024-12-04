@@ -129,7 +129,12 @@ private fun TopBar(
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = colorResource(R.color.btnCarritoTopBar)
                 ),
-                onClick = {}
+                onClick = {
+                    navController.popBackStack(
+                        Routes.MetodosPagoPage.route,
+                        inclusive = true
+                    )
+                }
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,

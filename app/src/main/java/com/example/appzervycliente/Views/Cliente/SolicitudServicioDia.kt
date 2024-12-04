@@ -491,7 +491,7 @@ private fun TipoPago(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(
-                    text = "Targeta",
+                    text = "Tarjeta",
                     fontWeight = FontWeight.W400
                 )
                 Checkbox(

@@ -96,7 +96,10 @@ fun IngresoTargetaPage(
             ){
                 Button(
                     onClick = {
-                        navController.popBackStack()
+                        navController.popBackStack(
+                            Routes.IngresoTargetaPage.route,
+                            inclusive = true
+                        )
                     }
                 ) {
                     Text(

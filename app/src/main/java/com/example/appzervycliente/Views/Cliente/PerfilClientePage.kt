@@ -107,7 +107,12 @@ private fun TopBar(
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = Color.White
                 ),
-                onClick = {}
+                onClick = {
+                    navController.popBackStack(
+                        Routes.PerfilClientePage.route,
+                        inclusive = true
+                    )
+                }
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
