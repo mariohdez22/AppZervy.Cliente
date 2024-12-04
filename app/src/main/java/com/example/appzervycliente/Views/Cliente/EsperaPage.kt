@@ -85,6 +85,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Delay
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
@@ -141,7 +142,7 @@ fun  EsperaPage(
                     .fillMaxWidth()
             ) {
                 Cargando(navController, vmPropuesta, solicitud?.tipoCategoria ?: "")
-                //Publicidad()
+                Publicidad()
             }
 
             AnimatedVisibility(
@@ -464,49 +465,89 @@ private fun Cargando(
         vmPropuesta.obtenerPropuestas()
     }
 
+    val time by vmPropuesta.time
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 25.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 25.dp,
+                    end = 25.dp,
+                    bottom = 30.dp
+                ),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = "Encontrando socios cercanos...",
+                fontWeight = FontWeight.W500,
+                fontSize = 20.sp,
+            )
+            Text(
+                text = buildAnnotatedString {
+                    append("Estimado de espera: ")
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.W500)){
+                        append(time.toString())
+                    }
+                },
+                fontWeight = FontWeight.W300,
+                fontSize = 14.sp,
+            )
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .height(13.dp)
+                    .fillMaxWidth(),
+                color = Color.Magenta,
+            )
+        }
+    }
+    HorizontalDivider(thickness = 1.dp)
+
     when{
         isLoading -> {
-            val time by vmPropuesta.time
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 25.dp),
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            start = 25.dp,
-                            end = 25.dp,
-                            bottom = 30.dp
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Text(
-                        text = "Encontrando socios cercanos...",
-                        fontWeight = FontWeight.W500,
-                        fontSize = 20.sp,
-                    )
-                    Text(
-                        text = buildAnnotatedString {
-                            append("Estimado de espera: ")
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.W500)){
-                                append(time.toString())
-                            }
-                        },
-                        fontWeight = FontWeight.W300,
-                        fontSize = 14.sp,
-                    )
-                    LinearProgressIndicator(
-                        modifier = Modifier
-                            .height(13.dp)
-                            .fillMaxWidth(),
-                        color = Color.Magenta,
-                    )
-                }
-            }
-            HorizontalDivider(thickness = 1.dp)
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(top = 25.dp),
+//            ) {
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(
+//                            start = 25.dp,
+//                            end = 25.dp,
+//                            bottom = 30.dp
+//                        ),
+//                    verticalArrangement = Arrangement.spacedBy(10.dp)
+//                ) {
+//                    Text(
+//                        text = "Encontrando socios cercanos...",
+//                        fontWeight = FontWeight.W500,
+//                        fontSize = 20.sp,
+//                    )
+//                    Text(
+//                        text = buildAnnotatedString {
+//                            append("Estimado de espera: ")
+//                            withStyle(style = SpanStyle(fontWeight = FontWeight.W500)){
+//                                append(time.toString())
+//                            }
+//                        },
+//                        fontWeight = FontWeight.W300,
+//                        fontSize = 14.sp,
+//                    )
+//                    LinearProgressIndicator(
+//                        modifier = Modifier
+//                            .height(13.dp)
+//                            .fillMaxWidth(),
+//                        color = Color.Magenta,
+//                    )
+//                }
+//            }
+//            HorizontalDivider(thickness = 1.dp)
         }
         errorMessage != null -> {
             Column(
@@ -520,7 +561,7 @@ private fun Cargando(
         }
         else -> {
             LaunchedEffect(Unit) {
-
+                delay(7000)
 //                propuestas = propuestas.filter {
 //                    it.idSocio != null &&
 //                    it.tipoCategoria == tipoCategoria
